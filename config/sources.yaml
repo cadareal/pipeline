@@ -1,0 +1,197 @@
+# Catálogo de fontes (a tabela "Acesso verificado" da Planilha-mãe, como código).
+# Cada fetcher lê sua entrada aqui. status: implementado | planejado
+# Reconhecimento feito em 2026-11-08; URLs e nomes de anexo são confirmados na primeira execução real.
+
+fontes:
+  - id: S1
+    nome: Tesouro CKAN, Dívida (Estoque da DPF, Fatores de Variação, Emissões e Resgates)
+    orgao: Tesouro Nacional
+    base_url: https://www.tesourotransparente.gov.br/ckan/api/3/action
+    formato: xlsx/csv via CKAN
+    cadencia: mensal (últimos 10 dias do mês seguinte)
+    cobertura: desde 2006 (estoque) e 2007 (fatores)
+    chave: nenhuma
+    camada: arquivo
+    status: planejado
+    usos: [juros (linha 7), imposto futuro (M1), vencimentos]
+
+  - id: S2
+    nome: Relatório Mensal da Dívida (RMD) e anexos
+    orgao: Tesouro Nacional
+    base_url: https://www.tesourotransparente.gov.br/publicacoes
+    formato: pdf (anexos xlsx a confirmar)
+    cadencia: mensal (~26 dias após o fim do mês)
+    chave: nenhuma
+    camada: pdf
+    status: planejado
+    usos: [detentores por classe, perfil de vencimentos, custo e prazo médio]
+
+  - id: S3
+    nome: Resultado do Tesouro Nacional (RTN), série histórica
+    orgao: Tesouro Nacional
+    base_url: https://www.tesourotransparente.gov.br/ckan/api/3/action
+    formato: xlsx via CKAN
+    cadencia: mensal
+    cobertura: desde 1997
+    chave: nenhuma
+    camada: arquivo
+    status: planejado
+    usos: [déficit (M2), transferências (linha 8), itens Bolsa Família e BPC, receita total]
+
+  - id: S4
+    nome: SICONFI, RREO da União
+    orgao: Tesouro Nacional
+    base_url: https://apidatalake.tesouro.gov.br/ords/siconfi/tt
+    formato: json (ORDS, paginado por hasMore/offset)
+    cadencia: bimestral (até 30 dias após o bimestre)
+    cobertura: desde 2015
+    chave: nenhuma
+    camada: api
+    status: implementado
+    fetcher: siconfi
+    tipo_demonstrativo: RREO
+    esfera: U
+    id_ente: null            # descoberto em /entes (ente da esfera U); fixe aqui depois da primeira execução
+    anexos_padrao:           # nomes a confirmar contra /anexos-relatorios na primeira execução
+      - "RREO-Anexo 01"
+      - "RREO-Anexo 02"
+      - "RREO-Anexo 04"
+      - "RREO-Anexo 06"
+    periodos_padrao: [1, 2, 3, 4, 5, 6]
+    usos: [despesa por função e subfunção, juros (Anexo 01), previdência RPPS (Anexo 04), resultado primário (Anexo 06)]
+
+  - id: S5
+    nome: CUSTOS, pessoal ativo, inativos e pensionistas
+    orgao: Tesouro Nacional
+    base_url: https://apidatalake.tesouro.gov.br/ords/custos/tt
+    formato: json (ORDS, 1.000 por página)
+    cadencia: mensal
+    chave: nenhuma
+    camada: api
+    status: planejado
+    usos: [chip folha de ativos, drill de inativos por órgão]
+
+  - id: S6
+    nome: Transferências constitucionais (FPM, FPE, FUNDEB)
+    orgao: Tesouro Nacional
+    base_url: https://apiapex.tesouro.gov.br/aria/v1/transferencias_constitucionais/custom
+    formato: json (sem paginação; códigos internos do Tesouro, não IBGE)
+    cadencia: decendial/mensal
+    chave: nenhuma
+    camada: api
+    status: planejado
+    usos: [transferências (linha 8), recibo v2 por município]
+
+  - id: S7
+    nome: COFOG, despesa do Governo Central por função (GFSM 2014)
+    orgao: Tesouro Nacional
+    base_url: https://www.tesourotransparente.gov.br/ckan/api/3/action
+    formato: xlsx via CKAN
+    cadencia: anual (1 ano de defasagem)
+    cobertura: desde 2010
+    chave: nenhuma
+    camada: arquivo
+    status: planejado
+    usos: [fonte definitiva das linhas por função no ano fechado]
+
+  - id: S8
+    nome: SIOP, orçamento federal por classificador (inclui marcador de emendas RP 6/7/8)
+    orgao: Ministério do Planejamento
+    base_url: https://www1.siop.planejamento.gov.br/sparql/
+    formato: sparql/json
+    cadencia: contínua
+    chave: nenhuma
+    camada: api
+    status: planejado
+    notas: possível problema de cadeia TLS; pinar a CA (RECIBO_CA_BUNDLE), nunca desligar verificação
+    usos: [chip emendas, chip investimento, fonte corrente de 2026]
+
+  - id: S9
+    nome: Portal da Transparência (bulk e API de Dados)
+    orgao: CGU
+    base_url: https://portaldatransparencia.gov.br/download-de-dados
+    formato: csv em zip (bulk); json (API, chave via gov.br)
+    cadencia: mensal (bulk), diária (API)
+    chave: só na API (400 req/min; 700 entre 0h e 6h; 180 nas restritas)
+    camada: arquivo
+    status: planejado
+    usos: [drill Bolsa Família/BPC por UF, servidores, emendas, CEIS/CNEP]
+
+  - id: S10
+    nome: Receita Federal, Carga Tributária no Brasil (estudo anual)
+    orgao: Receita Federal
+    base_url: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/estudos/carga-tributaria
+    formato: pdf/html (séries em xlsx/ods a localizar)
+    cadencia: anual (~12 meses após o ano-base)
+    cobertura: desde 2002
+    chave: nenhuma
+    camada: pdf
+    status: planejado
+    usos: [denominador do recibo (arrecadação por esfera e tributo)]
+
+  - id: S11
+    nome: Receita Federal, arrecadação mensal (Análise Mensal) e Receitadata
+    orgao: Receita Federal
+    base_url: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/relatorios/arrecadacao-federal
+    formato: pdf (padrão analise-mensal-{mes}-{ano}.pdf); planilhas no Receitadata
+    cadencia: mensal (~3 semanas após o mês)
+    chave: nenhuma
+    camada: pdf
+    status: planejado
+    usos: [proxy de arrecadação de 2026]
+
+  - id: S12
+    nome: Previdência, BEPS e datasets do INSS (dados.gov.br)
+    orgao: Ministério da Previdência / INSS
+    base_url: https://www.gov.br/previdencia/pt-br/assuntos/previdencia-social/Dados-estatisticos-previdencia-social-e-inss/boletins-da-previdencia-social
+    formato: pdf (BEPS, 27 quadros); csv nos datasets do INSS (a confirmar)
+    cadencia: mensal (2 a 3 meses de defasagem)
+    chave: nenhuma
+    camada: pdf
+    status: planejado
+    usos: [drill RGPS: espécie, clientela, faixa de valor]
+
+  - id: S13
+    nome: TCU, Contas do Presidente (déficit por beneficiário por regime)
+    orgao: TCU
+    base_url: https://sites.tcu.gov.br/contas-do-presidente/fichas/
+    formato: pdf
+    cadencia: anual (junho)
+    chave: nenhuma
+    camada: pdf
+    status: planejado
+    usos: [drill previdência por regime]
+
+  - id: S14
+    nome: IBGE, população (SIDRA tabela 6579 e estimativas)
+    orgao: IBGE
+    base_url: https://apisidra.ibge.gov.br/values/t/6579
+    formato: json
+    cadencia: anual
+    chave: nenhuma
+    camada: api
+    status: planejado
+    usos: [per capita]
+
+  - id: S15
+    nome: DadosJusBr, contracheques de Judiciário e MP
+    orgao: DadosJusBr (sociedade civil)
+    base_url: https://api.dadosjusbr.org
+    formato: json
+    cadencia: mensal
+    cobertura: 2018+
+    chave: nenhuma
+    camada: api
+    status: planejado
+    usos: [ranking nominal de remunerações (fase 2)]
+
+  - id: S16
+    nome: BCB SGS, séries da dívida e juros
+    orgao: Banco Central
+    base_url: https://api.bcb.gov.br/dados/serie/bcdata.sgs
+    formato: json/csv
+    cadencia: mensal
+    chave: nenhuma
+    camada: api
+    status: planejado
+    usos: [fallback de prazo médio e detentores]

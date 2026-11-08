@@ -1,0 +1,17 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12
+      - run: uv sync --extra dev
+      - run: uv run pytest -q
+      - name: valida YAML de spec
+        run: uv run python -c "import yaml; [yaml.safe_load(open(f, encoding='utf-8')) for f in ('config/linhas.yaml', 'config/sources.yaml')]; print('spec ok')"

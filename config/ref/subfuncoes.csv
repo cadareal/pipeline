@@ -1,0 +1,120 @@
+codigo,nome
+031,Ação Legislativa
+032,Controle Externo
+061,Ação Judiciária
+062,Defesa do Interesse Público no Processo Judiciário
+091,Defesa da Ordem Jurídica
+092,Representação Judicial e Extrajudicial
+121,Planejamento e Orçamento
+122,Administração Geral
+123,Administração Financeira
+124,Controle Interno
+125,Normatização e Fiscalização
+126,Tecnologia da Informação
+127,Ordenamento Territorial
+128,Formação de Recursos Humanos
+129,Administração de Receitas
+130,Administração de Concessões
+131,Comunicação Social
+151,Defesa Aérea
+152,Defesa Naval
+153,Defesa Terrestre
+181,Policiamento
+182,Defesa Civil
+183,Informação e Inteligência
+211,Relações Diplomáticas
+212,Cooperação Internacional
+241,Assistência ao Idoso
+242,Assistência ao Portador de Deficiência
+242,Assistência à Pessoa com Deficiência
+243,Assistência à Criança e ao Adolescente
+244,Assistência Comunitária
+271,Previdência Básica
+272,Previdência do Regime Estatutário
+273,Previdência Complementar
+274,Previdência Especial
+301,Atenção Básica
+302,Assistência Hospitalar e Ambulatorial
+303,Suporte Profilático e Terapêutico
+304,Vigilância Sanitária
+305,Vigilância Epidemiológica
+306,Alimentação e Nutrição
+331,Proteção e Benefícios ao Trabalhador
+332,Relações de Trabalho
+333,Empregabilidade
+334,Fomento ao Trabalho
+361,Ensino Fundamental
+362,Ensino Médio
+363,Ensino Profissional
+364,Ensino Superior
+365,Educação Infantil
+366,Educação de Jovens e Adultos
+367,Educação Especial
+368,Educação Básica
+391,Patrimônio Histórico Artístico e Arqueológico
+392,Difusão Cultural
+421,Custódia e Reintegração Social
+422,Direitos Individuais Coletivos e Difusos
+423,Assistência aos Povos Indígenas
+451,Infra-Estrutura Urbana
+451,Infraestrutura Urbana
+452,Serviços Urbanos
+453,Transportes Coletivos Urbanos
+481,Habitação Rural
+482,Habitação Urbana
+511,Saneamento Básico Rural
+512,Saneamento Básico Urbano
+541,Preservação e Conservação Ambiental
+542,Controle Ambiental
+543,Recuperação de Áreas Degradadas
+544,Recursos Hídricos
+545,Meteorologia
+571,Desenvolvimento Científico
+572,Desenvolvimento Tecnológico e Engenharia
+573,Difusão do Conhecimento Científico e Tecnológico
+601,Promoção da Produção Vegetal
+601,Promoção da Produção Agropecuária
+602,Promoção da Produção Animal
+603,Defesa Sanitária Vegetal
+604,Defesa Sanitária Animal
+604,Defesa Agropecuária
+605,Abastecimento
+606,Extensão Rural
+607,Irrigação
+631,Reforma Agrária
+632,Colonização
+661,Promoção Industrial
+662,Produção Industrial
+663,Mineração
+664,Propriedade Industrial
+665,Normalização e Qualidade
+691,Promoção Comercial
+692,Comercialização
+693,Comércio Exterior
+694,Serviços Financeiros
+695,Turismo
+721,Comunicações Postais
+722,Telecomunicações
+751,Conservação de Energia
+752,Energia Elétrica
+753,Petróleo
+753,Combustíveis Minerais
+754,Álcool
+754,Biocombustíveis
+781,Transporte Aéreo
+782,Transporte Rodoviário
+783,Transporte Ferroviário
+784,Transporte Hidroviário
+785,Transportes Especiais
+811,Desporto de Rendimento
+812,Desporto Comunitário
+813,Lazer
+841,Refinanciamento da Dívida Interna
+842,Refinanciamento da Dívida Externa
+843,Serviço da Dívida Interna
+844,Serviço da Dívida Externa
+845,Outras Transferências
+846,Outros Encargos Especiais
+847,Transferências para a Educação Básica
+997,Reserva do RPPS
+999,Reserva de Contingência

@@ -1,0 +1,161 @@
+# Planilha-mãe como código (v0, fase 1).
+# Cada entrada gera, ao mesmo tempo: o SQL que calcula o número, a ficha técnica publicada e as reconciliações.
+# Mudou aqui, mudou nos três. Nenhum valor é digitado neste arquivo.
+
+versao: "0.1.0"
+
+regra_rateio: >
+  O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção da despesa executada do exercício,
+  excluídos refinanciamento e amortização da dívida (operações de estoque, não consumo). As linhas somam R$ 1,00.
+  O que foi gasto além do arrecadado aparece como memo (déficit), nunca dentro do R$ 1,00.
+
+metrica:
+  descricao: Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.
+  coluna_regex: "LIQUIDADAS.*ATE O BIMESTRE"
+  escopo: exceto_intra
+  nota: >
+    O RREO não traz "pago" por função; liquidado é o estágio mais próximo da execução. No ano fechado, a fonte
+    definitiva passa a ser o COFOG (S7: liquidado + restos a pagar pagos) e esta métrica vira preliminar.
+
+bases:
+  anexo02_subfuncao:
+    fonte: S4
+    dataset: siconfi_rreo
+    anexo_regex: "^RREO-ANEXO 0?2$"
+    nivel: subfuncao
+    descricao: >
+      Linhas de subfunção do Anexo 02 (despesa por função/subfunção). A partição é por subfunção, não por função,
+      porque a função 09 "Previdência Social" não é o INSS (contém RPPS e administração) e os inativos aparecem em
+      várias funções (05, 01, 02, 09...) sempre sob a subfunção 272.
+  anexo01_conta:
+    fonte: S4
+    dataset: siconfi_rreo
+    anexo_regex: "^RREO-ANEXO 0?1$"
+    nivel: null
+    descricao: Contas do Anexo 01 (balanço orçamentário), por categoria econômica e grupo de despesa.
+
+linhas:
+  - id: previdencia_inss
+    nome: Previdência (INSS)
+    definicao: "Benefícios do Regime Geral (trabalhadores do setor privado): subfunção 271 Previdência Básica, em qualquer função."
+    base: anexo02_subfuncao
+    filtro: "subfuncao_cod = '271'"
+
+  - id: inativos_pensionistas
+    nome: Aposentados e pensionistas do setor público
+    definicao: >
+      Subfunções 272 (regime estatutário: servidores civis e militares) e 274 (previdência especial), em qualquer
+      função. O drill por regime (civil, militar, Poderes) vem do Anexo 04 e do CUSTOS na fase 2.
+    base: anexo02_subfuncao
+    filtro: "subfuncao_cod IN ('272', '274')"
+
+  - id: assistencia
+    nome: Assistência social (Bolsa Família, BPC)
+    definicao: Função 08, excluídas as subfunções previdenciárias.
+    base: anexo02_subfuncao
+    filtro: "funcao_cod = '08' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')"
+
+  - id: saude
+    nome: Saúde
+    definicao: Função 10 (inclui repasses do SUS a estados e municípios), excluídas as subfunções previdenciárias.
+    base: anexo02_subfuncao
+    filtro: "funcao_cod = '10' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')"
+
+  - id: educacao
+    nome: Educação
+    definicao: Função 12 mais a subfunção 847 (transferências para a educação básica, FUNDEB), excluídas as subfunções previdenciárias.
+    base: anexo02_subfuncao
+    filtro: "(funcao_cod = '12' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')) OR subfuncao_cod = '847'"
+
+  - id: trabalho
+    nome: Trabalho (abono, seguro-desemprego)
+    definicao: Função 11, excluídas as subfunções previdenciárias.
+    base: anexo02_subfuncao
+    filtro: "funcao_cod = '11' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')"
+
+  - id: defesa_seguranca
+    nome: Defesa e segurança
+    definicao: Funções 05 e 06, excluídas as subfunções previdenciárias (inativos militares ficam na linha de aposentados).
+    base: anexo02_subfuncao
+    filtro: "funcao_cod IN ('05', '06') AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')"
+
+  - id: transferencias
+    nome: Transferências a estados e municípios
+    definicao: Subfunção 845 (FPM, FPE e demais repartições de receita classificadas em Encargos Especiais).
+    base: anexo02_subfuncao
+    filtro: "subfuncao_cod = '845'"
+
+  - id: juros
+    nome: Juros da dívida
+    definicao: >
+      Juros e encargos da dívida (grupo de despesa) do Anexo 01. Substitui as subfunções 843/844 do Anexo 02,
+      que misturam juros e amortização.
+    base: anexo01_conta
+    filtro: "conta_norm LIKE 'JUROS E ENCARGOS DA DIVIDA%'"
+
+  - id: maquina_demais
+    nome: Máquina pública e demais funções
+    definicao: >
+      Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima e das exclusões:
+      funções 01-04, 07, 13-27, administração dos órgãos (inclusive do INSS) e a subfunção 846.
+    base: anexo02_subfuncao
+    residual: true
+
+excluidos:
+  - id: refinanciamento
+    nome: Refinanciamento da dívida (rolagem)
+    motivo: >
+      Troca de título vencido por título novo. Não consome imposto, e somar giro é dupla contagem
+      (regra editorial 3). Exibido e decomposto no módulo dívida, nunca dentro do R$ 1,00.
+    base: anexo02_subfuncao
+    filtro: "subfuncao_cod IN ('841', '842')"
+
+  - id: servico_divida_bruto
+    nome: Serviço da dívida (juros + amortização) no Anexo 02
+    motivo: >
+      As subfunções 843/844 misturam juros e amortização. Os juros entram pela linha própria (Anexo 01);
+      a amortização é operação de estoque e fica fora do R$ 1,00. A diferença (843 + 844 menos juros) é
+      publicada como amortização.
+    base: anexo02_subfuncao
+    filtro: "subfuncao_cod IN ('843', '844')"
+
+chips:
+  - id: folha_ativos
+    nome: Salários de servidores ativos
+    definicao: GND 1 (pessoal e encargos) menos inativos e pensionistas. Transversal às funções; não é linha, para não dupla-contar.
+    status: fase_1_1
+  - id: emendas
+    nome: Indicação parlamentar
+    definicao: Despesa com marcador RP 6, 7 e 8 (SIOP). Transversal às funções.
+    status: fase_1_1
+  - id: investimento
+    nome: Investimento
+    definicao: GND 4. Transversal às funções.
+    status: fase_1_1
+
+memos:
+  - id: deficit
+    nome: Gasto além do arrecadado
+    definicao: Despesa primária menos receita primária (Anexo 06); vira dívida nova, isto é, imposto futuro.
+    status: fase_1_1
+  - id: imposto_futuro
+    nome: Dívida nova por habitante
+    definicao: Variação líquida do estoque da DPF no ano, dividida pela população (S1 e S14).
+    status: fase_1_1
+
+reconciliacoes:
+  - id: hierarquia
+    descricao: Soma das subfunções = soma das funções (valida a derivação da hierarquia a partir da ordem das linhas).
+    critica: true
+  - id: total_cabecalho
+    descricao: Soma das funções = total "Despesas (exceto intraorçamentárias)" do próprio anexo.
+    critica: true
+  - id: residual_nao_negativo
+    descricao: O residual (máquina e demais funções) não pode ser negativo.
+    critica: true
+  - id: centavos_somam_100
+    descricao: Os centavos publicados somam exatamente 100.
+    critica: true
+  - id: amortizacao_vs_anexo01
+    descricao: (843 + 844) menos juros do Anexo 01 deve se aproximar da amortização (ex-refinanciamento) do Anexo 01.
+    critica: false

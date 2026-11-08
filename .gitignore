@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+
+# dados locais: raw, staging, marts e exports ficam fora do git
+data/
+
+# ambiente
+.env
