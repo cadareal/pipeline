@@ -1,6 +1,6 @@
 [project]
 name = "recibo"
-version = "0.1.0"
+version = "0.2.1"
 description = "Pipeline aberto: de cada R$ 1,00 de imposto, quantos centavos foram para onde. Fase 1: Recibo do Contribuinte."
 readme = "README.md"
 requires-python = ">=3.11"

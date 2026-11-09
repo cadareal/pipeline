@@ -51,11 +51,13 @@ fontes:
     fetcher: siconfi
     tipo_demonstrativo: RREO
     esfera: U
-    id_ente: null            # descoberto em /entes (ente da esfera U); fixe aqui depois da primeira execução
-    anexos_padrao:           # nomes a confirmar contra /anexos-relatorios na primeira execução
+    id_ente: null            # descoberto em /entes (ente da esfera U); fixe aqui depois de conferir no log
+    anexos_padrao:           # nomes confirmados em /anexos-relatorios (2026-11-08); "RREO-Anexo 04" puro vem vazio para a União
       - "RREO-Anexo 01"
       - "RREO-Anexo 02"
-      - "RREO-Anexo 04"
+      - "RREO-Anexo 04 - RGPS"
+      - "RREO-Anexo 04 - RPPS"
+      - "RREO-Anexo 04.0 - RGPS"
       - "RREO-Anexo 06"
     periodos_padrao: [1, 2, 3, 4, 5, 6]
     usos: [despesa por função e subfunção, juros (Anexo 01), previdência RPPS (Anexo 04), resultado primário (Anexo 06)]
@@ -98,13 +100,48 @@ fontes:
     nome: SIOP, orçamento federal por classificador (inclui marcador de emendas RP 6/7/8)
     orgao: Ministério do Planejamento
     base_url: https://www1.siop.planejamento.gov.br/sparql/
-    formato: sparql/json
-    cadencia: contínua
+    formato: sparql/json (Virtuoso; um grafo por exercício; valores em R$ inteiros)
+    cadencia: contínua (o grafo publica loa:dataUltimaAtualizacao; o fetcher só refaz o exercício quando ela muda)
+    cobertura: desde 2000 (a confirmar); usamos 2024 em diante
     chave: nenhuma
     camada: api
-    status: planejado
-    notas: possível problema de cadeia TLS; pinar a CA (RECIBO_CA_BUNDLE), nunca desligar verificação
-    usos: [chip emendas, chip investimento, fonte corrente de 2026]
+    status: implementado
+    fetcher: siop
+    grafo: "http://orcamento.dados.gov.br/{exercicio}/"
+    vocabulario: "http://vocab.e.gov.br/2013/09/loa#"   # confirmado em 2026-11-08 listando os predicados do grafo de 2025
+    timeout_ms: 0                                        # parâmetro `timeout` do Virtuoso (0 = padrão do servidor)
+    timeout_http_s: 300                                  # as fatias grandes (elemento x órgão da função 28) podem levar dezenas de segundos
+    # Rolagem como o RREO monta a linha XII do Anexo 01: GND 6 com fonte cujo código termina em 443 ("Refinanciamento da
+    # Dívida Pública Federal"; o primeiro dígito é o indicador de exercício: 1 corrente, 3 condicionado...). Confirmado em
+    # 2025: R$ 1.417,6 bi nas duas fontes, ao bilhão. A fonte 444 ("Demais Aplicações" dos títulos) não é rolagem.
+    fontes_refinanciamento: ["443"]
+    exercicios_padrao: [2024, 2025, 2026]
+    notas: >
+      Acesso documentado pelo pacote oficial orcamentobr (Ministério do Planejamento; GPL-3, por isso usamos só o
+      modelo de dados, que é público). TLS OK com curl em 2026-11-08; se o Python reclamar da cadeia, RECIBO_CA_BUNDLE
+      com a cadeia Sectigo, nunca desligar verificação. Sem teto de linhas até 20 mil (testado); o fetcher avisa se uma
+      resposta vier com exatamente 10 mil. Não tem restos a pagar pagos (isso é o COFOG, S7).
+    # Cada agregação vira uma consulta SPARQL (SUM dos valores por combinação de códigos). As grandes são fatiadas por
+    # função (uma consulta por função). esfera e modalidade entram em todas: é o que separa o universo comparável ao
+    # RREO (orçamentos fiscal e da seguridade, sem a modalidade 91, intraorçamentária).
+    agregacoes:
+      - id: fonte_gnd_subfuncao
+        dimensoes: [esfera, modalidade_aplicacao, funcao, subfuncao, gnd, fonte]
+        fatiar_por_funcao: false
+        descricao: grupo de despesa por subfunção, com a fonte de recursos (identifica o refinanciamento como o RREO faz)
+      - id: elemento_orgao
+        dimensoes: [esfera, modalidade_aplicacao, orgao, funcao, subfuncao, gnd, elemento_despesa]
+        fatiar_por_funcao: true
+        descricao: elemento de despesa por órgão (01 aposentadorias e reformas, 03 pensões, 11 vencimentos, 91 sentenças judiciais)
+      - id: rp_subfuncao
+        dimensoes: [esfera, modalidade_aplicacao, funcao, subfuncao, gnd, resultado_primario]
+        fatiar_por_funcao: false
+        descricao: identificador de resultado primário (RP 6, 7 e 8 = emendas; 0 = financeira) por subfunção
+      - id: acao_subfuncao
+        dimensoes: [esfera, modalidade_aplicacao, funcao, subfuncao, gnd, acao]
+        fatiar_por_funcao: true
+        descricao: ação por subfunção (abre a 846; nomeia o serviço da dívida fora de 843/844)
+    usos: [conferência cruzada com o RREO, serviço da dívida fora de 843/844 por ação, inativos por elemento, chip emendas, chip investimento, folha de ativos]
 
   - id: S9
     nome: Portal da Transparência (bulk e API de Dados)

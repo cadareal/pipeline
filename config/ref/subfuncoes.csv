@@ -105,6 +105,7 @@ codigo,nome
 782,Transporte Rodoviário
 783,Transporte Ferroviário
 784,Transporte Hidroviário
+784,Transporte Aquaviário
 785,Transportes Especiais
 811,Desporto de Rendimento
 812,Desporto Comunitário
@@ -114,6 +115,7 @@ codigo,nome
 843,Serviço da Dívida Interna
 844,Serviço da Dívida Externa
 845,Outras Transferências
+845,Transferências
 846,Outros Encargos Especiais
 847,Transferências para a Educação Básica
 997,Reserva do RPPS

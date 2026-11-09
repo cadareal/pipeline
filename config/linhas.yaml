@@ -1,8 +1,10 @@
-# Planilha-mãe como código (v0, fase 1).
+# Planilha-mãe como código (v0.2.1, fase 1 com a fonte S8 conferindo e dando valor à linha de aposentados).
 # Cada entrada gera, ao mesmo tempo: o SQL que calcula o número, a ficha técnica publicada e as reconciliações.
 # Mudou aqui, mudou nos três. Nenhum valor é digitado neste arquivo.
+# Calibrado em 2026-11-08 contra o RREO da União: 2024/6º, 2025/6º e 2026/4º bimestre (ver docstring de
+# transform/siconfi.py). Os valores citados nos comentários são observações dessas rodadas, não entradas.
 
-versao: "0.1.0"
+versao: "0.2.1"
 
 regra_rateio: >
   O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção da despesa executada do exercício,
@@ -14,8 +16,9 @@ metrica:
   coluna_regex: "LIQUIDADAS.*ATE O BIMESTRE"
   escopo: exceto_intra
   nota: >
-    O RREO não traz "pago" por função; liquidado é o estágio mais próximo da execução. No ano fechado, a fonte
-    definitiva passa a ser o COFOG (S7: liquidado + restos a pagar pagos) e esta métrica vira preliminar.
+    O RREO não traz "pago" por função; liquidado é o estágio mais próximo da execução. Liquidado no exercício
+    subestima investimento (boa parte paga via restos a pagar): no ano fechado, a fonte definitiva passa a ser o
+    COFOG (S7: liquidado + restos a pagar pagos) e esta métrica vira preliminar.
 
 bases:
   anexo02_subfuncao:
@@ -23,16 +26,56 @@ bases:
     dataset: siconfi_rreo
     anexo_regex: "^RREO-ANEXO 0?2$"
     nivel: subfuncao
+    usa_escopo: true
     descricao: >
       Linhas de subfunção do Anexo 02 (despesa por função/subfunção). A partição é por subfunção, não por função,
-      porque a função 09 "Previdência Social" não é o INSS (contém RPPS e administração) e os inativos aparecem em
-      várias funções (05, 01, 02, 09...) sempre sob a subfunção 272.
+      porque a função 09 "Previdência Social" não é o INSS (contém RPPS e administração). A União lista as
+      subfunções típicas de cada função pelo nome e agrega as atípicas em "FUxx - Demais Subfunções".
   anexo01_conta:
     fonte: S4
     dataset: siconfi_rreo
     anexo_regex: "^RREO-ANEXO 0?1$"
     nivel: null
-    descricao: Contas do Anexo 01 (balanço orçamentário), por categoria econômica e grupo de despesa.
+    usa_escopo: false
+    descricao: >
+      Contas do Anexo 01 (balanço orçamentário), selecionadas por cod_conta, que é estável e já distingue
+      as linhas intraorçamentárias (sufixo "Intra").
+  siop_elemento:
+    fonte: S8
+    dataset: siop_execucao
+    fonte_valor: siop
+    agregacao: elemento_orgao
+    medida: liquidado          # a mesma métrica do recibo (despesa liquidada no exercício)
+    universo: "ofss AND NOT intra"
+    descricao: >
+      Execução do SIOP por elemento de despesa, órgão, função, subfunção e GND, no mesmo universo do RREO (orçamentos
+      fiscal e da seguridade, sem intraorçamentárias). Só vale para ano fechado: o SIOP é acumulado até a última
+      atualização, o RREO até o bimestre. Os filtros usam funcao_cod e subfuncao_cod como no Anexo 02 (a view
+      siop_lin dá esses nomes às colunas do SIOP), por isso a mesma regra de uma linha do RREO pode ser aplicada ao SIOP.
+
+# cod_conta do Anexo 01 usados em linhas e reconciliações (observados em 2024/6).
+referencias_anexo01:
+  total_exceto_intra: DespesasExcetoIntraOrcamentarias
+  juros: JurosEEncargosDaDivida
+  amortizacao: AmortizacaoDaDivida
+  refinanciamento: AmortizacaoRefinanciamentoDaDivida
+  beneficios_previdenciarios: BeneficiosPrevidenciarios
+  pessoal: PessoalEEncargosSociais
+  investimentos: Investimentos
+  transferencias_modalidade: TransferenciasAEstadosDistritoFederalEMunicipios
+
+# Ajustes metodológicos declarados (cada um é uma decisão, não um detalhe de código).
+ajustes:
+  # Juros (GND 2) + amortização (GND 6) do Anexo 01 excedem as subfunções 843/844 (serviço da dívida): em 2024/6,
+  # R$ 40,8 bi (1,2% da despesa exceto intra); em 2025, R$ 124,0 bi (3,3%), valor idêntico ao centavo do 4º ao 6º
+  # bimestre (lançamento único, concluído até agosto); em 2026/4, zero ao centavo. Essa parcela está classificada
+  # em outras subfunções; em 2025 a única com espaço para ela é a 846 (Outros Encargos Especiais), que cai no
+  # residual. Sem o ajuste, esses juros seriam contados duas vezes (na linha de juros e no residual) e essa
+  # amortização entraria como gasto. Com o ajuste, o residual é reduzido nesse valor e vale a identidade:
+  # total do recibo = despesa exceto intra - amortização do Anexo 01. O total está certo por construção; o risco
+  # é de alocação (se parte estiver numa linha nomeada, ela fica inflada e o residual subestimado).
+  # Hipótese a confirmar com o SIOP (GND x subfunção) na fase 1.1; `recibo diff` ajuda a localizar.
+  servico_divida_fora_843_844: true
 
 linhas:
   - id: previdencia_inss
@@ -44,10 +87,23 @@ linhas:
   - id: inativos_pensionistas
     nome: Aposentados e pensionistas do setor público
     definicao: >
-      Subfunções 272 (regime estatutário: servidores civis e militares) e 274 (previdência especial), em qualquer
-      função. O drill por regime (civil, militar, Poderes) vem do Anexo 04 e do CUSTOS na fase 2.
-    base: anexo02_subfuncao
-    filtro: "subfuncao_cod IN ('272', '274')"
+      Aposentadorias, reservas remuneradas, reformas e pensões pagas pela União a servidores civis e militares e
+      seus dependentes: elementos de despesa 01 (aposentadorias do RPPS, reserva remunerada e reformas dos militares)
+      e 03 (pensões), em qualquer função e qualquer órgão, no SIOP. Pela função/subfunção do RREO isso não se vê:
+      em 2025 só R$ 103,5 bi dos R$ 179,7 bi estavam na subfunção 272; o resto estava em Defesa (reserva e reforma
+      dos militares, R$ 34,2 bi), em Encargos Especiais (pensões militares, R$ 30,4 bi; movidas da função 09 para a
+      28 em 2025) e em Transferências (inativos do Fundo Constitucional do DF, R$ 10,4 bi). O que o SIOP encontra
+      dentro de uma linha do RREO sai dela e entra aqui (transferências declaradas na ficha); o total do recibo não
+      muda. Em ano em andamento, ou sem SIOP, vale o fallback do RREO, marcado como piso.
+    base: siop_elemento
+    filtro: "cod_elemento_despesa IN ('01', '03')"
+    transfere_de_linhas: true
+    fallback:
+      base: anexo02_subfuncao
+      filtro: "subfuncao_cod IN ('272', '274')"
+      nota: >
+        piso: subfunções 272 e 274 do RREO. O valor completo (elementos 01 e 03 do SIOP, em qualquer função) só é
+        calculado em ano fechado; em 2025 ele foi 72% maior que o piso.
 
   - id: assistencia
     nome: Assistência social (Bolsa Família, BPC)
@@ -63,7 +119,10 @@ linhas:
 
   - id: educacao
     nome: Educação
-    definicao: Função 12 mais a subfunção 847 (transferências para a educação básica, FUNDEB), excluídas as subfunções previdenciárias.
+    definicao: >
+      Função 12, excluídas as subfunções previdenciárias. A complementação do FUNDEB e o salário-educação
+      (subfunção 847, atípica para a função) já estão dentro de "FU12 - Demais Subfunções"; a cláusula sobre 847
+      cobre o caso de a União passar a detalhá-la em outra função.
     base: anexo02_subfuncao
     filtro: "(funcao_cod = '12' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')) OR subfuncao_cod = '847'"
 
@@ -75,38 +134,49 @@ linhas:
 
   - id: defesa_seguranca
     nome: Defesa e segurança
-    definicao: Funções 05 e 06, excluídas as subfunções previdenciárias (inativos militares ficam na linha de aposentados).
+    definicao: >
+      Funções 05 e 06, excluídas as subfunções previdenciárias explícitas. Atenção: inativos e pensionistas
+      militares podem estar classificados dentro desta função (ver limitação da linha de aposentados).
     base: anexo02_subfuncao
     filtro: "funcao_cod IN ('05', '06') AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')"
 
   - id: transferencias
     nome: Transferências a estados e municípios
-    definicao: Subfunção 845 (FPM, FPE e demais repartições de receita classificadas em Encargos Especiais).
+    definicao: >
+      Subfunção 845 (FPM, FPE e demais repartições de receita classificadas em Encargos Especiais). Repasses do
+      SUS e do FUNDEB não entram aqui: contam como Saúde e Educação, por desenho.
     base: anexo02_subfuncao
     filtro: "subfuncao_cod = '845'"
 
   - id: juros
     nome: Juros da dívida
     definicao: >
-      Juros e encargos da dívida (grupo de despesa) do Anexo 01. Substitui as subfunções 843/844 do Anexo 02,
-      que misturam juros e amortização.
+      Juros e encargos da dívida (grupo de despesa) do Anexo 01, cod_conta JurosEEncargosDaDivida. Substitui as
+      subfunções 843/844 do Anexo 02, que misturam juros e amortização.
     base: anexo01_conta
-    filtro: "conta_norm LIKE 'JUROS E ENCARGOS DA DIVIDA%'"
+    filtro: "cod_conta = 'JurosEEncargosDaDivida'"
 
   - id: maquina_demais
-    nome: Máquina pública e demais funções
+    nome: Encargos especiais e demais funções
     definicao: >
-      Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima e das exclusões:
-      funções 01-04, 07, 13-27, administração dos órgãos (inclusive do INSS) e a subfunção 846.
+      Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima, das exclusões e do
+      ajuste do serviço da dívida fora de 843/844. Duas metades de tamanho parecido em 2025: a subfunção 846
+      "Outros Encargos Especiais" (R$ 346 bi, descontados os R$ 124 bi da cobertura do Banco Central e as pensões
+      militares que vão para a linha de aposentados: sentenças judiciais e precatórios, financiamentos com retorno
+      como o Plano Brasil Soberano, o Minha Casa Minha Vida e os fundos regionais, honras de aval) e todas as outras
+      funções juntas (R$ 208 bi: Judiciário, Legislativo, Essencial à Justiça, Administração, Agricultura, Ciência,
+      Gestão ambiental, Transporte, Relações exteriores e as pequenas). O hover abre a 846 por ação, pelo SIOP.
     base: anexo02_subfuncao
     residual: true
 
 excluidos:
   - id: refinanciamento
-    nome: Refinanciamento da dívida (rolagem)
+    nome: Refinanciamento da dívida (rolagem) no Anexo 02
     motivo: >
       Troca de título vencido por título novo. Não consome imposto, e somar giro é dupla contagem
-      (regra editorial 3). Exibido e decomposto no módulo dívida, nunca dentro do R$ 1,00.
+      (regra editorial 3). No RREO da União o total do Anexo 02 já exclui o refinanciamento (ele aparece só
+      na linha XII do Anexo 01), então esta exclusão tende a zero; fica como salvaguarda. O valor exibido ao
+      público vem do Anexo 01 (referencias_anexo01.refinanciamento).
     base: anexo02_subfuncao
     filtro: "subfuncao_cod IN ('841', '842')"
 
@@ -114,8 +184,9 @@ excluidos:
     nome: Serviço da dívida (juros + amortização) no Anexo 02
     motivo: >
       As subfunções 843/844 misturam juros e amortização. Os juros entram pela linha própria (Anexo 01);
-      a amortização é operação de estoque e fica fora do R$ 1,00. A diferença (843 + 844 menos juros) é
-      publicada como amortização.
+      a amortização é operação de estoque e fica fora do R$ 1,00. O valor de amortização publicado é o do
+      Anexo 01 (AmortizacaoDaDivida); a parte dele que não está em 843/844 é removida do residual
+      (ajustes.servico_divida_fora_843_844).
     base: anexo02_subfuncao
     filtro: "subfuncao_cod IN ('843', '844')"
 
@@ -130,7 +201,7 @@ chips:
     status: fase_1_1
   - id: investimento
     nome: Investimento
-    definicao: GND 4. Transversal às funções.
+    definicao: GND 4. Transversal às funções. Liquidado no exercício subestima; usar liquidado + RP pagos.
     status: fase_1_1
 
 memos:
@@ -148,7 +219,13 @@ reconciliacoes:
     descricao: Soma das subfunções = soma das funções (valida a derivação da hierarquia a partir da ordem das linhas).
     critica: true
   - id: total_cabecalho
-    descricao: Soma das funções = total "Despesas (exceto intraorçamentárias)" do próprio anexo.
+    descricao: Soma das funções = total "Despesas (exceto intraorçamentárias)" do próprio Anexo 02.
+    critica: true
+  - id: total_anexos
+    descricao: Total exceto intra do Anexo 02 = DespesasExcetoIntraOrcamentarias do Anexo 01 (mesmo universo).
+    critica: true
+  - id: fu_prefixo_consistente
+    descricao: O prefixo "FUxx" nunca discorda da função vista na ordem das linhas.
     critica: true
   - id: residual_nao_negativo
     descricao: O residual (máquina e demais funções) não pode ser negativo.
@@ -156,6 +233,86 @@ reconciliacoes:
   - id: centavos_somam_100
     descricao: Os centavos publicados somam exatamente 100.
     critica: true
-  - id: amortizacao_vs_anexo01
-    descricao: (843 + 844) menos juros do Anexo 01 deve se aproximar da amortização (ex-refinanciamento) do Anexo 01.
+  - id: identidade_total
+    descricao: Total do recibo = despesa exceto intra (Anexo 02) menos AmortizacaoDaDivida (Anexo 01).
+    critica: true
+  - id: servico_divida_fora_843_844
+    descricao: >
+      Juros + amortização (Anexo 01) menos subfunções 843/844: parcela do serviço da dívida classificada em outras
+      subfunções. Ideal zero; tolerada até 2% da despesa exceto intra. Em 2024/6 deu R$ 40,8 bi (1,2%); em 2025
+      deu R$ 124,0 bi (3,3%) e acusou; em 2026/4, zero.
     critica: false
+    tolerancia_relativa: 0.02
+  - id: inss_vs_beneficios_anexo01
+    descricao: >
+      Previdência Básica (271) deve ficar a menos de 5% de BeneficiosPrevidenciarios do Anexo 01. Diferença de
+      R$ 25,3 bi em 2024/6 (2,7%), R$ 38,0 bi em 2025/6 (3,7%) e R$ 37,9 bi em 2026/4 (4,9%); hipótese: sentenças
+      judiciais e compensação previdenciária do RGPS classificadas em Encargos Especiais (846).
+    critica: false
+    tolerancia_relativa: 0.05
+  - id: variacao_anual
+    descricao: >
+      Cada linha do recibo comparada com o mesmo período do exercício anterior (2026/p4 contra 2025/p4; 2025/p6
+      contra 2024/p6). Mesmo período, porque o gasto não é um sexto por bimestre (13º, abono, cupons de títulos,
+      obras em dezembro). Variação acima do limite é aviso, não erro: pode ser economia real, calendário ou
+      mudança de classificação na fonte. Em 2025/6 acusaria inativos (-16%) e máquina (+34%); investigue com
+      `recibo diff`.
+    critica: false
+    limite_relativo: 0.15
+
+  # Conferências cruzadas com o SIOP (S8): fonte independente do RREO, sobre o mesmo universo (orçamentos fiscal e
+  # da seguridade, sem intraorçamentárias, sem refinanciamento quando se compara com o Anexo 02). Só em ano fechado.
+  # Calibradas em 2025 (9/nov): juros com diferença de R$ 0,57, GND 6 total com R$ 2,20, e com refinanciamento
+  # definido como GND 6 + fonte 443 as funções batem ao real. O SIOP publica valores em reais inteiros, por isso a
+  # tolerância é de 1 em 10 milhões (R$ 370 mil num total de R$ 3,7 tri), não zero. Como a linha de aposentados agora
+  # vem do SIOP, as duas conferências que garantem que as fontes descrevem o mesmo universo são críticas.
+  - id: siop_vs_rreo_funcao
+    descricao: >
+      Liquidado por função no SIOP (OFSS, sem modalidade 91, sem refinanciamento) contra a soma das funções do
+      Anexo 02 (exceto intra). O detalhe lista as funções fora da tolerância. Crítica: se as duas fontes não
+      descrevem o mesmo bolo, as transferências entre linhas não podem ser feitas.
+    critica: true
+    tolerancia_relativa: 0.0000001
+  - id: siop_juros_vs_anexo01
+    descricao: GND 2 (juros e encargos) no SIOP contra JurosEEncargosDaDivida do Anexo 01. Em 2025, diferença de R$ 0,57.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: siop_gnd6_vs_anexo01
+    descricao: >
+      GND 6 (amortização, inclusive refinanciamento) no SIOP contra AmortizacaoDaDivida + AmortizacaoRefinanciamentoDaDivida
+      do Anexo 01. Em 2025, diferença de R$ 2,20.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: siop_refinanciamento_vs_anexo01
+    descricao: >
+      GND 6 com fonte 443 no SIOP contra a linha XII do Anexo 01. É a mesma definição (o RREO separa a rolagem pela
+      fonte de recursos): em 2025, R$ 1.417,6 bi dos dois lados, inclusive os R$ 13,8 bi que estão fora de 841/842.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: servico_divida_fora_843_844_siop
+    descricao: >
+      GND 2 e 6 fora das subfunções 841-844 (sem refinanciamento) medidos no SIOP, contra o excesso que o RREO só
+      estima por diferença (servico_divida_fora_843_844). Crítica: é o que transforma o ajuste em valor nomeado. O
+      detalhe lista as ações: em 2024 e 2025, 0669 "Cobertura do Resultado Negativo Apurado no Banco Central do
+      Brasil" (R$ 40,7 bi e R$ 124,0 bi).
+    critica: true
+    tolerancia_relativa: 0.0000001
+  - id: inativos_pensionistas_siop_vs_rreo
+    descricao: >
+      Elementos 01 e 03 do SIOP dentro do recorte do RREO (subfunções 272 e 274) contra o valor do RREO nesse recorte.
+      A diferença é o que está nessas subfunções sem ser aposentadoria ou pensão (em 2025, cerca de R$ 1 bi).
+    critica: false
+    tolerancia_relativa: 0.02
+  - id: siop_comparavel
+    descricao: >
+      Emitida em ano em andamento: o SIOP é acumulado até a última atualização do grafo, o RREO até o bimestre, então
+      as conferências cruzadas não rodam. O detalhe traz o serviço da dívida fora de 841-844 até a data do SIOP.
+    critica: false
+
+# Parâmetros das conferências cruzadas e das linhas que usam o SIOP.
+siop:
+  agregacao_gnd: fonte_gnd_subfuncao
+  agregacao_acao: acao_subfuncao
+  agregacao_elemento: elemento_orgao
+  subfuncoes_servico_divida: ["841", "842", "843", "844"]
+  subfuncao_outros_encargos: "846"

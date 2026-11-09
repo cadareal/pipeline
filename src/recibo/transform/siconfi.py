@@ -1,17 +1,28 @@
 """Transform S4: raw (pages.jsonl) -> staging (stg_siconfi_rreo.parquet).
 
 Mantém todas as colunas da API e acrescenta derivações:
-  anexo_norm, coluna_norm, conta_norm  : texto normalizado (sem acento, maiúsculas)
-  escopo                               : exceto_intra | intra | desconhecido (forward-fill a partir dos cabeçalhos)
-  nivel                                : total | funcao | subfuncao | conta
-  funcao_cod                           : código da função (na linha de função, o próprio; na de subfunção, o da função-mãe)
-  subfuncao_cod                        : código da subfunção quando reconhecida
-  is_header                            : True nas linhas "DESPESAS (EXCETO INTRAORÇAMENTÁRIAS)" / "(INTRAORÇAMENTÁRIAS)"
-  ordem                                : posição da linha dentro de (chave raw, coluna), como a API devolveu
+  anexo_norm, coluna_norm, conta_norm, rotulo_norm : texto normalizado (sem acento, maiúsculas)
+  escopo              : exceto_intra | intra | desconhecido. Vem do `rotulo` (a API repete o nome da seção em
+                        toda linha); se o rotulo não disser, usa o próprio `conta` quando ele é o cabeçalho, e
+                        por último o forward-fill a partir do último cabeçalho visto.
+  nivel               : total | funcao | subfuncao | conta
+  funcao_cod          : na linha de função, o próprio código; na de subfunção, o da função-mãe
+  funcao_cod_prefixo  : código vindo do prefixo "FUxx - " (União), quando existe
+  funcao_cod_ordem    : código da última função vista na ordem da API
+  subfuncao_cod       : código da subfunção ('122' para "FUxx - Administração Geral"; 'demais' para o balde
+                        "FUxx - Demais Subfunções"; None quando o nome não está na referência)
+  is_header           : True nas linhas cujo `conta` é "DESPESAS (EXCETO INTRA-ORÇAMENTÁRIAS)" / "(INTRA-...)"
+  header_escopo       : nas linhas is_header, o escopo dito pelo próprio `conta` (exceto_intra | intra). Necessário
+                        porque o bloco I do Anexo 02 contém também a linha-resumo "DESPESAS (INTRA-ORÇAMENTÁRIAS) (II)",
+                        cujo rotulo é o do bloco I; só o `conta` distingue o cabeçalho (I) desse resumo (II).
+  fu_inconsistente    : True quando o prefixo FUxx discorda da função vista na ordem (hierarquia suspeita)
+  ordem               : posição da linha dentro de (chave raw, coluna), como a API devolveu
 
-A hierarquia função -> subfunção é derivada da ORDEM das linhas (uma subfunção pertence à última função vista).
-Isso é validado pela reconciliação "hierarquia" (soma das subfunções = soma das funções). Se falhar, o
-cod_conta da API provavelmente carrega a hierarquia; `recibo inspect` mostra os valores para calibrar.
+Calibrado em 2026-11-08 com o RREO 2024/6º bimestre da União:
+  - `cod_conta` do Anexo 02 é constante ("RREO2TotalDespesas"): não serve para hierarquia.
+  - A União lista subfunções típicas pelo nome e agrega as atípicas em "FUxx - Demais Subfunções".
+  - `cod_conta` do Anexo 01 é um código estável (JurosEEncargosDaDivida, AmortizacaoDaDivida...); as linhas
+    intraorçamentárias têm sufixo "Intra". Os filtros do Anexo 01 usam cod_conta, não escopo.
 """
 
 from __future__ import annotations
@@ -37,6 +48,9 @@ RE_EXCETO_INTRA = re.compile(r"EXCETO\s+INTRA[- ]?ORCAMENTARIAS")
 RE_INTRA = re.compile(r"\bINTRA[- ]?ORCAMENTARIAS")
 RE_TOTAL = re.compile(r"^(TOTAL|SUBTOTAL|SUPERAVIT|DEFICIT)\b")
 RE_ANEXO02 = re.compile(r"^RREO-ANEXO 0?2$")
+RE_FU = re.compile(r"^FU(\d{2})\s*-\s*(.+)$")
+
+SUBFUNCAO_DEMAIS = "demais"
 
 API_COLS = [
     "exercicio", "demonstrativo", "periodo", "periodicidade", "instituicao", "cod_ibge", "uf",
@@ -81,6 +95,14 @@ def normalize_items(items: list[dict], manifest: dict) -> list[dict]:
     return out
 
 
+def _escopo_de(texto: str) -> str | None:
+    if RE_EXCETO_INTRA.search(texto):
+        return "exceto_intra"
+    if RE_INTRA.search(texto):
+        return "intra"
+    return None
+
+
 def derive(rows: list[dict], funcoes: dict[str, str], subfuncoes: dict[str, str]) -> list[dict]:
     func_codes = set(funcoes.values())
     sub_codes = set(subfuncoes.values())
@@ -93,33 +115,47 @@ def derive(rows: list[dict], funcoes: dict[str, str], subfuncoes: dict[str, str]
     for (_key, coluna_norm), grp in groups.items():
         anexo_norm = norm(grp[0].get("anexo"))
         is_anexo02 = bool(RE_ANEXO02.match(anexo_norm))
-        escopo = "desconhecido"
-        funcao_atual: str | None = None
+        escopo_ff = "desconhecido"
+        funcao_ordem: str | None = None
 
         for i, r in enumerate(grp):
             conta_norm = norm(r.get("conta"))
+            rotulo_norm = norm(r.get("rotulo"))
             code, label = split_leading_code(conta_norm)
-            hint = " | ".join([norm(r.get("rotulo")), norm(r.get("cod_conta")), conta_norm])
 
-            is_header = False
-            if RE_EXCETO_INTRA.search(hint):
-                escopo, is_header = "exceto_intra", True
-            elif RE_INTRA.search(hint):
-                escopo, is_header = "intra", True
+            header_escopo = _escopo_de(conta_norm)
+            is_header = header_escopo is not None
+            if is_header:
+                escopo_ff = header_escopo
+            escopo = _escopo_de(rotulo_norm) or header_escopo or escopo_ff
 
             nivel = "conta"
             funcao_cod: str | None = None
+            funcao_prefixo: str | None = None
             subfuncao_cod: str | None = None
+            fu_inconsistente = False
+
             if is_header or RE_TOTAL.match(conta_norm):
                 nivel = "total"
-                funcao_atual = None
+                funcao_ordem = None
             elif is_anexo02:
-                fcode = code if (code in func_codes and len(code) == 2) else funcoes.get(label)
-                if fcode:
-                    nivel, funcao_cod, funcao_atual = "funcao", fcode, fcode
+                m_fu = RE_FU.match(conta_norm)
+                if m_fu:
+                    funcao_prefixo, fu_label = m_fu.group(1), m_fu.group(2).strip()
+                    nivel = "subfuncao"
+                    funcao_cod = funcao_prefixo
+                    if fu_label.startswith("DEMAIS SUBFUNC"):
+                        subfuncao_cod = SUBFUNCAO_DEMAIS
+                    else:
+                        subfuncao_cod = subfuncoes.get(fu_label)
+                    fu_inconsistente = funcao_ordem is not None and funcao_ordem != funcao_prefixo
                 else:
-                    nivel, funcao_cod = "subfuncao", funcao_atual
-                    subfuncao_cod = code if (code in sub_codes and len(code) == 3) else subfuncoes.get(label)
+                    fcode = code if (code in func_codes and len(code) == 2) else funcoes.get(label)
+                    if fcode:
+                        nivel, funcao_cod, funcao_ordem = "funcao", fcode, fcode
+                    else:
+                        nivel, funcao_cod = "subfuncao", funcao_ordem
+                        subfuncao_cod = code if (code in sub_codes and len(code) == 3) else subfuncoes.get(label)
 
             r2 = dict(r)
             r2.update(
@@ -127,12 +163,17 @@ def derive(rows: list[dict], funcoes: dict[str, str], subfuncoes: dict[str, str]
                     "anexo_norm": anexo_norm,
                     "coluna_norm": coluna_norm,
                     "conta_norm": conta_norm,
+                    "rotulo_norm": rotulo_norm,
                     "conta_cod_prefixo": code,
                     "escopo": escopo,
                     "nivel": nivel,
                     "funcao_cod": funcao_cod,
+                    "funcao_cod_prefixo": funcao_prefixo,
+                    "funcao_cod_ordem": funcao_ordem if nivel == "subfuncao" else None,
                     "subfuncao_cod": subfuncao_cod,
                     "is_header": is_header,
+                    "header_escopo": header_escopo,
+                    "fu_inconsistente": fu_inconsistente,
                     "ordem": i,
                 }
             )
