@@ -1,0 +1,4633 @@
+{
+ "versao_spec": "0.9.1",
+ "gerado_em": "2026-11-10T15:18:14+00:00",
+ "exercicio": 2026,
+ "periodo": 4,
+ "estado": {
+  "selo": "em_andamento",
+  "nota": "Dados até o 4º bimestre de 2026 (RREO). Atualização a cada bimestre."
+ },
+ "publicavel": true,
+ "unidade": "R$ (como publicado pela fonte)",
+ "regra_rateio": "O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção do que o governo gastou no período. \"Gastou\" é a conta oficial do Tesouro: a despesa primária do Anexo 06 do RREO (salários, aposentadorias, benefícios, custeio, obras, repasses; liquidada), mais os juros da dívida pagos (Anexo 01). Fica fora do R$ 1,00 o que não é gasto e sim troca de ativo: refinanciamento e amortização da dívida (pagar o principal) e o que o Tesouro classifica como financeiro (emprestar, comprar título, integralizar capital com retorno). As linhas somam R$ 1,00. O que saiu do caixa como empréstimo aparece no \"Fora do R$ 1,00\", com a lista do que foi emprestado; o que foi gasto além do arrecadado aparece como memo (resultado primário), nunca dentro do R$ 1,00.\n",
+ "total_recibo": 2497125334439.21,
+ "total_recibo_definicao": "despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01)",
+ "total_base_anexo02": 2928524270047.2197,
+ "comparacao": {
+  "exercicio": 2025,
+  "periodo": 4,
+  "disponivel": true
+ },
+ "siop": {
+  "disponivel": true,
+  "data_atualizacao": "2026-11-07T01:34:43.550-03:00",
+  "agregacao_gnd": "fonte_gnd_subfuncao",
+  "agregacao_acao": "acao_subfuncao",
+  "servico_divida_fora_843_844": [
+   {
+    "acao": "00Q3",
+    "nome": "Assunção e Novação de Dívidas do Fundo de Compensação das Variações Salariais - FCVS",
+    "gnd": "6",
+    "liquidado": 2236376802.0
+   }
+  ],
+  "refinanciamento_fora_841_844": 2236376802.0,
+  "nota_lista_acoes": "a lista por ação não distingue fonte: 2,236,376,802.00 dela têm fonte de refinanciamento (ex.: novação do FCVS, ação 00Q3) e não entram na medida, porque o RREO os trata como rolagem",
+  "detalhe_846": [
+   {
+    "acao": "00WU",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios) - Excedentes ao sublimite",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 41636986533.0
+   },
+   {
+    "acao": "00YA",
+    "nome": "Financiamento a Profissionais de Transporte Remunerado Privado Individual de Passageiros, Taxistas e Cooperativas de Taxistas, para Aquisição de Veículos Automotores Novos",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 30000000000.0
+   },
+   {
+    "acao": "0625",
+    "nome": "Sentenças Judiciais Transitadas em Julgado de Pequeno Valor",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 26533906187.0
+   },
+   {
+    "acao": "00XF",
+    "nome": "Financiamento de operações de crédito reembolsável no âmbito do Programa Minha Casa, Minha Vida (Lei nº 12.351, de 2010)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 25552118035.0
+   },
+   {
+    "acao": "0179",
+    "nome": "Pensões Militares da União",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 23930294829.0
+   },
+   {
+    "acao": "00XO",
+    "nome": "Financiamentos a Pessoas Físicas e Jurídicas de Direito Privado Exportadoras de Bens e Serviços, bem como seus Fornecedores, abrangidos pelo Plano Brasil Soberano",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 22000000000.0
+   },
+   {
+    "acao": "00Y6",
+    "nome": "Financiamento a Pessoas Físicas e Jurídicas de Direito Privado para Aquisição de Caminhões e Caminhões tratores Novos ou Seminovos, bem como de Ônibus, Micro ônibus e Implementos Rodoviários Novos, para Renovação de Frota",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 12528807482.0
+   },
+   {
+    "acao": "0EC7",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios relativos à complementação da União ao Fundef)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 10062655858.0
+   },
+   {
+    "acao": "00YO",
+    "nome": "Subvenção Econômica à Produção e à Importação de Óleo Diesel de Uso Rodoviário (Medida Provisória nº 1.363, de 2026)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 9860098810.0
+   },
+   {
+    "acao": "00WU",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios) - Excedentes ao sublimite",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 8339114346.0
+   },
+   {
+    "acao": "00X8",
+    "nome": "Apoio financeiro reembolsável mediante concessão de empréstimo a Empresas prestadoras de Serviços Aéreos Regulares no Mercado Brasileiro",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 8000000000.0
+   },
+   {
+    "acao": "0031",
+    "nome": "Financiamento aos Setores Produtivos da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 7220584023.0
+   },
+   {
+    "acao": "0030",
+    "nome": "Financiamento aos Setores Produtivos do Semiárido da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 7220584023.0
+   },
+   {
+    "acao": "00QU",
+    "nome": "Subvenção Econômica à Comercialização de Óleo Diesel de Uso Rodoviário no Território Nacional (Medida Provisória nº 1.340, de 2026)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 6684872939.0
+   },
+   {
+    "acao": "0EB8",
+    "nome": "Financiamento de Campanha Eleitoral",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 4954904417.0
+   },
+   {
+    "acao": "0029",
+    "nome": "Financiamento aos Setores Produtivos da Região Centro-Oeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 4813722680.0
+   },
+   {
+    "acao": "0534",
+    "nome": "Financiamento aos Setores Produtivos da Região Norte - FNO (Lei nº 7.827, de 27 de setembro de 1989)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 4657870207.0
+   },
+   {
+    "acao": "0005",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 4296462763.0
+   },
+   {
+    "acao": "00ED",
+    "nome": "Integralização de cotas do Fundo Garantidor para Investimentos - FGI no âmbito do Programa Emergencial de Acesso a Crédito - PEAC-FGI",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 4000000000.0
+   },
+   {
+    "acao": "00YN",
+    "nome": "Subvenção Econômica à Produção e à Importação de Combustíveis Derivados de Petróleo (Medida Provisória nº 1.358 de 2026)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 3551136675.0
+   },
+   {
+    "acao": "00WU",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios) - Excedentes ao sublimite",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 3197402356.0
+   },
+   {
+    "acao": "00X6",
+    "nome": "Financiamentos de Investimentos em Infraestrutura Social (Lei nº 14.947, de 2024)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 2500000000.0
+   },
+   {
+    "acao": "00Q3",
+    "nome": "Assunção e Novação de Dívidas do Fundo de Compensação das Variações Salariais - FCVS",
+    "gnd": "6",
+    "gnd_nome": "Amortização da Dívida",
+    "liquidado": 2236376802.0
+   },
+   {
+    "acao": "0118",
+    "nome": "Financiamentos à Infraestrutura Aquaviária, Portuária e Construção/Manutenção Naval",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 1773200906.0
+   },
+   {
+    "acao": "0625",
+    "nome": "Sentenças Judiciais Transitadas em Julgado de Pequeno Valor",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 1681471376.0
+   },
+   {
+    "acao": "00YH",
+    "nome": "Financiamento a Beneficiários do Programa Desenrola Adimplentes",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 1650000000.0
+   },
+   {
+    "acao": "00CX",
+    "nome": "Subvenção econômica destinada a Implementação de projetos de Interesse social em áreas rurais(Lei nº 14.620, DE 13 de julho de 2023)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 1500000000.0
+   },
+   {
+    "acao": "0413",
+    "nome": "Manutenção e Operação dos Partidos Políticos",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 1190114277.0
+   },
+   {
+    "acao": "00YG",
+    "nome": "Financiamento a Beneficiários Adimplentes do Fundo de Financiamento Estudantil – Fies",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 1000000000.0
+   },
+   {
+    "acao": "0739",
+    "nome": "Indenização a Anistiados Políticos",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 932837079.0
+   },
+   {
+    "acao": "0536",
+    "nome": "Benefícios de Legislação Especial",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 868776772.0
+   },
+   {
+    "acao": "00OP",
+    "nome": "Integralização de Cotas em Rodadas Específicas de Capital de Bancos Internacionais",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 843302873.0
+   },
+   {
+    "acao": "0355",
+    "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento do Nordeste - FDNE (Lei Complementar nº 125, de 3 de janeiro de 2007)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 790994839.0
+   },
+   {
+    "acao": "00EE",
+    "nome": "Integralização de Cotas no Fundo Garantidor de Operações (FGO) para o Programa Nacional de Apoio às Microempresas e Empresas de Pequeno Porte (Pronampe)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 750000000.0
+   },
+   {
+    "acao": "00VE",
+    "nome": "Integralização de cotas do Fundo Garantidor da Habitação Popular - FGHab",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 750000000.0
+   },
+   {
+    "acao": "0005",
+    "nome": "Sentenças Judiciais Transitadas em Julgado (Precatórios)",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 746496305.0
+   },
+   {
+    "acao": "00M4",
+    "nome": "Remuneração a Agentes Financeiros",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 735165607.0
+   },
+   {
+    "acao": "00XC",
+    "nome": "Aporte de Recursos para Implementação do Comitê Gestor do Imposto sobre Bens e Serviços - CGIBS (Lei Complementar nº 214, de 2025)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 733333333.0
+   },
+   {
+    "acao": "0265",
+    "nome": "Indenizações e Restituições relativas ao Programa de Garantia da Atividade Agropecuária - PROAGRO (Lei nº 8.171, de 1991)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 690000000.0
+   },
+   {
+    "acao": "00Y8",
+    "nome": "Financiamento Destinado a Capital de Giro aos Prestadores de Serviços Aéreos Regulares",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 661453662.0
+   },
+   {
+    "acao": "00SA",
+    "nome": "Pagamento de honorários periciais nas ações em que o INSS figure como parte",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 640447165.0
+   },
+   {
+    "acao": "00S6",
+    "nome": "Benefício Especial - Lei nº 12.618, de 2012",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 636183657.0
+   },
+   {
+    "acao": "0536",
+    "nome": "Benefícios de Legislação Especial",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 615241156.0
+   },
+   {
+    "acao": "00N2",
+    "nome": "Cumprimento de Sentença Judicial - Instituto Aerus de Seguridade Social - Processo nº 0010295-77.2004.4.01.3400",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 521791852.0
+   },
+   {
+    "acao": "0617",
+    "nome": "Operacionalização do Fundo de Compensação e Variações Salariais - FCVS",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 513266958.0
+   },
+   {
+    "acao": "00Y7",
+    "nome": "Integralização de Cotas do Fundo Garantidor de Operações de Comércio Exterior - FGCE",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 500000000.0
+   },
+   {
+    "acao": "00UX",
+    "nome": "Demais Aposentadorias e Complementações",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 498739186.0
+   },
+   {
+    "acao": "00QY",
+    "nome": "Acordos referentes a passivos atuariais de estatais dependentes",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 420249683.0
+   },
+   {
+    "acao": "00Y3",
+    "nome": "Subvenção Econômica à Importação de Óleo Diesel de Uso Rodoviário (Medida Provisória nº 1.349, de 2026)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 348457708.0
+   },
+   {
+    "acao": "00VR",
+    "nome": "Participação da União em projetos de concessões rodoviárias outorgadas a iniciativa privada",
+    "gnd": "4",
+    "gnd_nome": "Investimentos",
+    "liquidado": 330509766.0
+   },
+   {
+    "acao": "0023",
+    "nome": "Obrigações com a Garantia de Contratos de Financiamento Habitacional",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 314888517.0
+   },
+   {
+    "acao": "00Y0",
+    "nome": "Integralização de Cotas do Fundo Garantidor de Operações (FGO) destinada a garantir financiamento para pessoas físicas ou jurídicas afetadas pelos eventos climáticos ocorridos em fevereiro e março de 2026",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 300000000.0
+   },
+   {
+    "acao": "0128",
+    "nome": "Contribuição à Organização das Nações Unidas - ONU (MRE)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 278231957.0
+   },
+   {
+    "acao": "0027",
+    "nome": "Pagamentos no âmbito do Seguro de Crédito à Exportação",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 219568385.0
+   },
+   {
+    "acao": "00WH",
+    "nome": "Financiamentos de Operações para Apoiar Ações de Mitigação e Adaptação às Mudanças Climáticas e de Enfrentamento de Consequências Sociais e Econômicas de Calamidades Públicas",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 214728019.0
+   },
+   {
+    "acao": "0739",
+    "nome": "Indenização a Anistiados Políticos",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 210713907.0
+   },
+   {
+    "acao": "0353",
+    "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento da Amazônia - FDA (Lei Complementar nº 124, de 3 de janeiro de 2007)",
+    "gnd": "5",
+    "gnd_nome": "Inversões Financeiras",
+    "liquidado": 201326255.0
+   },
+   {
+    "acao": "0022",
+    "nome": "Sentenças Judiciais Devidas por Empresas Estatais",
+    "gnd": "1",
+    "gnd_nome": "Pessoal e Encargos Sociais",
+    "liquidado": 141756933.0
+   },
+   {
+    "acao": "000K",
+    "nome": "Subvenção Econômica em Operações de Financiamento no âmbito do Programa de Sustentação do Investimento - PSI e do Programa Emergencial de Reconstrução de Municípios Afetados por Desastres Naturais (Leis nº 12.096, de 2009 e nº 12.409, de 2011)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 106399223.0
+   },
+   {
+    "acao": "00CW",
+    "nome": "Subvenção econômica destinada à ampliação do acesso ao financiamento habitacional(Lei nº 14.620, DE 13 de julho de 2023)",
+    "gnd": "3",
+    "gnd_nome": "Outras Despesas Correntes",
+    "liquidado": 100000000.0
+   }
+  ],
+  "agregacao_acao_rp": "acao_rp_subfuncao",
+  "emprestimos_financeiros_acoes": [
+   {
+    "acao": "00YA",
+    "nome": "Financiamento a Profissionais de Transporte Remunerado Privado Individual de Passageiros, Taxistas e Cooperativas de Taxistas, para Aquisição de Veículos Automotores Novos",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 30000000000.0
+   },
+   {
+    "acao": "00J4",
+    "nome": "Apoio Financeiro Reembolsável mediante Financiamento e outros Instrumentos Financeiros para Projetos de Mitigação e Adaptação à Mudança do Clima",
+    "funcao": "18",
+    "subfuncao": "541",
+    "liquidado": 29884183880.0
+   },
+   {
+    "acao": "00XF",
+    "nome": "Financiamento de operações de crédito reembolsável no âmbito do Programa Minha Casa, Minha Vida (Lei nº 12.351, de 2010)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 25552118035.0
+   },
+   {
+    "acao": "0158",
+    "nome": "Financiamento de Programas de Desenvolvimento Econômico a Cargo do BNDES",
+    "funcao": "11",
+    "subfuncao": "334",
+    "liquidado": 25081922181.0
+   },
+   {
+    "acao": "00XO",
+    "nome": "Financiamentos a Pessoas Físicas e Jurídicas de Direito Privado Exportadoras de Bens e Serviços, bem como seus Fornecedores, abrangidos pelo Plano Brasil Soberano",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 22000000000.0
+   },
+   {
+    "acao": "00Y6",
+    "nome": "Financiamento a Pessoas Físicas e Jurídicas de Direito Privado para Aquisição de Caminhões e Caminhões tratores Novos ou Seminovos, bem como de Ônibus, Micro ônibus e Implementos Rodoviários Novos, para Renovação de Frota",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 12528807482.0
+   },
+   {
+    "acao": "0A37",
+    "nome": "Financiamento de Projetos de Desenvolvimento Tecnológico de Empresas (Lei nº 11.540, de 2007)",
+    "funcao": "19",
+    "subfuncao": "572",
+    "liquidado": 8846984016.0
+   },
+   {
+    "acao": "00X8",
+    "nome": "Apoio financeiro reembolsável mediante concessão de empréstimo a Empresas prestadoras de Serviços Aéreos Regulares no Mercado Brasileiro",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 8000000000.0
+   },
+   {
+    "acao": "0030",
+    "nome": "Financiamento aos Setores Produtivos do Semiárido da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 7220584023.0
+   },
+   {
+    "acao": "0031",
+    "nome": "Financiamento aos Setores Produtivos da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 7220584023.0
+   },
+   {
+    "acao": "0012",
+    "nome": "Financiamentos ao Agronegócio Café (Lei nº 8.427, de 1992)",
+    "funcao": "20",
+    "subfuncao": "608",
+    "liquidado": 6827064952.0
+   },
+   {
+    "acao": "00IG",
+    "nome": "Concessão de Financiamento Estudantil - FIES (Lei nº 10.260, de 2001)",
+    "funcao": "12",
+    "subfuncao": "694",
+    "liquidado": 5755290107.0
+   },
+   {
+    "acao": "0029",
+    "nome": "Financiamento aos Setores Produtivos da Região Centro-Oeste (Lei nº 7.827, de 27 de setembro de 1989)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 4813722680.0
+   },
+   {
+    "acao": "0534",
+    "nome": "Financiamento aos Setores Produtivos da Região Norte - FNO (Lei nº 7.827, de 27 de setembro de 1989)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 4657870207.0
+   },
+   {
+    "acao": "00X6",
+    "nome": "Financiamentos de Investimentos em Infraestrutura Social (Lei nº 14.947, de 2024)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 2500000000.0
+   },
+   {
+    "acao": "0118",
+    "nome": "Financiamentos à Infraestrutura Aquaviária, Portuária e Construção/Manutenção Naval",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 1773200906.0
+   },
+   {
+    "acao": "00YH",
+    "nome": "Financiamento a Beneficiários do Programa Desenrola Adimplentes",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 1650000000.0
+   },
+   {
+    "acao": "00YG",
+    "nome": "Financiamento a Beneficiários Adimplentes do Fundo de Financiamento Estudantil – Fies",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 1000000000.0
+   },
+   {
+    "acao": "0A81",
+    "nome": "Financiamento de Operações no âmbito do Programa Nacional de Fortalecimento da Agricultura Familiar - PRONAF (Lei nº 10.186, de 2001)",
+    "funcao": "20",
+    "subfuncao": "608",
+    "liquidado": 987000000.0
+   },
+   {
+    "acao": "0355",
+    "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento do Nordeste - FDNE (Lei Complementar nº 125, de 3 de janeiro de 2007)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 790994839.0
+   },
+   {
+    "acao": "00XC",
+    "nome": "Aporte de Recursos para Implementação do Comitê Gestor do Imposto sobre Bens e Serviços - CGIBS (Lei Complementar nº 214, de 2025)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 733333333.0
+   },
+   {
+    "acao": "0427",
+    "nome": "Concessão de Crédito-Instalação às Famílias Assentadas ( Lei n° 8.629, de 1993)",
+    "funcao": "21",
+    "subfuncao": "631",
+    "liquidado": 731068712.0
+   },
+   {
+    "acao": "0A84",
+    "nome": "Financiamento de Operações no âmbito do Programa de Financiamento às Exportações - PROEX (Lei nº 10.184, de 2001)",
+    "funcao": "23",
+    "subfuncao": "693",
+    "liquidado": 668500000.0
+   },
+   {
+    "acao": "00Y8",
+    "nome": "Financiamento Destinado a Capital de Giro aos Prestadores de Serviços Aéreos Regulares",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 661453662.0
+   },
+   {
+    "acao": "00YI",
+    "nome": "Financiamento de Projetos de Desenvolvimento Tecnológico de Produtores Rurais",
+    "funcao": "19",
+    "subfuncao": "572",
+    "liquidado": 600000000.0
+   },
+   {
+    "acao": "006A",
+    "nome": "Investimentos Retornáveis no Setor Audiovisual mediante Participação em Empresas e Projetos - Fundo Setorial do Audiovisual",
+    "funcao": "13",
+    "subfuncao": "691",
+    "liquidado": 600000000.0
+   },
+   {
+    "acao": "0061",
+    "nome": "Concessão de Crédito para Aquisição de Imóveis Rurais e Investimentos Básicos - Fundo de Terras (Lei Complementar nº 93, de 1998)",
+    "funcao": "21",
+    "subfuncao": "631",
+    "liquidado": 326083308.0
+   },
+   {
+    "acao": "00WH",
+    "nome": "Financiamentos de Operações para Apoiar Ações de Mitigação e Adaptação às Mudanças Climáticas e de Enfrentamento de Consequências Sociais e Econômicas de Calamidades Públicas",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 214728019.0
+   },
+   {
+    "acao": "0353",
+    "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento da Amazônia - FDA (Lei Complementar nº 124, de 3 de janeiro de 2007)",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 201326255.0
+   },
+   {
+    "acao": "006C",
+    "nome": "Financiamento ao Setor Audiovisual - Fundo Setorial do Audiovisual (Lei nº 11.437, de 2006)",
+    "funcao": "13",
+    "subfuncao": "392",
+    "liquidado": 200000000.0
+   },
+   {
+    "acao": "0454",
+    "nome": "Financiamento da Infraestrutura Turística Nacional",
+    "funcao": "23",
+    "subfuncao": "695",
+    "liquidado": 187235407.0
+   },
+   {
+    "acao": "00GY",
+    "nome": "Financiamento Imobiliário para o Pessoal da Marinha",
+    "funcao": "05",
+    "subfuncao": "482",
+    "liquidado": 128242252.0
+   },
+   {
+    "acao": "00JE",
+    "nome": "Financiamento Imobiliário para o Pessoal da Aeronáutica",
+    "funcao": "05",
+    "subfuncao": "482",
+    "liquidado": 3545379.0
+   },
+   {
+    "acao": "00M5",
+    "nome": "Aquisição de terrenos e construção de unidades habitacionais destinadas à moradia do pessoal da Marinha",
+    "funcao": "05",
+    "subfuncao": "482",
+    "liquidado": 2534246.0
+   },
+   {
+    "acao": "0354",
+    "nome": "Concessão de Empréstimos para Liquidação de Operadoras de Planos Privados de Assistência à Saúde (Lei nº 9.961, de 2000)",
+    "funcao": "10",
+    "subfuncao": "125",
+    "liquidado": 1444831.0
+   },
+   {
+    "acao": "0461",
+    "nome": "Concessão de Empréstimos para Liquidação de Sociedades Seguradoras, Resseguradoras, Entidades de Previdência Complementar Aberta e Capitalização",
+    "funcao": "28",
+    "subfuncao": "846",
+    "liquidado": 239358.0
+   }
+  ],
+  "inversoes_por_rp": [
+   {
+    "rp": "0",
+    "nome": "Financeira",
+    "liquidado": 212350062092.0
+   },
+   {
+    "rp": "1",
+    "nome": "Primária obrigatória, considerada no cálculo do RP",
+    "liquidado": 3202621174.0
+   },
+   {
+    "rp": "2",
+    "nome": "Primária discricionária, considerada no cálculo do RP",
+    "liquidado": 16899273643.0
+   },
+   {
+    "rp": "3",
+    "nome": "Primária discricionária, PAC, considerada no cálculo do RP",
+    "liquidado": 1116520744.0
+   },
+   {
+    "rp": "6",
+    "nome": "Primária discricionária, decorrente de emendas individuais, considerada no cálculo do RP",
+    "liquidado": 3240896.0
+   }
+  ],
+  "inversoes_detalhe": "RP 0 (financeira pela lei orçamentária): 212,350,062,092.00; primária pela lei (RP 1, 2, 3 e emendas): 21,221,656,457.00 = RP 1 3,202,621,174.00; RP 2 16,899,273,643.00; RP 3 1,116,520,744.00; RP 6 3,240,896.00",
+  "usado_nas_linhas": false
+ },
+ "linhas": [
+  {
+   "id": "previdencia_inss",
+   "nome": "Previdência (INSS)",
+   "valor": 731983538858.98,
+   "share": 0.29313047637769635,
+   "centavos": 29,
+   "anterior": 678934865774.73,
+   "variacao_anual": 0.07813514338185645,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "09-271",
+      "funcao_cod": "09",
+      "funcao": "Previdência Social",
+      "subfuncao_cod": "271",
+      "nome": "Previdência Básica",
+      "valor_rreo": 731983538858.98,
+      "ajustes": [],
+      "valor": 731983538858.98
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 731983538858.98,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Benefícios do Regime Geral (trabalhadores do setor privado): subfunção 271 Previdência Básica, em qualquer função.",
+    "numerador": "Previdência (INSS): soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "subfuncao_cod = '271'",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (subfuncao_cod = '271')",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "inativos_pensionistas",
+   "nome": "Aposentados e pensionistas do setor público",
+   "valor": 71090337070.18,
+   "share": 0.02846887022038285,
+   "centavos": 3,
+   "anterior": 67763288945.38,
+   "variacao_anual": 0.04909809096606477,
+   "fonte_valor": "rreo",
+   "piso": true,
+   "notas": [
+    "piso: subfunções 272 e 274 do RREO. O valor completo (elementos 01 e 03 do SIOP, em qualquer função) só é calculado em ano fechado; em 2025 ele foi 72% maior que o piso."
+   ],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "09-272",
+      "funcao_cod": "09",
+      "funcao": "Previdência Social",
+      "subfuncao_cod": "272",
+      "nome": "Previdência do Regime Estatutário",
+      "valor_rreo": 71090337070.18,
+      "ajustes": [],
+      "valor": 71090337070.18
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 71090337070.18,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Aposentadorias, reservas remuneradas, reformas e pensões pagas pela União a servidores civis e militares e seus dependentes: elementos de despesa 01 (aposentadorias do RPPS, reserva remunerada e reformas dos militares) e 03 (pensões), em qualquer função e qualquer órgão, no SIOP. Pela função/subfunção do RREO isso não se vê: em 2025 só R$ 103,5 bi dos R$ 179,7 bi estavam na subfunção 272; o resto estava em Defesa (reserva e reforma dos militares, R$ 34,2 bi), em Encargos Especiais (pensões militares, R$ 30,4 bi; movidas da função 09 para a 28 em 2025) e em Transferências (inativos do Fundo Constitucional do DF, R$ 10,4 bi). O que o SIOP encontra dentro de uma linha do RREO sai dela e entra aqui (transferências declaradas na ficha); o total do recibo não muda. Em ano em andamento, ou sem SIOP, vale o fallback do RREO, marcado como piso.\n",
+    "numerador": "Aposentados e pensionistas do setor público: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S8",
+     "nome": "SIOP, orçamento federal por classificador (inclui marcador de emendas RP 6/7/8)",
+     "url": "https://www1.siop.planejamento.gov.br/sparql/"
+    },
+    "dataset": "siop_execucao",
+    "anexo_regex": null,
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "cod_elemento_despesa IN ('01', '03')",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": true,
+    "fallback": {
+     "base": "anexo02_subfuncao",
+     "filtro": "subfuncao_cod IN ('272', '274')",
+     "nota": "piso: subfunções 272 e 274 do RREO. O valor completo (elementos 01 e 03 do SIOP, em qualquer função) só é calculado em ano fechado; em 2025 ele foi 72% maior que o piso.\n"
+    },
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (subfuncao_cod IN ('272', '274'))",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "assistencia",
+   "nome": "Assistência social (Bolsa Família, BPC)",
+   "valor": 198879803774.91998,
+   "share": 0.07964350088161805,
+   "centavos": 8,
+   "anterior": 193780244787.11,
+   "variacao_anual": 0.02631619643897376,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "08-demais",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 106407203682.34,
+      "ajustes": [],
+      "valor": 106407203682.34
+     },
+     {
+      "id": "08-242",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "242",
+      "nome": "Assistência à Pessoa com Deficiência",
+      "valor_rreo": 52090091233.22,
+      "ajustes": [],
+      "valor": 52090091233.22
+     },
+     {
+      "id": "08-241",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "241",
+      "nome": "Assistência ao Idoso",
+      "valor_rreo": 36199414072.49,
+      "ajustes": [],
+      "valor": 36199414072.49
+     },
+     {
+      "id": "08-244",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "244",
+      "nome": "Assistência Comunitária",
+      "valor_rreo": 3509459597.75,
+      "ajustes": [],
+      "valor": 3509459597.75
+     },
+     {
+      "id": "08-122",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 411070687.29,
+      "ajustes": [],
+      "valor": 411070687.29
+     },
+     {
+      "id": "08-243",
+      "funcao_cod": "08",
+      "funcao": "Assistência Social",
+      "subfuncao_cod": "243",
+      "nome": "Assistência à Criança e ao Adolescente",
+      "valor_rreo": 262564501.83,
+      "ajustes": [],
+      "valor": 262564501.83
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 198879803774.91998,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Função 08, excluídas as subfunções previdenciárias.",
+    "numerador": "Assistência social (Bolsa Família, BPC): soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "funcao_cod = '08' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (funcao_cod = '08' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274'))",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "saude",
+   "nome": "Saúde",
+   "valor": 156797278111.98,
+   "share": 0.06279111262438601,
+   "centavos": 6,
+   "anterior": 128905853096.06999,
+   "variacao_anual": 0.21637050875512465,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "10-302",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "302",
+      "nome": "Assistência Hospitalar e Ambulatorial",
+      "valor_rreo": 68979704815.07,
+      "ajustes": [],
+      "valor": 68979704815.07
+     },
+     {
+      "id": "10-301",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "301",
+      "nome": "Atenção Básica",
+      "valor_rreo": 42261817008.95,
+      "ajustes": [],
+      "valor": 42261817008.95
+     },
+     {
+      "id": "10-303",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "303",
+      "nome": "Suporte Profilático e Terapêutico",
+      "valor_rreo": 17674810970.8,
+      "ajustes": [],
+      "valor": 17674810970.8
+     },
+     {
+      "id": "10-122",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 13542471040.68,
+      "ajustes": [],
+      "valor": 13542471040.68
+     },
+     {
+      "id": "10-305",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "305",
+      "nome": "Vigilância Epidemiológica",
+      "valor_rreo": 8462436932.88,
+      "ajustes": [],
+      "valor": 8462436932.88
+     },
+     {
+      "id": "10-demais",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 5626569941.12,
+      "ajustes": [],
+      "valor": 5626569941.12
+     },
+     {
+      "id": "10-304",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "304",
+      "nome": "Vigilância Sanitária",
+      "valor_rreo": 181449473.38,
+      "ajustes": [],
+      "valor": 181449473.38
+     },
+     {
+      "id": "10-306",
+      "funcao_cod": "10",
+      "funcao": "Saúde",
+      "subfuncao_cod": "306",
+      "nome": "Alimentação e Nutrição",
+      "valor_rreo": 68017929.1,
+      "ajustes": [],
+      "valor": 68017929.1
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 156797278111.98,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Função 10 (inclui repasses do SUS a estados e municípios), excluídas as subfunções previdenciárias.",
+    "numerador": "Saúde: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "funcao_cod = '10' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (funcao_cod = '10' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274'))",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "educacao",
+   "nome": "Educação",
+   "valor": 189003404326.34,
+   "share": 0.07568839325751556,
+   "centavos": 8,
+   "anterior": 163396480211.34,
+   "variacao_anual": 0.1567164976986013,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [
+    "inclui, até o fechamento do ano, o financiamento estudantil FIES (grupo 5, RP 0; R$ 5,6 bi em 2025), que em ano fechado sai desta linha para o \"Fora do R$ 1,00\""
+   ],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "28-847",
+      "funcao_cod": "28",
+      "funcao": "Encargos Especiais",
+      "subfuncao_cod": "847",
+      "nome": "Transferências para a Educação Básica",
+      "valor_rreo": 72588581890.94,
+      "ajustes": [],
+      "valor": 72588581890.94
+     },
+     {
+      "id": "12-demais",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 60724468864.23,
+      "ajustes": [],
+      "valor": 60724468864.23
+     },
+     {
+      "id": "12-364",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "364",
+      "nome": "Ensino Superior",
+      "valor_rreo": 29069212646.71,
+      "ajustes": [],
+      "valor": 29069212646.71
+     },
+     {
+      "id": "12-363",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "363",
+      "nome": "Ensino Profissional",
+      "valor_rreo": 11887652685.68,
+      "ajustes": [],
+      "valor": 11887652685.68
+     },
+     {
+      "id": "12-362",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "362",
+      "nome": "Ensino Médio",
+      "valor_rreo": 9500000000.0,
+      "ajustes": [],
+      "valor": 9500000000.0
+     },
+     {
+      "id": "12-368",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "368",
+      "nome": "Educação Básica",
+      "valor_rreo": 3680469879.78,
+      "ajustes": [],
+      "valor": 3680469879.78
+     },
+     {
+      "id": "12-122",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 1211040006.84,
+      "ajustes": [],
+      "valor": 1211040006.84
+     },
+     {
+      "id": "12-365",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "365",
+      "nome": "Educação Infantil",
+      "valor_rreo": 261395503.41,
+      "ajustes": [],
+      "valor": 261395503.41
+     },
+     {
+      "id": "12-366",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "366",
+      "nome": "Educação de Jovens e Adultos",
+      "valor_rreo": 58502814.24,
+      "ajustes": [],
+      "valor": 58502814.24
+     },
+     {
+      "id": "12-367",
+      "funcao_cod": "12",
+      "funcao": "Educação",
+      "subfuncao_cod": "367",
+      "nome": "Educação Especial",
+      "valor_rreo": 22080034.51,
+      "ajustes": [],
+      "valor": 22080034.51
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 189003404326.34,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Função 12, excluídas as subfunções previdenciárias. A complementação do FUNDEB e o salário-educação (subfunção 847, atípica para a função) já estão dentro de \"FU12 - Demais Subfunções\"; a cláusula sobre 847 cobre o caso de a União passar a detalhá-la em outra função.\n",
+    "numerador": "Educação: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "(funcao_cod = '12' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')) OR subfuncao_cod = '847'",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND ((funcao_cod = '12' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')) OR subfuncao_cod = '847')",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "trabalho",
+   "nome": "Trabalho (abono, seguro-desemprego)",
+   "valor": 86164287368.15001,
+   "share": 0.03450539153153892,
+   "centavos": 3,
+   "anterior": 86517880530.63,
+   "variacao_anual": -0.004086937408907199,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [
+    "inclui, até o fechamento do ano, o FAT emprestado ao BNDES (grupo 5, RP 0; R$ 28,9 bi em 2025), que em ano fechado sai desta linha para o \"Fora do R$ 1,00\""
+   ],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "11-331",
+      "funcao_cod": "11",
+      "funcao": "Trabalho",
+      "subfuncao_cod": "331",
+      "nome": "Proteção e Benefícios ao Trabalhador",
+      "valor_rreo": 70305237375.0,
+      "ajustes": [],
+      "valor": 70305237375.0
+     },
+     {
+      "id": "11-334",
+      "funcao_cod": "11",
+      "funcao": "Trabalho",
+      "subfuncao_cod": "334",
+      "nome": "Fomento ao Trabalho",
+      "valor_rreo": 14331179858.59,
+      "ajustes": [],
+      "valor": 14331179858.59
+     },
+     {
+      "id": "11-122",
+      "funcao_cod": "11",
+      "funcao": "Trabalho",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 1398448328.58,
+      "ajustes": [],
+      "valor": 1398448328.58
+     },
+     {
+      "id": "11-demais",
+      "funcao_cod": "11",
+      "funcao": "Trabalho",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 100877951.74,
+      "ajustes": [],
+      "valor": 100877951.74
+     },
+     {
+      "id": "11-333",
+      "funcao_cod": "11",
+      "funcao": "Trabalho",
+      "subfuncao_cod": "333",
+      "nome": "Empregabilidade",
+      "valor_rreo": 28543854.24,
+      "ajustes": [],
+      "valor": 28543854.24
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 86164287368.15,
+    "fecha": true,
+    "diferenca": -1.52587890625e-05,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Função 11, excluídas as subfunções previdenciárias.",
+    "numerador": "Trabalho (abono, seguro-desemprego): soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "funcao_cod = '11' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (funcao_cod = '11' AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274'))",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "defesa_seguranca",
+   "nome": "Defesa e segurança",
+   "valor": 67907978126.1,
+   "share": 0.027194461242911694,
+   "centavos": 3,
+   "anterior": 62632745087.22999,
+   "variacao_anual": 0.08422484167863109,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "05-122",
+      "funcao_cod": "05",
+      "funcao": "Defesa Nacional",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 48946887599.21,
+      "ajustes": [],
+      "valor": 48946887599.21
+     },
+     {
+      "id": "05-demais",
+      "funcao_cod": "05",
+      "funcao": "Defesa Nacional",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 6531343579.77,
+      "ajustes": [],
+      "valor": 6531343579.77
+     },
+     {
+      "id": "06-122",
+      "funcao_cod": "06",
+      "funcao": "Segurança Pública",
+      "subfuncao_cod": "122",
+      "nome": "Administração Geral",
+      "valor_rreo": 6002454559.73,
+      "ajustes": [],
+      "valor": 6002454559.73
+     },
+     {
+      "id": "05-151",
+      "funcao_cod": "05",
+      "funcao": "Defesa Nacional",
+      "subfuncao_cod": "151",
+      "nome": "Defesa Aérea",
+      "valor_rreo": 1952392675.08,
+      "ajustes": [],
+      "valor": 1952392675.08
+     },
+     {
+      "id": "06-181",
+      "funcao_cod": "06",
+      "funcao": "Segurança Pública",
+      "subfuncao_cod": "181",
+      "nome": "Policiamento",
+      "valor_rreo": 1727518937.0,
+      "ajustes": [],
+      "valor": 1727518937.0
+     },
+     {
+      "id": "06-182",
+      "funcao_cod": "06",
+      "funcao": "Segurança Pública",
+      "subfuncao_cod": "182",
+      "nome": "Defesa Civil",
+      "valor_rreo": 833202269.9,
+      "ajustes": [],
+      "valor": 833202269.9
+     },
+     {
+      "id": "05-152",
+      "funcao_cod": "05",
+      "funcao": "Defesa Nacional",
+      "subfuncao_cod": "152",
+      "nome": "Defesa Naval",
+      "valor_rreo": 798224470.17,
+      "ajustes": [],
+      "valor": 798224470.17
+     },
+     {
+      "id": "06-demais",
+      "funcao_cod": "06",
+      "funcao": "Segurança Pública",
+      "subfuncao_cod": "demais",
+      "nome": "Demais subfunções",
+      "valor_rreo": 561527516.27,
+      "ajustes": [],
+      "valor": 561527516.27
+     },
+     {
+      "id": "05-153",
+      "funcao_cod": "05",
+      "funcao": "Defesa Nacional",
+      "subfuncao_cod": "153",
+      "nome": "Defesa Terrestre",
+      "valor_rreo": 554426518.97,
+      "ajustes": [],
+      "valor": 554426518.97
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 67907978126.1,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Funções 05 e 06, excluídas as subfunções previdenciárias explícitas. Atenção: inativos e pensionistas militares podem estar classificados dentro desta função (ver limitação da linha de aposentados).\n",
+    "numerador": "Defesa e segurança: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "funcao_cod IN ('05', '06') AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274')",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (funcao_cod IN ('05', '06') AND COALESCE(subfuncao_cod, '') NOT IN ('271', '272', '274'))",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "transferencias",
+   "nome": "Transferências a estados e municípios",
+   "valor": 326293930143.22,
+   "share": 0.1306678225730697,
+   "centavos": 13,
+   "anterior": 292369971606.45,
+   "variacao_anual": 0.11603092598864406,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "subfuncoes",
+    "itens": [
+     {
+      "id": "28-845",
+      "funcao_cod": "28",
+      "funcao": "Encargos Especiais",
+      "subfuncao_cod": "845",
+      "nome": "Transferências",
+      "valor_rreo": 326293930143.22,
+      "ajustes": [],
+      "valor": 326293930143.22
+     }
+    ],
+    "nao_alocado": [],
+    "soma": 326293930143.22,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por subfunção)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Subfunção 845 (FPM, FPE e demais repartições de receita classificadas em Encargos Especiais). Repasses do SUS e do FUNDEB não entram aqui: contam como Saúde e Educação, por desenho.\n",
+    "numerador": "Transferências a estados e municípios: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": "subfuncao_cod = '845'",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?2$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND escopo = 'exceto_intra' AND nivel = 'subfuncao' AND (subfuncao_cod = '845')",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "juros",
+   "nome": "Juros da dívida",
+   "valor": 415811371479.51,
+   "share": 0.16651601973870908,
+   "centavos": 17,
+   "anterior": 269796430518.18,
+   "variacao_anual": 0.5412041244611312,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": null,
+    "itens": [],
+    "nao_alocado": [],
+    "soma": 415811371479.51,
+    "fecha": true,
+    "diferenca": 0.0,
+    "fonte": "sem níveis nesta fonte (as partes dos juros vêm do mart da dívida, execução por carteira)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Juros e encargos da dívida (grupo de despesa) do Anexo 01, cod_conta JurosEEncargosDaDivida: o que foi pago em dinheiro no período. Substitui as subfunções 843/844 do Anexo 02, que misturam juros e amortização. Os juros que a dívida gerou no período (competência, Anexo 06) são bem maiores e estão no memo juros_nominais.\n",
+    "numerador": "Juros da dívida: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?1$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "n/a (filtro por cod_conta)",
+    "filtro": "cod_conta = 'JurosEEncargosDaDivida'",
+    "residual": false,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "SELECT COALESCE(SUM(valor), 0) AS valor FROM stg WHERE exercicio = 2026 AND periodo = 4 AND regexp_matches(anexo_norm, '^RREO-ANEXO 0?1$') AND regexp_matches(coluna_norm, 'LIQUIDADAS.*ATE O BIMESTRE') AND (cod_conta = 'JurosEEncargosDaDivida')",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "maquina_demais",
+   "nome": "Encargos especiais e demais funções",
+   "valor": 253193405179.82983,
+   "share": 0.10139395155217171,
+   "centavos": 10,
+   "anterior": 206652108864.41016,
+   "variacao_anual": 0.22521568529434477,
+   "fonte_valor": "rreo",
+   "piso": false,
+   "notas": [],
+   "transferencias": [],
+   "niveis": {
+    "tipo": "funcoes",
+    "itens": [
+     {
+      "id": "28",
+      "cod": "28",
+      "nome": "Encargos Especiais",
+      "valor": 254086207031.52,
+      "subfuncoes": [
+       {
+        "id": "28-846",
+        "funcao_cod": "28",
+        "funcao": "Encargos Especiais",
+        "subfuncao_cod": "846",
+        "nome": "Outros Encargos Especiais",
+        "valor_rreo": 254084507031.52,
+        "ajustes": [],
+        "valor": 254084507031.52
+       },
+       {
+        "id": "28-demais",
+        "funcao_cod": "28",
+        "funcao": "Encargos Especiais",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 1700000.0,
+        "ajustes": [],
+        "valor": 1700000.0
+       }
+      ]
+     },
+     {
+      "id": "18",
+      "cod": "18",
+      "nome": "Gestão Ambiental",
+      "valor": 32324715344.08,
+      "subfuncoes": [
+       {
+        "id": "18-541",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "541",
+        "nome": "Preservação e Conservação Ambiental",
+        "valor_rreo": 29693695374.15,
+        "ajustes": [],
+        "valor": 29693695374.15
+       },
+       {
+        "id": "18-122",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1085290795.41,
+        "ajustes": [],
+        "valor": 1085290795.41
+       },
+       {
+        "id": "18-544",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "544",
+        "nome": "Recursos Hídricos",
+        "valor_rreo": 1049260985.4,
+        "ajustes": [],
+        "valor": 1049260985.4
+       },
+       {
+        "id": "18-demais",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 405899822.62,
+        "ajustes": [],
+        "valor": 405899822.62
+       },
+       {
+        "id": "18-542",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "542",
+        "nome": "Controle Ambiental",
+        "valor_rreo": 88505716.66,
+        "ajustes": [],
+        "valor": 88505716.66
+       },
+       {
+        "id": "18-543",
+        "funcao_cod": "18",
+        "funcao": "Gestão Ambiental",
+        "subfuncao_cod": "543",
+        "nome": "Recuperação de Áreas Degradadas",
+        "valor_rreo": 2062649.84,
+        "ajustes": [],
+        "valor": 2062649.84
+       }
+      ]
+     },
+     {
+      "id": "02",
+      "cod": "02",
+      "nome": "Judiciária",
+      "valor": 30340508513.68,
+      "subfuncoes": [
+       {
+        "id": "02-122",
+        "funcao_cod": "02",
+        "funcao": "Judiciária",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 24672802095.25,
+        "ajustes": [],
+        "valor": 24672802095.25
+       },
+       {
+        "id": "02-demais",
+        "funcao_cod": "02",
+        "funcao": "Judiciária",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 3936527154.03,
+        "ajustes": [],
+        "valor": 3936527154.03
+       },
+       {
+        "id": "02-061",
+        "funcao_cod": "02",
+        "funcao": "Judiciária",
+        "subfuncao_cod": "061",
+        "nome": "Ação Judiciária",
+        "valor_rreo": 1731179264.4,
+        "ajustes": [],
+        "valor": 1731179264.4
+       }
+      ]
+     },
+     {
+      "id": "20",
+      "cod": "20",
+      "nome": "Agricultura",
+      "valor": 20033132584.63,
+      "subfuncoes": [
+       {
+        "id": "20-608",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "608",
+        "nome": "Promoção da Produção Agropecuária",
+        "valor_rreo": 11356377088.07,
+        "ajustes": [],
+        "valor": 11356377088.07
+       },
+       {
+        "id": "20-605",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "605",
+        "nome": "Abastecimento",
+        "valor_rreo": 4673899947.28,
+        "ajustes": [],
+        "valor": 4673899947.28
+       },
+       {
+        "id": "20-122",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 3384108279.45,
+        "ajustes": [],
+        "valor": 3384108279.45
+       },
+       {
+        "id": "20-demais",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 529800875.57,
+        "ajustes": [],
+        "valor": 529800875.57
+       },
+       {
+        "id": "20-607",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "607",
+        "nome": "Irrigação",
+        "valor_rreo": 68654614.93,
+        "ajustes": [],
+        "valor": 68654614.93
+       },
+       {
+        "id": "20-609",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "609",
+        "nome": "Defesa Agropecuária",
+        "valor_rreo": 20212210.25,
+        "ajustes": [],
+        "valor": 20212210.25
+       },
+       {
+        "id": "20-606",
+        "funcao_cod": "20",
+        "funcao": "Agricultura",
+        "subfuncao_cod": "606",
+        "nome": "Extensão Rural",
+        "valor_rreo": 79569.08,
+        "ajustes": [],
+        "valor": 79569.08
+       }
+      ]
+     },
+     {
+      "id": "04",
+      "cod": "04",
+      "nome": "Administração",
+      "valor": 18653699619.309994,
+      "subfuncoes": [
+       {
+        "id": "04-122",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 14838397988.49,
+        "ajustes": [],
+        "valor": 14838397988.49
+       },
+       {
+        "id": "04-demais",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 1479649920.48,
+        "ajustes": [],
+        "valor": 1479649920.48
+       },
+       {
+        "id": "04-126",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "126",
+        "nome": "Tecnologia da Informação",
+        "valor_rreo": 1331372232.47,
+        "ajustes": [],
+        "valor": 1331372232.47
+       },
+       {
+        "id": "04-131",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "131",
+        "nome": "Comunicação Social",
+        "valor_rreo": 285611240.96,
+        "ajustes": [],
+        "valor": 285611240.96
+       },
+       {
+        "id": "04-129",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "129",
+        "nome": "Administração de Receitas",
+        "valor_rreo": 267964315.0,
+        "ajustes": [],
+        "valor": 267964315.0
+       },
+       {
+        "id": "04-125",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "125",
+        "nome": "Normatização e Fiscalização",
+        "valor_rreo": 223828064.26,
+        "ajustes": [],
+        "valor": 223828064.26
+       },
+       {
+        "id": "04-121",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "121",
+        "nome": "Planejamento e Orçamento",
+        "valor_rreo": 121240715.75,
+        "ajustes": [],
+        "valor": 121240715.75
+       },
+       {
+        "id": "04-124",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "124",
+        "nome": "Controle Interno",
+        "valor_rreo": 60096777.77,
+        "ajustes": [],
+        "valor": 60096777.77
+       },
+       {
+        "id": "04-127",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "127",
+        "nome": "Ordenamento Territorial",
+        "valor_rreo": 38393404.69,
+        "ajustes": [],
+        "valor": 38393404.69
+       },
+       {
+        "id": "04-123",
+        "funcao_cod": "04",
+        "funcao": "Administração",
+        "subfuncao_cod": "123",
+        "nome": "Administração Financeira",
+        "valor_rreo": 7144959.44,
+        "ajustes": [],
+        "valor": 7144959.44
+       }
+      ]
+     },
+     {
+      "id": "19",
+      "cod": "19",
+      "nome": "Ciência e Tecnologia",
+      "valor": 11743780282.99,
+      "subfuncoes": [
+       {
+        "id": "19-572",
+        "funcao_cod": "19",
+        "funcao": "Ciência e Tecnologia",
+        "subfuncao_cod": "572",
+        "nome": "Desenvolvimento Tecnológico e Engenharia",
+        "valor_rreo": 8310321141.61,
+        "ajustes": [],
+        "valor": 8310321141.61
+       },
+       {
+        "id": "19-571",
+        "funcao_cod": "19",
+        "funcao": "Ciência e Tecnologia",
+        "subfuncao_cod": "571",
+        "nome": "Desenvolvimento Científico",
+        "valor_rreo": 2214513651.29,
+        "ajustes": [],
+        "valor": 2214513651.29
+       },
+       {
+        "id": "19-122",
+        "funcao_cod": "19",
+        "funcao": "Ciência e Tecnologia",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1039823168.49,
+        "ajustes": [],
+        "valor": 1039823168.49
+       },
+       {
+        "id": "19-demais",
+        "funcao_cod": "19",
+        "funcao": "Ciência e Tecnologia",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 169604626.42,
+        "ajustes": [],
+        "valor": 169604626.42
+       },
+       {
+        "id": "19-573",
+        "funcao_cod": "19",
+        "funcao": "Ciência e Tecnologia",
+        "subfuncao_cod": "573",
+        "nome": "Difusão do Conhecimento Científico e Tecnológico",
+        "valor_rreo": 9517695.18,
+        "ajustes": [],
+        "valor": 9517695.18
+       }
+      ]
+     },
+     {
+      "id": "03",
+      "cod": "03",
+      "nome": "Essencial à Justiça",
+      "valor": 8092462368.28,
+      "subfuncoes": [
+       {
+        "id": "03-122",
+        "funcao_cod": "03",
+        "funcao": "Essencial à Justiça",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 6518157046.89,
+        "ajustes": [],
+        "valor": 6518157046.89
+       },
+       {
+        "id": "03-demais",
+        "funcao_cod": "03",
+        "funcao": "Essencial à Justiça",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 1312095078.49,
+        "ajustes": [],
+        "valor": 1312095078.49
+       },
+       {
+        "id": "03-092",
+        "funcao_cod": "03",
+        "funcao": "Essencial à Justiça",
+        "subfuncao_cod": "092",
+        "nome": "Representação Judicial e Extrajudicial",
+        "valor_rreo": 262210242.9,
+        "ajustes": [],
+        "valor": 262210242.9
+       }
+      ]
+     },
+     {
+      "id": "26",
+      "cod": "26",
+      "nome": "Transporte",
+      "valor": 8035704169.229999,
+      "subfuncoes": [
+       {
+        "id": "26-782",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "782",
+        "nome": "Transporte Rodoviário",
+        "valor_rreo": 5975813139.4,
+        "ajustes": [],
+        "valor": 5975813139.4
+       },
+       {
+        "id": "26-122",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1500566015.48,
+        "ajustes": [],
+        "valor": 1500566015.48
+       },
+       {
+        "id": "26-demais",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 284467524.51,
+        "ajustes": [],
+        "valor": 284467524.51
+       },
+       {
+        "id": "26-784",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "784",
+        "nome": "Transporte Aquaviário",
+        "valor_rreo": 191979310.7,
+        "ajustes": [],
+        "valor": 191979310.7
+       },
+       {
+        "id": "26-781",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "781",
+        "nome": "Transporte Aéreo",
+        "valor_rreo": 52963196.4,
+        "ajustes": [],
+        "valor": 52963196.4
+       },
+       {
+        "id": "26-783",
+        "funcao_cod": "26",
+        "funcao": "Transporte",
+        "subfuncao_cod": "783",
+        "nome": "Transporte Ferroviário",
+        "valor_rreo": 29914982.74,
+        "ajustes": [],
+        "valor": 29914982.74
+       }
+      ]
+     },
+     {
+      "id": "01",
+      "cod": "01",
+      "nome": "Legislativa",
+      "valor": 6454645689.609999,
+      "subfuncoes": [
+       {
+        "id": "01-122",
+        "funcao_cod": "01",
+        "funcao": "Legislativa",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 4384743748.74,
+        "ajustes": [],
+        "valor": 4384743748.74
+       },
+       {
+        "id": "01-demais",
+        "funcao_cod": "01",
+        "funcao": "Legislativa",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 1037913005.98,
+        "ajustes": [],
+        "valor": 1037913005.98
+       },
+       {
+        "id": "01-031",
+        "funcao_cod": "01",
+        "funcao": "Legislativa",
+        "subfuncao_cod": "031",
+        "nome": "Ação Legislativa",
+        "valor_rreo": 811548348.99,
+        "ajustes": [],
+        "valor": 811548348.99
+       },
+       {
+        "id": "01-032",
+        "funcao_cod": "01",
+        "funcao": "Legislativa",
+        "subfuncao_cod": "032",
+        "nome": "Controle Externo",
+        "valor_rreo": 220440585.9,
+        "ajustes": [],
+        "valor": 220440585.9
+       }
+      ]
+     },
+     {
+      "id": "09",
+      "cod": "09",
+      "nome": "Previdência Social",
+      "valor": 4546884716.07,
+      "subfuncoes": [
+       {
+        "id": "09-122",
+        "funcao_cod": "09",
+        "funcao": "Previdência Social",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 4056196510.69,
+        "ajustes": [],
+        "valor": 4056196510.69
+       },
+       {
+        "id": "09-demais",
+        "funcao_cod": "09",
+        "funcao": "Previdência Social",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 490688205.38,
+        "ajustes": [],
+        "valor": 490688205.38
+       }
+      ]
+     },
+     {
+      "id": "21",
+      "cod": "21",
+      "nome": "Organização Agrária",
+      "valor": 3101282211.46,
+      "subfuncoes": [
+       {
+        "id": "21-122",
+        "funcao_cod": "21",
+        "funcao": "Organização Agrária",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1254546803.14,
+        "ajustes": [],
+        "valor": 1254546803.14
+       },
+       {
+        "id": "21-631",
+        "funcao_cod": "21",
+        "funcao": "Organização Agrária",
+        "subfuncao_cod": "631",
+        "nome": "Reforma Agrária",
+        "valor_rreo": 1128449357.73,
+        "ajustes": [],
+        "valor": 1128449357.73
+       },
+       {
+        "id": "21-demais",
+        "funcao_cod": "21",
+        "funcao": "Organização Agrária",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 718286050.59,
+        "ajustes": [],
+        "valor": 718286050.59
+       }
+      ]
+     },
+     {
+      "id": "07",
+      "cod": "07",
+      "nome": "Relações Exteriores",
+      "valor": 2833663530.7999997,
+      "subfuncoes": [
+       {
+        "id": "07-122",
+        "funcao_cod": "07",
+        "funcao": "Relações Exteriores",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1370644645.95,
+        "ajustes": [],
+        "valor": 1370644645.95
+       },
+       {
+        "id": "07-211",
+        "funcao_cod": "07",
+        "funcao": "Relações Exteriores",
+        "subfuncao_cod": "211",
+        "nome": "Relações Diplomáticas",
+        "valor_rreo": 803730826.53,
+        "ajustes": [],
+        "valor": 803730826.53
+       },
+       {
+        "id": "07-demais",
+        "funcao_cod": "07",
+        "funcao": "Relações Exteriores",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 637483936.18,
+        "ajustes": [],
+        "valor": 637483936.18
+       },
+       {
+        "id": "07-212",
+        "funcao_cod": "07",
+        "funcao": "Relações Exteriores",
+        "subfuncao_cod": "212",
+        "nome": "Cooperação Internacional",
+        "valor_rreo": 21804122.14,
+        "ajustes": [],
+        "valor": 21804122.14
+       }
+      ]
+     },
+     {
+      "id": "22",
+      "cod": "22",
+      "nome": "Indústria",
+      "valor": 1638348835.2099998,
+      "subfuncoes": [
+       {
+        "id": "22-122",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 1101708015.79,
+        "ajustes": [],
+        "valor": 1101708015.79
+       },
+       {
+        "id": "22-demais",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 453147866.44,
+        "ajustes": [],
+        "valor": 453147866.44
+       },
+       {
+        "id": "22-664",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "664",
+        "nome": "Propriedade Industrial",
+        "valor_rreo": 48169234.08,
+        "ajustes": [],
+        "valor": 48169234.08
+       },
+       {
+        "id": "22-663",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "663",
+        "nome": "Mineração",
+        "valor_rreo": 23835342.1,
+        "ajustes": [],
+        "valor": 23835342.1
+       },
+       {
+        "id": "22-661",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "661",
+        "nome": "Promoção Industrial",
+        "valor_rreo": 5978886.18,
+        "ajustes": [],
+        "valor": 5978886.18
+       },
+       {
+        "id": "22-665",
+        "funcao_cod": "22",
+        "funcao": "Indústria",
+        "subfuncao_cod": "665",
+        "nome": "Normalização e Qualidade",
+        "valor_rreo": 5509490.62,
+        "ajustes": [],
+        "valor": 5509490.62
+       }
+      ]
+     },
+     {
+      "id": "13",
+      "cod": "13",
+      "nome": "Cultura",
+      "valor": 1604883449.15,
+      "subfuncoes": [
+       {
+        "id": "13-demais",
+        "funcao_cod": "13",
+        "funcao": "Cultura",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 556002256.22,
+        "ajustes": [],
+        "valor": 556002256.22
+       },
+       {
+        "id": "13-122",
+        "funcao_cod": "13",
+        "funcao": "Cultura",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 523285539.95,
+        "ajustes": [],
+        "valor": 523285539.95
+       },
+       {
+        "id": "13-392",
+        "funcao_cod": "13",
+        "funcao": "Cultura",
+        "subfuncao_cod": "392",
+        "nome": "Difusão Cultural",
+        "valor_rreo": 481692185.54,
+        "ajustes": [],
+        "valor": 481692185.54
+       },
+       {
+        "id": "13-391",
+        "funcao_cod": "13",
+        "funcao": "Cultura",
+        "subfuncao_cod": "391",
+        "nome": "Patrimônio Histórico Artístico e Arqueológico",
+        "valor_rreo": 43903467.44,
+        "ajustes": [],
+        "valor": 43903467.44
+       }
+      ]
+     },
+     {
+      "id": "15",
+      "cod": "15",
+      "nome": "Urbanismo",
+      "valor": 1418306718.7600002,
+      "subfuncoes": [
+       {
+        "id": "15-122",
+        "funcao_cod": "15",
+        "funcao": "Urbanismo",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 524050962.97,
+        "ajustes": [],
+        "valor": 524050962.97
+       },
+       {
+        "id": "15-453",
+        "funcao_cod": "15",
+        "funcao": "Urbanismo",
+        "subfuncao_cod": "453",
+        "nome": "Transportes Coletivos Urbanos",
+        "valor_rreo": 441776454.55,
+        "ajustes": [],
+        "valor": 441776454.55
+       },
+       {
+        "id": "15-demais",
+        "funcao_cod": "15",
+        "funcao": "Urbanismo",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 382744973.21,
+        "ajustes": [],
+        "valor": 382744973.21
+       },
+       {
+        "id": "15-451",
+        "funcao_cod": "15",
+        "funcao": "Urbanismo",
+        "subfuncao_cod": "451",
+        "nome": "Infra-Estrutura Urbana",
+        "valor_rreo": 69730860.65,
+        "ajustes": [],
+        "valor": 69730860.65
+       },
+       {
+        "id": "15-452",
+        "funcao_cod": "15",
+        "funcao": "Urbanismo",
+        "subfuncao_cod": "452",
+        "nome": "Serviços Urbanos",
+        "valor_rreo": 3467.38,
+        "ajustes": [],
+        "valor": 3467.38
+       }
+      ]
+     },
+     {
+      "id": "23",
+      "cod": "23",
+      "nome": "Comércio e Serviços",
+      "valor": 1202772619.58,
+      "subfuncoes": [
+       {
+        "id": "23-693",
+        "funcao_cod": "23",
+        "funcao": "Comércio e Serviços",
+        "subfuncao_cod": "693",
+        "nome": "Comércio Exterior",
+        "valor_rreo": 763373639.99,
+        "ajustes": [],
+        "valor": 763373639.99
+       },
+       {
+        "id": "23-695",
+        "funcao_cod": "23",
+        "funcao": "Comércio e Serviços",
+        "subfuncao_cod": "695",
+        "nome": "Turismo",
+        "valor_rreo": 281626163.01,
+        "ajustes": [],
+        "valor": 281626163.01
+       },
+       {
+        "id": "23-691",
+        "funcao_cod": "23",
+        "funcao": "Comércio e Serviços",
+        "subfuncao_cod": "691",
+        "nome": "Promoção Comercial",
+        "valor_rreo": 94485645.57,
+        "ajustes": [],
+        "valor": 94485645.57
+       },
+       {
+        "id": "23-122",
+        "funcao_cod": "23",
+        "funcao": "Comércio e Serviços",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 59925705.02,
+        "ajustes": [],
+        "valor": 59925705.02
+       },
+       {
+        "id": "23-demais",
+        "funcao_cod": "23",
+        "funcao": "Comércio e Serviços",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 3361465.99,
+        "ajustes": [],
+        "valor": 3361465.99
+       }
+      ]
+     },
+     {
+      "id": "16",
+      "cod": "16",
+      "nome": "Habitação",
+      "valor": 1123311045.03,
+      "subfuncoes": [
+       {
+        "id": "16-482",
+        "funcao_cod": "16",
+        "funcao": "Habitação",
+        "subfuncao_cod": "482",
+        "nome": "Habitação Urbana",
+        "valor_rreo": 1123311045.03,
+        "ajustes": [],
+        "valor": 1123311045.03
+       }
+      ]
+     },
+     {
+      "id": "14",
+      "cod": "14",
+      "nome": "Direitos da Cidadania",
+      "valor": 998057995.1499999,
+      "subfuncoes": [
+       {
+        "id": "14-122",
+        "funcao_cod": "14",
+        "funcao": "Direitos da Cidadania",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 439435905.12,
+        "ajustes": [],
+        "valor": 439435905.12
+       },
+       {
+        "id": "14-422",
+        "funcao_cod": "14",
+        "funcao": "Direitos da Cidadania",
+        "subfuncao_cod": "422",
+        "nome": "Direitos Individuais Coletivos e Difusos",
+        "valor_rreo": 318436951.17,
+        "ajustes": [],
+        "valor": 318436951.17
+       },
+       {
+        "id": "14-423",
+        "funcao_cod": "14",
+        "funcao": "Direitos da Cidadania",
+        "subfuncao_cod": "423",
+        "nome": "Assistência aos Povos Indígenas",
+        "valor_rreo": 152699019.3,
+        "ajustes": [],
+        "valor": 152699019.3
+       },
+       {
+        "id": "14-demais",
+        "funcao_cod": "14",
+        "funcao": "Direitos da Cidadania",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 87486119.56,
+        "ajustes": [],
+        "valor": 87486119.56
+       }
+      ]
+     },
+     {
+      "id": "25",
+      "cod": "25",
+      "nome": "Energia",
+      "valor": 902792493.31,
+      "subfuncoes": [
+       {
+        "id": "25-122",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 715856438.0,
+        "ajustes": [],
+        "valor": 715856438.0
+       },
+       {
+        "id": "25-demais",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 171065628.11,
+        "ajustes": [],
+        "valor": 171065628.11
+       },
+       {
+        "id": "25-752",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "752",
+        "nome": "Energia Elétrica",
+        "valor_rreo": 11939534.28,
+        "ajustes": [],
+        "valor": 11939534.28
+       },
+       {
+        "id": "25-751",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "751",
+        "nome": "Conservação de Energia",
+        "valor_rreo": 2642114.08,
+        "ajustes": [],
+        "valor": 2642114.08
+       },
+       {
+        "id": "25-753",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "753",
+        "nome": "Combustíveis Minerais",
+        "valor_rreo": 991257.03,
+        "ajustes": [],
+        "valor": 991257.03
+       },
+       {
+        "id": "25-754",
+        "funcao_cod": "25",
+        "funcao": "Energia",
+        "subfuncao_cod": "754",
+        "nome": "Biocombustíveis",
+        "valor_rreo": 297521.81,
+        "ajustes": [],
+        "valor": 297521.81
+       }
+      ]
+     },
+     {
+      "id": "24",
+      "cod": "24",
+      "nome": "Comunicações",
+      "valor": 598220698.87,
+      "subfuncoes": [
+       {
+        "id": "24-122",
+        "funcao_cod": "24",
+        "funcao": "Comunicações",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 515765478.51,
+        "ajustes": [],
+        "valor": 515765478.51
+       },
+       {
+        "id": "24-demais",
+        "funcao_cod": "24",
+        "funcao": "Comunicações",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 76007124.65,
+        "ajustes": [],
+        "valor": 76007124.65
+       },
+       {
+        "id": "24-722",
+        "funcao_cod": "24",
+        "funcao": "Comunicações",
+        "subfuncao_cod": "722",
+        "nome": "Telecomunicações",
+        "valor_rreo": 6448095.71,
+        "ajustes": [],
+        "valor": 6448095.71
+       }
+      ]
+     },
+     {
+      "id": "27",
+      "cod": "27",
+      "nome": "Desporto e Lazer",
+      "valor": 392949119.86,
+      "subfuncoes": [
+       {
+        "id": "27-812",
+        "funcao_cod": "27",
+        "funcao": "Desporto e Lazer",
+        "subfuncao_cod": "812",
+        "nome": "Desporto Comunitário",
+        "valor_rreo": 191560925.25,
+        "ajustes": [],
+        "valor": 191560925.25
+       },
+       {
+        "id": "27-811",
+        "funcao_cod": "27",
+        "funcao": "Desporto e Lazer",
+        "subfuncao_cod": "811",
+        "nome": "Desporto de Rendimento",
+        "valor_rreo": 153085374.26,
+        "ajustes": [],
+        "valor": 153085374.26
+       },
+       {
+        "id": "27-122",
+        "funcao_cod": "27",
+        "funcao": "Desporto e Lazer",
+        "subfuncao_cod": "122",
+        "nome": "Administração Geral",
+        "valor_rreo": 46581557.72,
+        "ajustes": [],
+        "valor": 46581557.72
+       },
+       {
+        "id": "27-demais",
+        "funcao_cod": "27",
+        "funcao": "Desporto e Lazer",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 1721262.63,
+        "ajustes": [],
+        "valor": 1721262.63
+       }
+      ]
+     },
+     {
+      "id": "17",
+      "cod": "17",
+      "nome": "Saneamento",
+      "valor": 222003552.44,
+      "subfuncoes": [
+       {
+        "id": "17-512",
+        "funcao_cod": "17",
+        "funcao": "Saneamento",
+        "subfuncao_cod": "512",
+        "nome": "Saneamento Básico Urbano",
+        "valor_rreo": 204243336.66,
+        "ajustes": [],
+        "valor": 204243336.66
+       },
+       {
+        "id": "17-511",
+        "funcao_cod": "17",
+        "funcao": "Saneamento",
+        "subfuncao_cod": "511",
+        "nome": "Saneamento Básico Rural",
+        "valor_rreo": 16767215.78,
+        "ajustes": [],
+        "valor": 16767215.78
+       },
+       {
+        "id": "17-demais",
+        "funcao_cod": "17",
+        "funcao": "Saneamento",
+        "subfuncao_cod": "demais",
+        "nome": "Demais subfunções",
+        "valor_rreo": 993000.0,
+        "ajustes": [],
+        "valor": 993000.0
+       }
+      ]
+     }
+    ],
+    "nao_alocado": [
+     {
+      "nome": "fora do R$ 1,00: empréstimos e aplicações financeiras (sem detalhe por subfunção neste período)",
+      "para": "fora_do_real",
+      "valor": -157154927409.18994
+     }
+    ],
+    "soma": 253193405179.83002,
+    "fecha": true,
+    "diferenca": 0.00018310546875,
+    "fonte": "RREO, Anexo 02 (despesa liquidada por função e subfunção, no que sobra depois das linhas nomeadas)",
+    "acoes_fonte": null
+   },
+   "ficha": {
+    "definicao": "Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima, das exclusões (serviço da dívida, empréstimos e aplicações financeiras) e do ajuste do serviço da dívida fora de 843/844. Em 2025: a subfunção 846 \"Outros Encargos Especiais\" sem a cobertura do Banco Central, sem as pensões militares (linha de aposentados) e sem os empréstimos (fora do R$ 1,00): sentenças judiciais e precatórios (R$ 77 bi), subvenções e honras de aval; os repasses aos fundos constitucionais FNE, FNO e FCO (R$ 27,6 bi), que a lei orçamentária carimba como financeiros e o Tesouro conta como gasto; e todas as outras funções juntas (Judiciário, Legislativo, Essencial à Justiça, Administração, Agricultura, Ciência, Gestão ambiental, Transporte, Relações exteriores e as pequenas), também sem os seus empréstimos (Fundo Clima, FNDCT, dívidas rurais). O hover abre a 846 por ação, pelo SIOP.\n",
+    "numerador": "Encargos especiais e demais funções: soma de 'valor' nas linhas selecionadas pelo filtro",
+    "denominador": "Soma de todas as linhas do recibo = despesa primária liquidada (Anexo 06) + juros e encargos da dívida (Anexo 01); fora: rolagem, amortização e empréstimos e aplicações financeiras",
+    "fonte": {
+     "id": "S4",
+     "nome": "SICONFI, RREO da União",
+     "url": "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+    },
+    "dataset": "siconfi_rreo",
+    "anexo_regex": "^RREO-ANEXO 0?2$",
+    "metrica": "Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.",
+    "coluna_regex": "LIQUIDADAS.*ATE O BIMESTRE",
+    "escopo": "exceto_intra",
+    "filtro": null,
+    "residual": true,
+    "fonte_valor": "rreo",
+    "piso": false,
+    "fallback": null,
+    "transferencias": [],
+    "sql": "-- residual = total_base (2928524270047.22) - atribuido (1828120557779.87) - excluido (690055379678.33) - servico_divida_fora_843_844 (0.00) - emprestimos_e_aplicacoes_financeiras (157154927409.19)",
+    "snapshots": [
+     {
+      "raw_key": "2026/04/RREO-Anexo 01",
+      "snapshot_id": "20261108T181659881490Z",
+      "sha256_canonical": "aba1c8c8fb00719a1a87d054140f0929b2f3aee5c8b0b7e82f91b3dcc7f760bf",
+      "fetched_at": "2026-11-08T18:16:59+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 02",
+      "snapshot_id": "20261108T181701864763Z",
+      "sha256_canonical": "e2652b854e877e0973ccd052be63a1d1b33633cf979fbf26bbbfcaf9f7d0605c",
+      "fetched_at": "2026-11-08T18:17:01+00:00"
+     },
+     {
+      "raw_key": "2026/04/RREO-Anexo 06",
+      "snapshot_id": "20261108T181704345759Z",
+      "sha256_canonical": "36ee3fcdf763f98c7d2c31a784adbcd5c2a76e63ad0f7747391fd2a8a42fc40c",
+      "fetched_at": "2026-11-08T18:17:04+00:00"
+     }
+    ]
+   }
+  }
+ ],
+ "fora_do_real": {
+  "emprestimos_financeiros": {
+   "nome": "Empréstimos e aplicações financeiras do Tesouro",
+   "valor": 157154927409.18994,
+   "fonte_valor": "anexo06",
+   "calculo": "despesa exceto intra (Anexo 02) - AmortizacaoDaDivida (Anexo 01) - despesa primária liquidada (Anexo 06) - JurosEEncargosDaDivida (Anexo 01)",
+   "por_grupo": {
+    "pessoal": {
+     "anexo01": 281181216143.77,
+     "anexo06_primaria": 281181216143.77,
+     "financeira": 0.0
+    },
+    "outras_despesas_correntes": {
+     "anexo01": 1735527665090.97,
+     "anexo06_primaria": 1735426137748.4,
+     "financeira": 101527342.57006836
+    },
+    "investimentos": {
+     "anexo01": 22219143807.15,
+     "anexo06_primaria": 22219143807.15,
+     "financeira": 0.0
+    },
+    "inversoes_financeiras": {
+     "anexo01": 199540865327.03,
+     "anexo06_primaria": 42487465260.38,
+     "financeira": 157053400066.65
+    }
+   },
+   "por_linha_disponivel": false,
+   "por_linha": [],
+   "filtro_por_linha": "cod_gnd = '5' AND cod_resultado_primario = '0'",
+   "do_residual": 157154927409.18994,
+   "lei_vs_tesouro": null,
+   "acoes": [
+    {
+     "acao": "00YA",
+     "nome": "Financiamento a Profissionais de Transporte Remunerado Privado Individual de Passageiros, Taxistas e Cooperativas de Taxistas, para Aquisição de Veículos Automotores Novos",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 30000000000.0
+    },
+    {
+     "acao": "00J4",
+     "nome": "Apoio Financeiro Reembolsável mediante Financiamento e outros Instrumentos Financeiros para Projetos de Mitigação e Adaptação à Mudança do Clima",
+     "funcao": "18",
+     "subfuncao": "541",
+     "liquidado": 29884183880.0
+    },
+    {
+     "acao": "00XF",
+     "nome": "Financiamento de operações de crédito reembolsável no âmbito do Programa Minha Casa, Minha Vida (Lei nº 12.351, de 2010)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 25552118035.0
+    },
+    {
+     "acao": "0158",
+     "nome": "Financiamento de Programas de Desenvolvimento Econômico a Cargo do BNDES",
+     "funcao": "11",
+     "subfuncao": "334",
+     "liquidado": 25081922181.0
+    },
+    {
+     "acao": "00XO",
+     "nome": "Financiamentos a Pessoas Físicas e Jurídicas de Direito Privado Exportadoras de Bens e Serviços, bem como seus Fornecedores, abrangidos pelo Plano Brasil Soberano",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 22000000000.0
+    },
+    {
+     "acao": "00Y6",
+     "nome": "Financiamento a Pessoas Físicas e Jurídicas de Direito Privado para Aquisição de Caminhões e Caminhões tratores Novos ou Seminovos, bem como de Ônibus, Micro ônibus e Implementos Rodoviários Novos, para Renovação de Frota",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 12528807482.0
+    },
+    {
+     "acao": "0A37",
+     "nome": "Financiamento de Projetos de Desenvolvimento Tecnológico de Empresas (Lei nº 11.540, de 2007)",
+     "funcao": "19",
+     "subfuncao": "572",
+     "liquidado": 8846984016.0
+    },
+    {
+     "acao": "00X8",
+     "nome": "Apoio financeiro reembolsável mediante concessão de empréstimo a Empresas prestadoras de Serviços Aéreos Regulares no Mercado Brasileiro",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 8000000000.0
+    },
+    {
+     "acao": "0030",
+     "nome": "Financiamento aos Setores Produtivos do Semiárido da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 7220584023.0
+    },
+    {
+     "acao": "0031",
+     "nome": "Financiamento aos Setores Produtivos da Região Nordeste (Lei nº 7.827, de 27 de setembro de 1989)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 7220584023.0
+    },
+    {
+     "acao": "0012",
+     "nome": "Financiamentos ao Agronegócio Café (Lei nº 8.427, de 1992)",
+     "funcao": "20",
+     "subfuncao": "608",
+     "liquidado": 6827064952.0
+    },
+    {
+     "acao": "00IG",
+     "nome": "Concessão de Financiamento Estudantil - FIES (Lei nº 10.260, de 2001)",
+     "funcao": "12",
+     "subfuncao": "694",
+     "liquidado": 5755290107.0
+    },
+    {
+     "acao": "0029",
+     "nome": "Financiamento aos Setores Produtivos da Região Centro-Oeste (Lei nº 7.827, de 27 de setembro de 1989)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 4813722680.0
+    },
+    {
+     "acao": "0534",
+     "nome": "Financiamento aos Setores Produtivos da Região Norte - FNO (Lei nº 7.827, de 27 de setembro de 1989)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 4657870207.0
+    },
+    {
+     "acao": "00X6",
+     "nome": "Financiamentos de Investimentos em Infraestrutura Social (Lei nº 14.947, de 2024)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 2500000000.0
+    },
+    {
+     "acao": "0118",
+     "nome": "Financiamentos à Infraestrutura Aquaviária, Portuária e Construção/Manutenção Naval",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 1773200906.0
+    },
+    {
+     "acao": "00YH",
+     "nome": "Financiamento a Beneficiários do Programa Desenrola Adimplentes",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 1650000000.0
+    },
+    {
+     "acao": "00YG",
+     "nome": "Financiamento a Beneficiários Adimplentes do Fundo de Financiamento Estudantil – Fies",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 1000000000.0
+    },
+    {
+     "acao": "0A81",
+     "nome": "Financiamento de Operações no âmbito do Programa Nacional de Fortalecimento da Agricultura Familiar - PRONAF (Lei nº 10.186, de 2001)",
+     "funcao": "20",
+     "subfuncao": "608",
+     "liquidado": 987000000.0
+    },
+    {
+     "acao": "0355",
+     "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento do Nordeste - FDNE (Lei Complementar nº 125, de 3 de janeiro de 2007)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 790994839.0
+    },
+    {
+     "acao": "00XC",
+     "nome": "Aporte de Recursos para Implementação do Comitê Gestor do Imposto sobre Bens e Serviços - CGIBS (Lei Complementar nº 214, de 2025)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 733333333.0
+    },
+    {
+     "acao": "0427",
+     "nome": "Concessão de Crédito-Instalação às Famílias Assentadas ( Lei n° 8.629, de 1993)",
+     "funcao": "21",
+     "subfuncao": "631",
+     "liquidado": 731068712.0
+    },
+    {
+     "acao": "0A84",
+     "nome": "Financiamento de Operações no âmbito do Programa de Financiamento às Exportações - PROEX (Lei nº 10.184, de 2001)",
+     "funcao": "23",
+     "subfuncao": "693",
+     "liquidado": 668500000.0
+    },
+    {
+     "acao": "00Y8",
+     "nome": "Financiamento Destinado a Capital de Giro aos Prestadores de Serviços Aéreos Regulares",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 661453662.0
+    },
+    {
+     "acao": "00YI",
+     "nome": "Financiamento de Projetos de Desenvolvimento Tecnológico de Produtores Rurais",
+     "funcao": "19",
+     "subfuncao": "572",
+     "liquidado": 600000000.0
+    },
+    {
+     "acao": "006A",
+     "nome": "Investimentos Retornáveis no Setor Audiovisual mediante Participação em Empresas e Projetos - Fundo Setorial do Audiovisual",
+     "funcao": "13",
+     "subfuncao": "691",
+     "liquidado": 600000000.0
+    },
+    {
+     "acao": "0061",
+     "nome": "Concessão de Crédito para Aquisição de Imóveis Rurais e Investimentos Básicos - Fundo de Terras (Lei Complementar nº 93, de 1998)",
+     "funcao": "21",
+     "subfuncao": "631",
+     "liquidado": 326083308.0
+    },
+    {
+     "acao": "00WH",
+     "nome": "Financiamentos de Operações para Apoiar Ações de Mitigação e Adaptação às Mudanças Climáticas e de Enfrentamento de Consequências Sociais e Econômicas de Calamidades Públicas",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 214728019.0
+    },
+    {
+     "acao": "0353",
+     "nome": "Financiamento de Projetos do Setor Produtivo no âmbito do Fundo de Desenvolvimento da Amazônia - FDA (Lei Complementar nº 124, de 3 de janeiro de 2007)",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 201326255.0
+    },
+    {
+     "acao": "006C",
+     "nome": "Financiamento ao Setor Audiovisual - Fundo Setorial do Audiovisual (Lei nº 11.437, de 2006)",
+     "funcao": "13",
+     "subfuncao": "392",
+     "liquidado": 200000000.0
+    },
+    {
+     "acao": "0454",
+     "nome": "Financiamento da Infraestrutura Turística Nacional",
+     "funcao": "23",
+     "subfuncao": "695",
+     "liquidado": 187235407.0
+    },
+    {
+     "acao": "00GY",
+     "nome": "Financiamento Imobiliário para o Pessoal da Marinha",
+     "funcao": "05",
+     "subfuncao": "482",
+     "liquidado": 128242252.0
+    },
+    {
+     "acao": "00JE",
+     "nome": "Financiamento Imobiliário para o Pessoal da Aeronáutica",
+     "funcao": "05",
+     "subfuncao": "482",
+     "liquidado": 3545379.0
+    },
+    {
+     "acao": "00M5",
+     "nome": "Aquisição de terrenos e construção de unidades habitacionais destinadas à moradia do pessoal da Marinha",
+     "funcao": "05",
+     "subfuncao": "482",
+     "liquidado": 2534246.0
+    },
+    {
+     "acao": "0354",
+     "nome": "Concessão de Empréstimos para Liquidação de Operadoras de Planos Privados de Assistência à Saúde (Lei nº 9.961, de 2000)",
+     "funcao": "10",
+     "subfuncao": "125",
+     "liquidado": 1444831.0
+    },
+    {
+     "acao": "0461",
+     "nome": "Concessão de Empréstimos para Liquidação de Sociedades Seguradoras, Resseguradoras, Entidades de Previdência Complementar Aberta e Capitalização",
+     "funcao": "28",
+     "subfuncao": "846",
+     "liquidado": 239358.0
+    }
+   ],
+   "acoes_nota": "lista pelo carimbo da lei orçamentária (GND 5 com RP 0, SIOP); soma mais do que o valor fora do R$ 1,00 quando o Tesouro conta parte dela como gasto (ver lei_vs_tesouro)",
+   "por_rp": [
+    {
+     "rp": "0",
+     "nome": "Financeira",
+     "liquidado": 212350062092.0
+    },
+    {
+     "rp": "1",
+     "nome": "Primária obrigatória, considerada no cálculo do RP",
+     "liquidado": 3202621174.0
+    },
+    {
+     "rp": "2",
+     "nome": "Primária discricionária, considerada no cálculo do RP",
+     "liquidado": 16899273643.0
+    },
+    {
+     "rp": "3",
+     "nome": "Primária discricionária, PAC, considerada no cálculo do RP",
+     "liquidado": 1116520744.0
+    },
+    {
+     "rp": "6",
+     "nome": "Primária discricionária, decorrente de emendas individuais, considerada no cálculo do RP",
+     "liquidado": 3240896.0
+    }
+   ],
+   "notas": [
+    "total exato pelo Anexo 06; sem detalhe por linha neste período (o SIOP só é comparável em ano fechado): tudo sai da linha \"Encargos especiais e demais funções\"."
+   ],
+   "motivo": "Dinheiro que saiu do caixa mas não foi gasto: virou um direito de receber de volta (empréstimo a empresa, estudante, banco público ou fundo que empresta; compra de título; capital em empresa estatal com retorno). É como pagar o principal da dívida: sai dinheiro, não é consumo. O tamanho vem da conta oficial do Tesouro: é a diferença entre a despesa do RREO (Anexo 02, sem amortização) e a despesa primária do Anexo 06 mais os juros. Em 2025, R$ 128,8 bi (R$ 128,4 bi em inversões financeiras, grupo 5; R$ 0,45 bi em outras despesas correntes, grupo 3). Por linha, usamos o carimbo da lei orçamentária (grupo 5 com identificador de resultado primário 0) no SIOP: o FAT emprestado ao BNDES sai de Trabalho (R$ 28,9 bi em 2025), o FIES sai de Educação (R$ 5,6 bi), e o resto sai da linha \"Encargos especiais e demais funções\". Onde a lei carimba como financeiro e o Tesouro conta como gasto (R$ 31,9 bi em 2025, dos quais R$ 27,6 bi são os repasses aos fundos constitucionais FNE, FNO e FCO: 3% do IR e do IPI que a Constituição manda entregar e que não voltam ao Tesouro), o valor fica dentro do R$ 1,00, nessa mesma linha, com a diferença declarada. A própria LDO (art. 7º, §4º) diz que o carimbo serve para \"auxiliar a apuração do resultado primário\" pela metodologia do Tesouro: o número oficial é o do Tesouro. O que não voltar vira gasto no ano em que for perdoado (balanço patrimonial, não orçamento). O subsídio embutido (juro abaixo do mercado) já está no R$ 1,00, como equalização (grupo 3).\n",
+   "sql": "-- 157154927409.19 = despesa exceto intra, Anexo 02 (2928524270047.22) - AmortizacaoDaDivida, Anexo 01 (274244008198.82) - despesa primária liquidada, Anexo 06 (2081313962959.70) - JurosEEncargosDaDivida, Anexo 01 (415811371479.51)"
+  },
+  "refinanciamento": {
+   "valor": 1141059765822.79,
+   "fonte": "Anexo 01, cod_conta AmortizacaoRefinanciamentoDaDivida",
+   "excluido_do_anexo02": 0.0,
+   "motivo": "Troca de título vencido por título novo. Não consome imposto, e somar giro é dupla contagem (regra editorial 3). No RREO da União o total do Anexo 02 já exclui o refinanciamento (ele aparece só na linha XII do Anexo 01), então esta exclusão tende a zero; fica como salvaguarda. O valor exibido ao público vem do Anexo 01 (referencias_anexo01.refinanciamento).\n"
+  },
+  "amortizacao": {
+   "valor": 274244008198.82,
+   "fonte": "Anexo 01, cod_conta AmortizacaoDaDivida",
+   "em_843_844": 274244008198.82007,
+   "fora_843_844_estimado": 0.0,
+   "nota": "Amortização = operação de estoque, fora do R$ 1,00. A parte fora de 843/844 é removida do residual (ajuste declarado em linhas.yaml)."
+  },
+  "servico_divida_bruto_anexo02": 690055379678.3301,
+  "servico_divida_fora_843_844": {
+   "valor_rreo": 0.0,
+   "acoes": [
+    {
+     "acao": "00Q3",
+     "nome": "Assunção e Novação de Dívidas do Fundo de Compensação das Variações Salariais - FCVS",
+     "gnd": "6",
+     "liquidado": 2236376802.0
+    }
+   ],
+   "nota": "Juros e amortização classificados fora das subfunções da dívida. Em 2024 e 2025 é quase só a ação 0669, cobertura do resultado negativo do Banco Central (Lei 13.820/2019): a parte de amortização fica fora do R$ 1,00; a parte de juros está na linha de juros."
+  }
+ },
+ "anexo01_referencias": {
+  "total_exceto_intra": 2928524270047.25,
+  "juros": 415811371479.51,
+  "amortizacao": 274244008198.82,
+  "refinanciamento": 1141059765822.79,
+  "beneficios_previdenciarios": 769836099989.05,
+  "pessoal": 281181216143.77,
+  "outras_correntes": 1735527665090.97,
+  "investimentos": 22219143807.15,
+  "inversoes_financeiras": 199540865327.03,
+  "transferencias_modalidade": 532864850999.11
+ },
+ "anexo01_receitas": {
+  "receitas_exceto_intra": 2794847336782.8,
+  "correntes": 2142597948853.03,
+  "tributaria": 846163557843.27,
+  "impostos": 839020127393.72,
+  "taxas": 7143430449.55,
+  "contribuicoes": 1048150710753.87,
+  "contribuicoes_sociais": 1024052811553.24,
+  "patrimonial": 157933797153.63,
+  "agropecuaria": 12310956.28,
+  "industrial": 22835153120.42,
+  "servicos": 42898184859.82,
+  "transferencias_correntes": 630100673.78,
+  "outras_correntes": 23962012135.71,
+  "a_classificar": 12121356.25,
+  "capital": 652249387929.77,
+  "operacoes_credito": 467781360906.8,
+  "alienacao_bens": 892050383.36,
+  "amortizacoes_emprestimos": 27479934306.94,
+  "transferencias_capital": 53921541.31,
+  "outras_capital": 156042120791.36,
+  "remuneracao_caixa": 141621414868.2,
+  "resultado_bc": 0.0,
+  "refinanciamento": 1159936774950.71,
+  "total": 3997195006369.26,
+  "deficit": 110910986379.2
+ },
+ "anexo06_referencias": {
+  "receitas_correntes:realizadas": 2081612557671.84,
+  "tributarias:realizadas": 846163557843.27,
+  "contribuicoes:realizadas": 1048150710753.87,
+  "patrimonial:realizadas": 129993173913.21,
+  "transferencias_correntes:realizadas": 630100673.78,
+  "demais_correntes:realizadas": 56675014487.71,
+  "receitas_capital:realizadas": 15366677847.83,
+  "alienacao_bens:realizadas": 892050383.36,
+  "transferencias_capital:realizadas": 53921541.31,
+  "outras_capital:realizadas": 14420705923.16,
+  "receita_primaria_total:realizadas": 2096979235519.67,
+  "receitas_correntes:previsao": 3258705471937.0,
+  "tributarias:previsao": 1259451279239.0,
+  "contribuicoes:previsao": 1647259167860.0,
+  "patrimonial:previsao": 225649115670.0,
+  "transferencias_correntes:previsao": 138197839.0,
+  "demais_correntes:previsao": 126207711329.0,
+  "receitas_capital:previsao": 31330324415.0,
+  "alienacao_bens:previsao": 31201537562.0,
+  "transferencias_capital:previsao": 128786853.0,
+  "outras_capital:previsao": 0.0,
+  "receita_primaria_total:previsao": 3290035796352.0,
+  "despesas_correntes:liquidadas": 2016607353892.17,
+  "pessoal:liquidadas": 281181216143.77,
+  "outras_correntes:liquidadas": 1735426137748.4,
+  "transferencias_constitucionais:liquidadas": 409328772961.21,
+  "demais_despesas_correntes:liquidadas": 1326097364787.19,
+  "despesas_capital:liquidadas": 64706609067.53,
+  "investimentos:liquidadas": 22219143807.15,
+  "inversoes:liquidadas": 42487465260.38,
+  "reserva_contingencia:liquidadas": 0.0,
+  "despesa_primaria_total:liquidadas": 2081313962959.7,
+  "despesas_correntes:pagas": 1913824362616.48,
+  "pessoal:pagas": 254729171883.16,
+  "outras_correntes:pagas": 1659095190733.32,
+  "transferencias_constitucionais:pagas": 409322507360.96,
+  "demais_despesas_correntes:pagas": 1249772683372.36,
+  "despesas_capital:pagas": 61051894657.64,
+  "investimentos:pagas": 20579207502.57,
+  "inversoes:pagas": 40472687155.07,
+  "reserva_contingencia:pagas": 0.0,
+  "despesa_primaria_total:pagas": 1974876257274.12,
+  "despesas_correntes:empenhadas": 2583595288345.14,
+  "pessoal:empenhadas": 386542776497.83,
+  "outras_correntes:empenhadas": 2197052511847.31,
+  "transferencias_constitucionais:empenhadas": 651761329973.23,
+  "demais_despesas_correntes:empenhadas": 1545291181874.08,
+  "despesas_capital:empenhadas": 107617061586.9,
+  "investimentos:empenhadas": 52248326621.0,
+  "inversoes:empenhadas": 55368734965.9,
+  "reserva_contingencia:empenhadas": 0.0,
+  "despesa_primaria_total:empenhadas": 2691212349932.04,
+  "despesas_correntes:dotacao": 3150914450689.42,
+  "pessoal:dotacao": 452408814518.75,
+  "outras_correntes:dotacao": 2698505636170.67,
+  "transferencias_constitucionais:dotacao": 690790529496.0,
+  "demais_despesas_correntes:dotacao": 2007715106674.67,
+  "despesas_capital:dotacao": 198830436420.73,
+  "investimentos:dotacao": 84124219298.58,
+  "inversoes:dotacao": 114706217122.15,
+  "reserva_contingencia:dotacao": 35394476339.0,
+  "despesa_primaria_total:dotacao": 3385139363449.15,
+  "despesas_correntes:rp_processados_pagos": 98001251319.11,
+  "pessoal:rp_processados_pagos": 27114289283.33,
+  "outras_correntes:rp_processados_pagos": 70886962035.78,
+  "transferencias_constitucionais:rp_processados_pagos": 0.0,
+  "demais_despesas_correntes:rp_processados_pagos": 70886962035.78,
+  "despesas_capital:rp_processados_pagos": 2544958106.68,
+  "investimentos:rp_processados_pagos": 2536779380.7,
+  "inversoes:rp_processados_pagos": 8178725.98,
+  "reserva_contingencia:rp_processados_pagos": 0.0,
+  "despesa_primaria_total:rp_processados_pagos": 100546209425.79,
+  "despesas_correntes:rpnp_liquidados": 78984290537.04,
+  "pessoal:rpnp_liquidados": 591796896.92,
+  "outras_correntes:rpnp_liquidados": 78392493640.12,
+  "transferencias_constitucionais:rpnp_liquidados": 35735771073.18,
+  "demais_despesas_correntes:rpnp_liquidados": 42656722566.94,
+  "despesas_capital:rpnp_liquidados": 32664498424.57,
+  "investimentos:rpnp_liquidados": 22323830777.56,
+  "inversoes:rpnp_liquidados": 10340667647.01,
+  "reserva_contingencia:rpnp_liquidados": 0.0,
+  "despesa_primaria_total:rpnp_liquidados": 111648788961.61,
+  "despesas_correntes:rpnp_pagos": 78476312244.5,
+  "pessoal:rpnp_pagos": 591036077.58,
+  "outras_correntes:rpnp_pagos": 77885276166.92,
+  "transferencias_constitucionais:rpnp_pagos": 35735771073.18,
+  "demais_despesas_correntes:rpnp_pagos": 42149505093.74,
+  "despesas_capital:rpnp_pagos": 30462341155.25,
+  "investimentos:rpnp_pagos": 20121696705.38,
+  "inversoes:rpnp_pagos": 10340644449.87,
+  "reserva_contingencia:rpnp_pagos": 0.0,
+  "despesa_primaria_total:rpnp_pagos": 108938653399.75,
+  "primario_acima:valor": -94869478602.32,
+  "ajuste_metodologico:valor": -7487594022.33,
+  "primario_abaixo:valor": -87381884580.06,
+  "nominal_acima:valor": -802436455362.47,
+  "nominal_abaixo:valor": -801933437469.1,
+  "nominal_ajustado:valor": -794948861340.21,
+  "variacao_saldo_rpp:valor": -4975078634.07,
+  "passivos_reconhecidos:valor": -2790440316.91,
+  "outros_ajustes:valor": 4799937811.73,
+  "juros_ativos:valor_incorrido": 252764502419.5,
+  "juros_passivos:valor_incorrido": 960331479179.65,
+  "divida_consolidada:saldo_inicial": 11545342915303.7,
+  "deducoes:saldo_inicial": 3522327984571.35,
+  "caixa_bruta:saldo_inicial": 2063884697595.44,
+  "rp_processados_deducao:saldo_inicial": 149074345932.9,
+  "demais_haveres:saldo_inicial": 1607517632908.81,
+  "divida_liquida:saldo_inicial": 8023014930732.35,
+  "divida_consolidada:saldo_final": 12264073856966.4,
+  "deducoes:saldo_final": 3439125488764.95,
+  "caixa_bruta:saldo_final": 1803453570101.27,
+  "rp_processados_deducao:saldo_final": 154049424566.97,
+  "demais_haveres:saldo_final": 1789721343230.65,
+  "divida_liquida:saldo_final": 8824948368201.45
+ },
+ "memos": [
+  {
+   "id": "tributos",
+   "nome": "Tributos (impostos, taxas e contribuições)",
+   "definicao": "Impostos (IR, IPI, IOF, imposto de importação...), taxas e contribuições (INSS, COFINS, CSLL, PIS/PASEP, CIDE) arrecadados pela União no período. É o dinheiro que sai do bolso de pessoas e empresas por obrigação de lei. Valor do Anexo 06 (receita primária), conferido ao centavo com o Anexo 01 (tributos_anexo01_vs_anexo06).\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 1894314268597.1401,
+   "componentes": [
+    {
+     "id": "impostos",
+     "nome": "Impostos",
+     "valor": 839020127393.72,
+     "fonte": "Anexo 01: Impostos"
+    },
+    {
+     "id": "taxas",
+     "nome": "Taxas",
+     "valor": 7143430449.55,
+     "fonte": "Anexo 01: Taxas"
+    },
+    {
+     "id": "contribuicoes_sociais",
+     "nome": "Contribuições sociais (INSS, COFINS, CSLL, PIS/PASEP)",
+     "valor": 1024052811553.24,
+     "fonte": "Anexo 01: ContribuicoesSociais"
+    },
+    {
+     "id": "contribuicoes_economicas",
+     "nome": "Contribuições econômicas (CIDE e outras)",
+     "valor": 24097899200.630005,
+     "fonte": "Anexo 01: ReceitaDeContribuicoes - ContribuicoesSociais"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: tributarias:realizadas + contribuicoes:realizadas",
+     "anexo01 (componentes): Impostos, Taxas, ContribuicoesSociais, ReceitaDeContribuicoes"
+    ]
+   }
+  },
+  {
+   "id": "receita_primaria",
+   "nome": "Receita primária total",
+   "definicao": "Tudo o que o governo arrecadou sem se endividar: tributos mais royalties e dividendos (receita patrimonial), venda de bens, taxas de serviço e outras receitas. É o lado \"entrou\" da conta do déficit (Anexo 06, linha III).\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 2096979235519.67,
+   "componentes": [
+    {
+     "id": "tributos",
+     "nome": "Tributos (impostos, taxas e contribuições)",
+     "valor": 1894314268597.1401,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "patrimonial",
+     "nome": "Receita patrimonial (royalties, dividendos, concessões)",
+     "valor": 129993173913.21,
+     "fonte": "Anexo 06: patrimonial"
+    },
+    {
+     "id": "demais_correntes",
+     "nome": "Demais receitas correntes (serviços, multas, restituições)",
+     "valor": 56675014487.71,
+     "fonte": "Anexo 06: demais_correntes"
+    },
+    {
+     "id": "transferencias_correntes",
+     "nome": "Transferências correntes recebidas",
+     "valor": 630100673.78,
+     "fonte": "Anexo 06: transferencias_correntes"
+    },
+    {
+     "id": "capital",
+     "nome": "Receitas de capital (venda de bens e outras)",
+     "valor": 15366677847.83,
+     "fonte": "Anexo 06: receitas_capital"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: receita_primaria_total:realizadas (III) e componentes"
+    ]
+   }
+  },
+  {
+   "id": "receitas_financeiras",
+   "nome": "O que entrou além da receita primária",
+   "definicao": "Dinheiro que entrou no caixa e não é arrecadação: títulos vendidos além da rolagem (dívida nova), rendimento do caixa do Tesouro no Banco Central, resultado do Banco Central repassado, empréstimos que tomadores devolveram e algumas receitas que o Tesouro classifica como financeiras (parte da patrimonial e dos serviços). É a diferença entre as receitas do Anexo 01 (exceto intra, linha I) e a receita primária do Anexo 06. A rolagem (linha IV do Anexo 01) aparece ao lado, fora do total: é título novo pagando título velho.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 697868101263.1299,
+   "componentes": [
+    {
+     "id": "operacoes_credito",
+     "nome": "Títulos vendidos além da rolagem (dívida nova)",
+     "valor": 467781360906.8,
+     "fonte": "Anexo 01: ReceitasDeOperacoesDeCredito"
+    },
+    {
+     "id": "remuneracao_caixa",
+     "nome": "Rendimento do caixa do Tesouro no Banco Central",
+     "valor": 141621414868.2,
+     "fonte": "Anexo 01: RemuneracaoDasDisponibilidadesDoTesouro (prefixo)"
+    },
+    {
+     "id": "resultado_bc",
+     "nome": "Resultado do Banco Central repassado ao Tesouro",
+     "valor": 0.0,
+     "fonte": "Anexo 01: ResultadoDoBancoCentralDoBrasil (prefixo)"
+    },
+    {
+     "id": "amortizacoes_emprestimos",
+     "nome": "Empréstimos que tomadores devolveram",
+     "valor": 27479934306.94,
+     "fonte": "Anexo 01: AmortizacoesDeEmprestimos"
+    },
+    {
+     "id": "outras_financeiras",
+     "nome": "Outras receitas que o Tesouro classifica como financeiras (parte da patrimonial e dos serviços)",
+     "valor": 60985391181.18994,
+     "fonte": "diferença: Anexo 01 (I) - Anexo 06 (III) - as quatro acima"
+    },
+    {
+     "id": "refinanciamento",
+     "nome": "Rolagem da dívida (título novo pagando título velho; fora deste total)",
+     "valor": 1159936774950.71,
+     "fonte": "Anexo 01: OperacoesDeCreditoRefinanciamento (IV)",
+     "no_total": false
+    }
+   ],
+   "notas": [
+    "receita total do Anexo 01 (I) 2,794,847,336,782.80 = receita primária (Anexo 06) 2,096,979,235,519.67 + este memo 697,868,101,263.13"
+   ],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo01: ReceitasExcetoIntraOrcamentarias (I) e componentes",
+     "anexo06: receita_primaria_total:realizadas (III)"
+    ]
+   }
+  },
+  {
+   "id": "gasto_por_real_de_tributo",
+   "nome": "Gasto por R$ 1,00 de tributo",
+   "definicao": "Quanto o governo gastou (o total do recibo: despesa primária mais juros pagos) para cada R$ 1,00 de tributo arrecadado. Acima de R$ 1,00, a diferença veio de outras receitas e de dívida nova.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais_por_real",
+   "valor": 1.3182212560160305,
+   "componentes": [
+    {
+     "id": "total_recibo",
+     "nome": "Total do recibo (despesa primária + juros pagos)",
+     "valor": 2497125334439.21,
+     "fonte": "recibo"
+    },
+    {
+     "id": "tributos",
+     "nome": "Tributos (impostos, taxas e contribuições)",
+     "valor": 1894314268597.1401,
+     "fonte": "Anexo 06"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "recibo: total",
+     "anexo06: tributarias:realizadas + contribuicoes:realizadas"
+    ]
+   }
+  },
+  {
+   "id": "origem_do_real_gasto",
+   "nome": "De onde veio cada R$ 1,00 gasto",
+   "definicao": "De cada R$ 1,00 que o governo gastou, quantos centavos vieram de tributos, quantos de outras receitas (royalties, dividendos, serviços, venda de bens) e quantos foram cobertos com dívida nova ou com o caixa. Conta pelo gasto liquidado do recibo; o déficit oficial usa o pago, com restos a pagar (memo resultado_primario).\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "centavos",
+   "valor": 400146098919.54004,
+   "componentes": [
+    {
+     "id": "tributos",
+     "nome": "Tributos",
+     "valor": 1894314268597.1401,
+     "fonte": "Anexo 06 e recibo",
+     "share": 0.7585979936495876,
+     "centavos": 76
+    },
+    {
+     "id": "outras_receitas_primarias",
+     "nome": "Outras receitas (royalties, dividendos, serviços, venda de bens)",
+     "valor": 202664966922.5298,
+     "fonte": "Anexo 06 e recibo",
+     "share": 0.08115930911735478,
+     "centavos": 8
+    },
+    {
+     "id": "divida_ou_caixa",
+     "nome": "Dívida nova ou caixa",
+     "valor": 400146098919.54004,
+     "fonte": "Anexo 06 e recibo",
+     "share": 0.16024269723305762,
+     "centavos": 16
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: receita_primaria_total:realizadas, tributarias:realizadas, contribuicoes:realizadas",
+     "recibo: total"
+    ]
+   }
+  },
+  {
+   "id": "resultado_primario",
+   "nome": "Resultado primário (déficit antes dos juros)",
+   "definicao": "Receita primária menos despesa primária paga no ano, inclusive contas de anos anteriores pagas agora (restos a pagar). Negativo é déficit: o governo gastou mais do que arrecadou, antes de contar os juros. O Tesouro publica dois números: \"acima da linha\" (linha IX: a conta de receitas e despesas mais um \"ajuste metodológico\" que, segundo a nota 1 do próprio anexo, é a diferença para o número do boletim mensal do Tesouro, o Relatório do Tesouro Nacional, que segue o Manual de Estatísticas de Finanças Públicas; o anexo não abre os itens) e \"abaixo da linha\" (linha XXVII: pela variação da dívida consolidada líquida do próprio RREO, com ajustes). Os dois saem aqui, com a conta aberta. Em 2024 e 2025 o abaixo da linha é igual ao centavo à conta de caixa antes do ajuste. Atenção: não é a conta do Banco Central (NFSP); essa é outra régua e sai no mart da dívida (em 2024, o BC apurou déficit primário de R$ 45,4 bi para o Governo Central, contra R$ 47,96 bi aqui).\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": -94869478602.32,
+   "componentes": [
+    {
+     "id": "receita_primaria",
+     "nome": "Receita primária realizada (III)",
+     "valor": 2096979235519.67,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "despesa_paga",
+     "nome": "Despesa primária paga no ano",
+     "valor": 1974876257274.12,
+     "fonte": "Anexo 06: despesa_primaria_total:pagas"
+    },
+    {
+     "id": "rp_processados_pagos",
+     "nome": "Restos a pagar processados pagos (contas de anos anteriores)",
+     "valor": 100546209425.79,
+     "fonte": "Anexo 06: despesa_primaria_total:rp_processados_pagos"
+    },
+    {
+     "id": "rp_nao_processados_pagos",
+     "nome": "Restos a pagar não processados pagos",
+     "valor": 108938653399.75,
+     "fonte": "Anexo 06: despesa_primaria_total:rpnp_pagos"
+    },
+    {
+     "id": "antes_do_ajuste",
+     "nome": "Receita menos tudo o que foi pago (calculado)",
+     "valor": -87381884579.99019,
+     "fonte": "calculado"
+    },
+    {
+     "id": "ajuste_metodologico",
+     "nome": "Ajuste metodológico do Tesouro (não detalhado no anexo)",
+     "valor": -7487594022.33,
+     "fonte": "Anexo 06: ajuste_metodologico:valor"
+    },
+    {
+     "id": "acima_da_linha",
+     "nome": "Resultado primário acima da linha (IX), a conta do Tesouro",
+     "valor": -94869478602.32,
+     "fonte": "Anexo 06: primario_acima:valor"
+    },
+    {
+     "id": "abaixo_da_linha",
+     "nome": "Resultado primário abaixo da linha (XXVII), pela variação da dívida consolidada líquida do RREO",
+     "valor": -87381884580.06,
+     "fonte": "Anexo 06: primario_abaixo:valor"
+    },
+    {
+     "id": "despesa_liquidada",
+     "nome": "Despesa primária liquidada (a base do recibo)",
+     "valor": 2081313962959.7,
+     "fonte": "Anexo 06: despesa_primaria_total:liquidadas"
+    }
+   ],
+   "notas": [
+    "em 2026 o Tesouro aplica um ajuste metodológico de -7,487,594,022.33 sobre a conta de caixa. Segundo a nota 1 do Anexo 06 do RREO da União, é a diferença para o resultado publicado no Relatório do Tesouro Nacional (RTN), que segue o Manual de Estatísticas de Finanças Públicas (MEFP); o anexo não abre os itens"
+   ],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: receita_primaria_total, despesa_primaria_total (pagas, rp_processados_pagos, rpnp_pagos), ajuste_metodologico, primario_acima, primario_abaixo"
+    ]
+   }
+  },
+  {
+   "id": "juros_nominais",
+   "nome": "Juros que a dívida gerou (competência)",
+   "definicao": "Juros, encargos e variações monetárias que a dívida pública gerou no período, pela competência (venceram, mesmo que ainda não tenham sido pagos em dinheiro), menos os que o governo recebeu de quem lhe deve (Anexo 06, linhas XI e X). Compare com os juros pagos, que estão na linha \"Juros da dívida\" do recibo: a diferença é juro que virou dívida nova.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 707566976760.15,
+   "componentes": [
+    {
+     "id": "passivos",
+     "nome": "Juros que a dívida gerou (XI)",
+     "valor": 960331479179.65,
+     "fonte": "Anexo 06: juros_passivos:valor_incorrido"
+    },
+    {
+     "id": "ativos",
+     "nome": "Juros que o governo recebeu (X)",
+     "valor": 252764502419.5,
+     "fonte": "Anexo 06: juros_ativos:valor_incorrido"
+    },
+    {
+     "id": "liquidos",
+     "nome": "Juros líquidos (XI - X)",
+     "valor": 707566976760.15,
+     "fonte": "calculado"
+    },
+    {
+     "id": "juros_pagos",
+     "nome": "Juros pagos em dinheiro (linha do recibo)",
+     "valor": 415811371479.51,
+     "fonte": "Anexo 01: JurosEEncargosDaDivida"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: juros_passivos:valor_incorrido, juros_ativos:valor_incorrido",
+     "anexo01: JurosEEncargosDaDivida"
+    ]
+   }
+  },
+  {
+   "id": "resultado_nominal",
+   "nome": "Resultado nominal (déficit com os juros)",
+   "definicao": "Resultado primário mais os juros líquidos: o déficit completo. É o quanto a dívida precisou crescer para fechar a conta do período. Acima da linha (XII) pelo Tesouro; abaixo da linha (XVII, a variação da dívida consolidada líquida do RREO) e ajustado (XXVI). A conta do Banco Central (NFSP) é outra régua: mart da dívida.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": -802436455362.47,
+   "componentes": [
+    {
+     "id": "acima_da_linha",
+     "nome": "Resultado nominal acima da linha (XII), Tesouro",
+     "valor": -802436455362.47,
+     "fonte": "Anexo 06: nominal_acima:valor"
+    },
+    {
+     "id": "abaixo_da_linha",
+     "nome": "Resultado nominal abaixo da linha (XVII), a variação da dívida consolidada líquida do RREO",
+     "valor": -801933437469.1,
+     "fonte": "Anexo 06: nominal_abaixo:valor"
+    },
+    {
+     "id": "ajustado",
+     "nome": "Resultado nominal ajustado (XXVI)",
+     "valor": -794948861340.21,
+     "fonte": "Anexo 06: nominal_ajustado:valor"
+    },
+    {
+     "id": "variacao_saldo_rpp",
+     "nome": "Ajuste: variação do saldo de restos a pagar processados (XVIII)",
+     "valor": -4975078634.07,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "passivos_reconhecidos",
+     "nome": "Ajuste: passivos reconhecidos na dívida (XX)",
+     "valor": -2790440316.91,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "outros_ajustes",
+     "nome": "Ajuste: outros (XXV)",
+     "valor": 4799937811.73,
+     "fonte": "Anexo 06"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: nominal_acima, nominal_abaixo, nominal_ajustado, variacao_saldo_rpp, passivos_reconhecidos, outros_ajustes (valor)"
+    ]
+   }
+  },
+  {
+   "id": "divida",
+   "nome": "Dívida consolidada e dívida líquida",
+   "definicao": "Dívida consolidada (tudo o que a União deve) e dívida consolidada líquida (descontando o caixa e o que a União tem a receber), no fim do ano anterior e no fim do período (Anexo 06, linhas XIII, XIV e XVI). O valor do memo é a variação da líquida no período: a dívida nova.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 801933437469.0996,
+   "componentes": [
+    {
+     "id": "consolidada_inicial",
+     "nome": "Dívida consolidada em 31/12 do ano anterior (XIII)",
+     "valor": 11545342915303.7,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "consolidada_final",
+     "nome": "Dívida consolidada no fim do período (XIII)",
+     "valor": 12264073856966.4,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "deducoes_final",
+     "nome": "Deduções no fim do período (caixa e haveres, XIV)",
+     "valor": 3439125488764.95,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "caixa_bruta_final",
+     "nome": "Disponibilidade de caixa bruta no fim do período",
+     "valor": 1803453570101.27,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "haveres_final",
+     "nome": "Demais haveres financeiros no fim do período",
+     "valor": 1789721343230.65,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "liquida_inicial",
+     "nome": "Dívida consolidada líquida em 31/12 do ano anterior (XVI)",
+     "valor": 8023014930732.35,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "liquida_final",
+     "nome": "Dívida consolidada líquida no fim do período (XVI)",
+     "valor": 8824948368201.45,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "variacao_liquida",
+     "nome": "Dívida nova no período (variação da líquida)",
+     "valor": 801933437469.0996,
+     "fonte": "calculado"
+    }
+   ],
+   "notas": [
+    "a dívida nova é o resultado nominal abaixo da linha com o sinal trocado (conferência nominal_abaixo_vs_divida_liquida)"
+   ],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: divida_consolidada, deducoes, caixa_bruta, demais_haveres, divida_liquida (saldo_inicial, saldo_final)"
+    ]
+   }
+  },
+  {
+   "id": "restos_a_pagar",
+   "nome": "Contas de anos anteriores pagas neste ano (restos a pagar)",
+   "definicao": "Restos a pagar processados e não processados pagos no período (Anexo 06, colunas b e c da despesa primária). O recibo usa o liquidado do próprio ano; investimento é o grupo em que isso mais pesa, por isso o memo mostra o investimento pago no ano somando os restos.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 209484862825.53998,
+   "componentes": [
+    {
+     "id": "processados_pagos",
+     "nome": "Restos a pagar processados pagos (já liquidados em anos anteriores)",
+     "valor": 100546209425.79,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "nao_processados_pagos",
+     "nome": "Restos a pagar não processados pagos (empenhados em anos anteriores)",
+     "valor": 108938653399.75,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "pessoal_restos",
+     "nome": "Restos pagos: pessoal",
+     "valor": 27705325360.910004,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "outras_correntes_restos",
+     "nome": "Restos pagos: outras despesas correntes",
+     "valor": 148772238202.7,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "investimentos_restos",
+     "nome": "Restos pagos: investimentos",
+     "valor": 22658476086.08,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "inversoes_restos",
+     "nome": "Restos pagos: inversões financeiras",
+     "valor": 10348823175.85,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "investimentos_liquidados",
+     "nome": "Investimento liquidado no ano (métrica do recibo)",
+     "valor": 22219143807.15,
+     "fonte": "Anexo 06"
+    },
+    {
+     "id": "investimentos_pagos_no_ano",
+     "nome": "Investimento pago no ano (pagas do ano + restos pagos)",
+     "valor": 43237683588.65,
+     "fonte": "calculado"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo06: despesa_primaria_total e grupos (pagas, rp_processados_pagos, rpnp_pagos, liquidadas)"
+    ]
+   }
+  },
+  {
+   "id": "emprestimos_retorno",
+   "nome": "Empréstimos que voltaram",
+   "definicao": "O que tomadores devolveram ao Tesouro no período (receita de capital \"Amortizações de Empréstimos\" do Anexo 01), ao lado do que foi emprestado (exclusão emprestimos_financeiros). Perdão e calote não aparecem no orçamento (ficam no balanço patrimonial, BGU): fonte a definir na torneira da dívida.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais",
+   "valor": 27479934306.94,
+   "componentes": [
+    {
+     "id": "devolvido",
+     "nome": "Devolvido ao Tesouro no período",
+     "valor": 27479934306.94,
+     "fonte": "Anexo 01: AmortizacoesDeEmprestimos"
+    },
+    {
+     "id": "emprestado",
+     "nome": "Emprestado ou aplicado no período (fora do R$ 1,00)",
+     "valor": 157154927409.18994,
+     "fonte": "exclusão emprestimos_financeiros"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4"
+    },
+    "fontes": [
+     "anexo01: AmortizacoesDeEmprestimos",
+     "recibo: exclusão emprestimos_financeiros"
+    ]
+   }
+  },
+  {
+   "id": "por_habitante",
+   "nome": "Gasto e tributos por habitante",
+   "definicao": "O total do recibo, os tributos e cada uma das linhas divididos pela população do Brasil no ano (IBGE, projeção revisão 2024, população em 1º de julho; fonte S14). É o mesmo dinheiro das linhas, só que por pessoa: \"de cada brasileiro, R$ X saíram em tributos federais e R$ Y foram para o INSS\". Nenhum centavo do recibo muda. Só sai quando a projeção e a estimativa oficial do IBGE, nos anos em que as duas existem, são o mesmo número.\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais_por_habitante",
+   "valor": 11657.264325271983,
+   "componentes": [
+    {
+     "id": "populacao",
+     "nome": "População do Brasil em 2026-07-01 (IBGE, projeção revisão 2024)",
+     "valor": 214211951.0,
+     "fonte": "S14: IBGE, projeção revisão 2024",
+     "unidade": "pessoas"
+    },
+    {
+     "id": "total_recibo",
+     "nome": "Gasto do recibo por habitante (despesa primária + juros pagos)",
+     "valor": 11657.264325271983,
+     "fonte": "recibo: total / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "tributos",
+     "nome": "Tributos federais por habitante (impostos, taxas e contribuições)",
+     "valor": 8843.17732859424,
+     "fonte": "Anexo 06: tributarias + contribuicoes / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "previdencia_inss",
+     "nome": "Previdência (INSS) por habitante",
+     "valor": 3417.0994449277014,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "inativos_pensionistas",
+     "nome": "Aposentados e pensionistas do setor público por habitante",
+     "valor": 331.8691452008669,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "assistencia",
+     "nome": "Assistência social (Bolsa Família, BPC) por habitante",
+     "valor": 928.4253415670538,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "saude",
+     "nome": "Saúde por habitante",
+     "valor": 731.9725971403902,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "educacao",
+     "nome": "Educação por habitante",
+     "valor": 882.3196065579926,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "trabalho",
+     "nome": "Trabalho (abono, seguro-desemprego) por habitante",
+     "valor": 402.2384697301506,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "defesa_seguranca",
+     "nome": "Defesa e segurança por habitante",
+     "valor": 317.01302289198605,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "transferencias",
+     "nome": "Transferências a estados e municípios por habitante",
+     "valor": 1523.2293465420141,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "juros",
+     "nome": "Juros da dívida por habitante",
+     "valor": 1941.1212564863386,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    },
+    {
+     "id": "maquina_demais",
+     "nome": "Encargos especiais e demais funções por habitante",
+     "valor": 1181.976094227487,
+     "fonte": "recibo: linha / população",
+     "unidade": "reais_por_habitante"
+    }
+   ],
+   "notas": [
+    "a estimativa oficial do IBGE para 2026 (SIDRA 6579) é igual à projeção: 214,211,951 pessoas",
+    "o Censo 2022 contou 203,080,756 pessoas; a projeção corrige a cobertura do Censo e dá 210,862,983 para o mesmo ano: per capita pelo Censo sairia maior na mesma proporção"
+   ],
+   "ficha": {
+    "fonte": {
+     "id": "S4+S14"
+    },
+    "fontes": [
+     "recibo: total e linhas",
+     "anexo06: tributarias:realizadas + contribuicoes:realizadas",
+     "S14 IBGE: projecoes_2024_tab3_grupos_etarios_especificos.xlsx (snapshot 20261110T043229602702Z)"
+    ]
+   }
+  },
+  {
+   "id": "imposto_futuro",
+   "nome": "Dívida nova por habitante",
+   "definicao": "Variação da dívida consolidada líquida no período (memo divida, Anexo 06 do RREO) dividida pela população do ano (IBGE, S14): quanto cada brasileiro passou a dever a mais, pela régua da Lei de Responsabilidade Fiscal. É imposto futuro: dívida se paga com tributo depois. O mart da dívida traz a mesma conta com as outras réguas (DPF do Tesouro, dívida líquida pelo Banco Central).\n",
+   "status": "implementado",
+   "disponivel": true,
+   "unidade": "reais_por_habitante",
+   "valor": 3743.6447113499266,
+   "componentes": [
+    {
+     "id": "variacao_liquida",
+     "nome": "Dívida nova no período (variação da dívida consolidada líquida, Anexo 06)",
+     "valor": 801933437469.0996,
+     "fonte": "Anexo 06: divida_liquida (saldo_final - saldo_inicial)"
+    },
+    {
+     "id": "populacao",
+     "nome": "População do Brasil em 2026-07-01 (IBGE)",
+     "valor": 214211951.0,
+     "fonte": "S14: IBGE, projeção revisão 2024",
+     "unidade": "pessoas"
+    },
+    {
+     "id": "divida_liquida_por_habitante",
+     "nome": "Dívida consolidada líquida no fim do período, por habitante",
+     "valor": 41197.27366752497,
+     "fonte": "Anexo 06: divida_liquida:saldo_final / população",
+     "unidade": "reais_por_habitante"
+    }
+   ],
+   "notas": [],
+   "ficha": {
+    "fonte": {
+     "id": "S4+S14"
+    },
+    "fontes": [
+     "anexo06: divida_liquida (saldo_inicial, saldo_final)",
+     "S14 IBGE: projecoes_2024_tab3_grupos_etarios_especificos.xlsx (snapshot 20261110T043229602702Z)"
+    ]
+   }
+  }
+ ],
+ "populacao": {
+  "disponivel": true,
+  "exercicio": 2026,
+  "local": "Brasil",
+  "regua": "projecao",
+  "valor": 214211951,
+  "motivo": null,
+  "estimativa": {
+   "valor": 214211951,
+   "tabela": "6579",
+   "variavel": "9324",
+   "snapshot_id": "20261110T043230561890Z",
+   "data_referencia": "2026-07-01"
+  },
+  "censo": {
+   "ano": 2022,
+   "valor": 203080756,
+   "data_referencia": "2022-08-01",
+   "tabela": "4709",
+   "projecao_no_mesmo_ano": 210862983,
+   "nota": "o Censo conta pessoas numa data; a projeção corrige a cobertura do Censo e por isso é maior: per capita pelo Censo sairia maior na mesma proporção"
+  },
+  "conferencia": {
+   "id": "populacao_projecao_vs_estimativa",
+   "ok": true,
+   "critica": false,
+   "esperado": 214211951,
+   "obtido": 214211951,
+   "diff": 0,
+   "detalhe": "projeção revisão 2024 contra estimativa oficial (SIDRA 6579) em 2026; tolerância 0"
+  },
+  "fonte": {
+   "regua": "projecao",
+   "arquivo": "projecoes_2024_tab3_grupos_etarios_especificos.xlsx",
+   "revisao": "2024",
+   "snapshot_id": "20261110T043229602702Z",
+   "sha256_canonical": "a759c134c9cf0d36f9a633cc9700356f0230ed9be07c47b0b3ab2ee725076b20",
+   "fetched_at": "2026-11-10T04:32:29+00:00",
+   "data_referencia": "2026-07-01"
+  },
+  "homens": 104407312,
+  "mulheres": 109804639,
+  "idosos_65_mais": 25646543,
+  "data_referencia": "2026-07-01",
+  "revisao": "2024"
+ },
+ "fontes_de_recursos": {
+  "disponivel": false,
+  "motivo": "ano em andamento: o SIOP não cobre o mesmo período do RREO; o carimbo da fonte entra quando o ano fecha"
+ },
+ "reconciliacoes": [
+  {
+   "id": "hierarquia",
+   "ok": true,
+   "critica": true,
+   "esperado": 2928524270047.2197,
+   "obtido": 2928524270047.2197,
+   "diff": 0.0,
+   "descricao": "Soma das subfunções = soma das funções (valida a derivação da hierarquia a partir da ordem das linhas).",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "total_cabecalho",
+   "ok": true,
+   "critica": true,
+   "esperado": 2928524270047.22,
+   "obtido": 2928524270047.2197,
+   "diff": -0.00048828125,
+   "descricao": "Soma das funções = total \"Despesas (exceto intraorçamentárias)\" do próprio Anexo 02.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "total_anexos",
+   "ok": true,
+   "critica": true,
+   "esperado": 2928524270047.25,
+   "obtido": 2928524270047.22,
+   "diff": -0.02978515625,
+   "descricao": "Total exceto intra do Anexo 02 = DespesasExcetoIntraOrcamentarias do Anexo 01 (mesmo universo).",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "fu_prefixo_consistente",
+   "ok": true,
+   "critica": true,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "O prefixo \"FUxx\" nunca discorda da função vista na ordem das linhas.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "residual_nao_negativo",
+   "ok": true,
+   "critica": true,
+   "esperado": 0.0,
+   "obtido": 253193405179.82983,
+   "diff": 253193405179.82983,
+   "descricao": "O residual (máquina e demais funções) não pode ser negativo.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "centavos_somam_100",
+   "ok": true,
+   "critica": true,
+   "esperado": 100.0,
+   "obtido": 100.0,
+   "diff": 0.0,
+   "descricao": "Os centavos publicados somam exatamente 100.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "identidade_total",
+   "ok": true,
+   "critica": true,
+   "esperado": 2497125334439.21,
+   "obtido": 2497125334439.21,
+   "diff": 0.0,
+   "descricao": "Soma das linhas do recibo = despesa primária liquidada do Anexo 06 (conta oficial do Tesouro) + juros e encargos da dívida do Anexo 01. Vale por construção quando o ajuste do serviço da dívida está ligado; se alguém desligar o ajuste ou a fonte mudar, acusa.\n",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "exclusao_financeira_por_grupo",
+   "ok": true,
+   "critica": true,
+   "esperado": 157154927409.18994,
+   "obtido": 157154927409.22006,
+   "diff": 0.030120849609375,
+   "descricao": "O que fica fora do R$ 1,00 além da amortização (despesa exceto intra - amortização - despesa primária - juros) tem que ser igual à soma, por grupo de despesa, de Anexo 01 menos a parte primária do Anexo 06 (pessoal, outras despesas correntes, investimentos, inversões financeiras). Se um grupo novo aparecer num dos anexos, acusa. Tolerância de 1 em 10 milhões (o RREO de 2023 vem em dezenas de reais; a soma de sete linhas arredondadas não fecha ao centavo).\n",
+   "detalhe": "pessoal: Anexo 01 281,181,216,143.77 - Anexo 06 primária 281,181,216,143.77 = 0.00; outras_despesas_correntes: Anexo 01 1,735,527,665,090.97 - Anexo 06 primária 1,735,426,137,748.40 = 101,527,342.57; investimentos: Anexo 01 22,219,143,807.15 - Anexo 06 primária 22,219,143,807.15 = 0.00; inversoes_financeiras: Anexo 01 199,540,865,327.03 - Anexo 06 primária 42,487,465,260.38 = 157,053,400,066.65",
+   "explicada": false
+  },
+  {
+   "id": "exclusao_por_linha",
+   "ok": true,
+   "critica": true,
+   "esperado": 157154927409.18994,
+   "obtido": 0,
+   "diff": -157154927409.18994,
+   "descricao": "O que sai das linhas nomeadas pelo carimbo da lei (GND 5 com RP 0 no SIOP: FAT/BNDES de Trabalho, FIES de Educação) tem que caber dentro do total que o Tesouro trata como financeiro; o resto sai do resíduo.\n",
+   "detalhe": "sem detalhe por linha neste período: 157,154,927,409.19 saem do resíduo",
+   "explicada": false
+  },
+  {
+   "id": "pessoal_anexo06_vs_anexo01",
+   "ok": true,
+   "critica": false,
+   "esperado": 281181216143.77,
+   "obtido": 281181216143.77,
+   "diff": 0.0,
+   "descricao": "Pessoal e encargos liquidados do Anexo 06 contra PessoalEEncargosSociais do Anexo 01. Iguais em 2023 a 2026.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "investimentos_anexo06_vs_anexo01",
+   "ok": true,
+   "critica": false,
+   "esperado": 22219143807.15,
+   "obtido": 22219143807.15,
+   "diff": 0.0,
+   "descricao": "Investimentos liquidados do Anexo 06 contra Investimentos do Anexo 01. Iguais em 2023 a 2026.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "tributos_anexo01_vs_anexo06",
+   "ok": true,
+   "critica": true,
+   "esperado": 1894314268597.1401,
+   "obtido": 1894314268597.1401,
+   "diff": 0.0,
+   "descricao": "Impostos, taxas e contribuições do Anexo 01 (ReceitaTributaria + ReceitaDeContribuicoes, exceto intra) = os mesmos do Anexo 06 (RREO6ReceitasTributarias + RREO6ReceitasDeContribuicoes). Em 2024 e 2025 bateu ao centavo (R$ 1.146.491.700.715,94 de impostos e taxas em 2025).\n",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "receitas_anexo01_hierarquia",
+   "ok": true,
+   "critica": true,
+   "esperado": 2794847336782.8,
+   "obtido": 2794847336782.8,
+   "diff": 0.0,
+   "descricao": "Receitas do Anexo 01: correntes = soma das suas contas; capital = soma das suas contas; exceto intra (I) = correntes + capital. Se a União criar uma conta nova, acusa.\n",
+   "detalhe": "correntes: soma das contas - ReceitasCorrentes = 0.00; capital: 0.00; correntes + capital - (I) = 0.00",
+   "explicada": false
+  },
+  {
+   "id": "receitas_anexo06_hierarquia",
+   "ok": true,
+   "critica": true,
+   "esperado": 2096979235519.67,
+   "obtido": 2096979235519.6702,
+   "diff": 0.000244140625,
+   "descricao": "Receitas primárias do Anexo 06: correntes (I) = tributárias + contribuições + patrimonial + transferências + demais; capital (II) = alienação + transferências de capital + outras; total (III) = I + II.\n",
+   "detalhe": "correntes (I) - soma = -0.00; capital (II) - soma = -0.00; I + II - III = 0.00",
+   "explicada": false
+  },
+  {
+   "id": "despesas_anexo06_hierarquia",
+   "ok": true,
+   "critica": true,
+   "esperado": 2081313962959.7,
+   "obtido": 2081313962959.6997,
+   "diff": -0.000244140625,
+   "descricao": "Despesas primárias liquidadas do Anexo 06: correntes (IV) = pessoal + outras correntes; outras correntes = transferências constitucionais e legais + demais; capital (V) = investimentos + inversões; total (VII) = IV + V + reserva de contingência.\n",
+   "detalhe": "IV - (pessoal + outras correntes) = -0.00; outras correntes - (transferências + demais) = -0.00; V - (investimentos + inversões) = -0.00; VII - (IV + V + VI) = -0.00",
+   "explicada": false
+  },
+  {
+   "id": "resultado_primario_acima_da_linha",
+   "ok": true,
+   "critica": true,
+   "esperado": -94869478602.32019,
+   "obtido": -94869478602.32,
+   "diff": 0.00018310546875,
+   "descricao": "Resultado primário acima da linha (IX) = receita primária realizada (III) - despesa primária paga - restos a pagar processados pagos - restos a pagar não processados pagos + ajuste metodológico (quando existe). É a própria fórmula do Tesouro; conferida ao centavo de 2023 a 2026.\n",
+   "detalhe": "receita 2,096,979,235,519.67 - pagas 1,974,876,257,274.12 - RP processados 100,546,209,425.79 - RP não processados 108,938,653,399.75 + ajuste -7,487,594,022.33",
+   "explicada": false
+  },
+  {
+   "id": "resultado_nominal_acima_da_linha",
+   "ok": true,
+   "critica": false,
+   "esperado": -802436455362.47,
+   "obtido": -802436455362.47,
+   "diff": 0.0,
+   "descricao": "Resultado nominal acima da linha (XII) = resultado primário (IX) + juros ativos (X) - juros passivos (XI).",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "resultado_primario_abaixo_da_linha",
+   "ok": true,
+   "critica": false,
+   "esperado": -87381884580.05994,
+   "obtido": -87381884580.06,
+   "diff": -6.103515625e-05,
+   "descricao": "Resultado primário abaixo da linha (XXVII) = resultado nominal ajustado (XXVI) - (juros ativos - juros passivos).",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "divida_liquida_identidade",
+   "ok": true,
+   "critica": false,
+   "esperado": 8824948368201.45,
+   "obtido": 8824948368201.45,
+   "diff": 0.0,
+   "descricao": "Dívida consolidada líquida (XVI) = dívida consolidada (XIII) - deduções (XIV), no saldo final.",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "nominal_abaixo_vs_divida_liquida",
+   "ok": true,
+   "critica": false,
+   "esperado": -801933437469.0996,
+   "obtido": -801933437469.1,
+   "diff": -0.0003662109375,
+   "descricao": "Resultado nominal abaixo da linha (XVII) = dívida consolidada líquida no início do período - no fim: o déficit completo é a dívida nova, com o sinal trocado. Igual ao centavo em 2023 a 2026 (R$ 907,9 bi, 1.076,0, 845,7 e 801,9 até agosto de 2026).\n",
+   "detalhe": "dívida líquida de 8,023,014,930,732.35 para 8,824,948,368,201.45: dívida nova 801,933,437,469.10",
+   "explicada": false
+  },
+  {
+   "id": "servico_divida_fora_843_844",
+   "ok": true,
+   "critica": false,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "Juros + amortização (Anexo 01) menos subfunções 843/844: parcela do serviço da dívida classificada em outras subfunções. Ideal zero; tolerada até 2% da despesa exceto intra. Em 2024/6 deu R$ 40,8 bi (1,2%); em 2025 deu R$ 124,0 bi (3,3%), acima da tolerância, mas explicada ao real pela conferência do SIOP (servico_divida_fora_843_844_siop: ação 0669, cobertura do Banco Central). Quando a conferência do SIOP passa, esta é marcada \"explicada\" e não acusa; só acusa quando o SIOP não explica (ano em andamento, por exemplo). Em 2026/4, zero; em 2023, -R$ 2,26 (o RREO de 2023 vem em dezenas de reais), que conta como zero: negativo do tamanho do arredondamento da fonte (R$ 1 ou um bilionésimo do total) passa.\n",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "inss_vs_beneficios_anexo01",
+   "ok": true,
+   "critica": false,
+   "esperado": 769836099989.05,
+   "obtido": 731983538858.98,
+   "diff": -37852561130.07007,
+   "descricao": "Previdência Básica (271) deve ficar a menos de 5% de BeneficiosPrevidenciarios do Anexo 01. Diferença de R$ 25,3 bi em 2024/6 (2,7%), R$ 38,0 bi em 2025/6 (3,7%) e R$ 37,9 bi em 2026/4 (4,9%); hipótese: sentenças judiciais e compensação previdenciária do RGPS classificadas em Encargos Especiais (846). Em 2023 acusou (R$ 54,3 bi, 6,0%): os R$ 37,8 bi de precatórios da seguridade pagos em dezembro de 2023 na 846 explicam a maior parte.\n",
+   "detalhe": "",
+   "explicada": false
+  },
+  {
+   "id": "variacao_anual",
+   "ok": false,
+   "critica": false,
+   "esperado": 0.0,
+   "obtido": 4.0,
+   "diff": 4.0,
+   "descricao": "Cada linha do recibo comparada com o mesmo período do exercício anterior (2026/p4 contra 2025/p4; 2025/p6 contra 2024/p6). Mesmo período, porque o gasto não é um sexto por bimestre (13º, abono, cupons de títulos, obras em dezembro). Variação acima do limite é aviso, não erro: pode ser economia real, calendário ou mudança de classificação na fonte. Em 2025/6 (v0.3.0) acusou o resíduo (+25,5%): precatórios de volta ao normal depois do vale de 2024 (dezembro de 2023 pagou o estoque adiado), empréstimos novos e Agricultura (+99%, dois terços empréstimo); investigue com `recibo diff` e `recibo inspect siop`.\n",
+   "detalhe": "saude: +21.6% (128,905,853,096.07 -> 156,797,278,111.98); educacao: +15.7% (163,396,480,211.34 -> 189,003,404,326.34); juros: +54.1% (269,796,430,518.18 -> 415,811,371,479.51); maquina_demais: +22.5% (206,652,108,864.41 -> 253,193,405,179.83)",
+   "explicada": false
+  },
+  {
+   "id": "siop_comparavel",
+   "ok": true,
+   "critica": false,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "Emitida em ano em andamento: o SIOP é acumulado até a última atualização do grafo, o RREO até o bimestre, então as conferências cruzadas não rodam. O detalhe traz o serviço da dívida fora de 841-844 até a data do SIOP.\n",
+   "detalhe": "ano em andamento: SIOP acumulado até 2026-11-07T01:34:43.550-03:00, RREO até o 4º bimestre; conferências cruzadas só em ano fechado. Fora de 841-844 até agora: 00Q3 Assunção e Novação de Dívidas do Fundo de Compensação das Variações Salariais - FCVS (GND 6): 2,236,376,802.00 [a lista por ação não distingue fonte: 2,236,376,802.00 dela têm fonte de refinanciamento (ex.: novação do FCVS, ação 00Q3) e não entram na medida, porque o RREO os trata como rolagem]",
+   "explicada": false
+  },
+  {
+   "id": "niveis_fecham",
+   "ok": true,
+   "critica": false,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "Os níveis de dentro de cada linha (subfunções do RREO, funções do resíduo, elementos do SIOP), com os ajustes nomeados, somam o valor da linha. É o que o site abre quando a pessoa clica numa faixa; a conta tem que fechar linha a linha. Informativa: uma linha que não feche sai no site sem abertura, com o motivo, e o recibo não muda.\n",
+   "detalhe": "9 linhas abertas em níveis, todas fecham: previdencia_inss, inativos_pensionistas, assistencia, saude, educacao, trabalho, defesa_seguranca, transferencias, maquina_demais",
+   "explicada": false
+  },
+  {
+   "id": "subfuncoes_ref_vs_siop",
+   "ok": true,
+   "critica": true,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "Os apelidos de subfunção de config/ref/subfuncoes.csv (nome do RREO -> código) conferidos contra os rótulos do SIOP no exercício: um nome que no CSV aponta para um código e no SIOP tem outro código é erro de referência (não muda centavo, porque nenhuma linha filtra esses códigos, mas o `diff` e as fichas imprimiriam o código errado). Achado em 9/nov: \"Promoção da Produção Agropecuária\" era 601 no CSV e é 608 no SIOP; \"Defesa Agropecuária\" era 604 e é 609. O detalhe também lista nomes que o SIOP usa e o CSV ainda não conhece: em 9/nov, 245 \"Serviços Socioassistenciais\" e 246 \"Segurança de Renda\" (subfunções novas da assistência a partir de 2025, a reclassificação do Bolsa Família que o RREO mostra como \"FU08 - Demais\") e três renomeações (241, 391, 422), todas incluídas no CSV na v0.4.1.\n",
+   "detalhe": "102 rótulos de subfunção do SIOP conferidos com config/ref/subfuncoes.csv",
+   "explicada": false
+  },
+  {
+   "id": "populacao_projecao_vs_estimativa",
+   "ok": true,
+   "critica": false,
+   "esperado": 214211951.0,
+   "obtido": 214211951.0,
+   "diff": 0.0,
+   "descricao": "Nos anos em que o IBGE publica a estimativa oficial (tabela 6579, usada pelo TCU), ela tem que ser igual à projeção revisão 2024, de onde sai. Se divergir, o per capita não sai (fica indisponível, com o motivo) e o recibo e o mart da dívida continuam publicáveis: nenhum centavo deles depende da população.\n",
+   "detalhe": "projeção revisão 2024 contra estimativa oficial (SIDRA 6579) em 2026; tolerância 0",
+   "explicada": false
+  }
+ ],
+ "chips": [
+  {
+   "id": "folha_ativos",
+   "nome": "Salários e encargos de servidores ativos",
+   "definicao": "Grupo 1 (pessoal e encargos sociais) menos aposentadorias, reservas, reformas e pensões (elementos 01 e 03). Inclui salários de civis e militares da ativa, encargos patronais com o RGPS de empregados públicos, sentenças judiciais de pessoal e benefícios como auxílio-alimentação. Transversal às linhas: não é linha, para não contar duas vezes.\n",
+   "status": "implementado",
+   "disponivel": false,
+   "fonte_valor": null,
+   "total": 0.0,
+   "share": 0.0,
+   "centavos": 0.0,
+   "estagios": {},
+   "liquidado_sobre_empenhado": null,
+   "por_linha": [],
+   "excluidos": 0.0,
+   "nota": "sem valor neste período: o chip vem do SIOP e só é calculado em ano fechado",
+   "ficha": {
+    "fonte": {
+     "id": "S8"
+    },
+    "filtro": "cod_gnd = '1' AND COALESCE(cod_elemento_despesa, '') NOT IN ('01', '03')",
+    "sql": "",
+    "universo": "ofss AND NOT intra"
+   }
+  },
+  {
+   "id": "emendas",
+   "nome": "Indicação parlamentar (emendas)",
+   "definicao": "Despesa com identificador de resultado primário 6 (emendas individuais), 7 (de bancada), 8 (de comissão) e 9 (de relator, o \"orçamento secreto\", extinto depois de 2022). É dinheiro cuja destinação foi decidida por parlamentares, dentro das linhas onde foi gasto (saúde, assistência, transferências...). O valor do chip é o liquidado no exercício, a métrica do recibo, e subestima o tamanho das emendas: o empenhado (o carimbo do Congresso) foi R$ 47,1 bi em 2025 contra R$ 31,7 bi liquidados; individuais liquidam 83% do empenhado no ano, de bancada 55%, de comissão 48%. Emenda de custeio da saúde (repasse fundo a fundo) liquida no ano (87%); emenda de obra (urbanismo 2%, agricultura 12%) fica em restos a pagar. Por isso a ficha traz também dotação, empenhado e pago: pelo liquidado a Saúde é 71% das emendas; pelo empenhado, 54%.\n",
+   "status": "implementado",
+   "disponivel": false,
+   "fonte_valor": null,
+   "total": 0.0,
+   "share": 0.0,
+   "centavos": 0.0,
+   "estagios": {},
+   "liquidado_sobre_empenhado": null,
+   "por_linha": [],
+   "excluidos": 0.0,
+   "nota": "sem valor neste período: o chip vem do SIOP e só é calculado em ano fechado",
+   "ficha": {
+    "fonte": {
+     "id": "S8"
+    },
+    "filtro": "cod_resultado_primario IN ('6', '7', '8', '9')",
+    "sql": "",
+    "universo": "ofss AND NOT intra"
+   }
+  },
+  {
+   "id": "investimento",
+   "nome": "Investimento",
+   "definicao": "Grupo 4 (investimentos: obras, equipamentos, material permanente) liquidado no exercício, inclusive o transferido a estados e municípios com carimbo de obra. Subestima: investimento é a despesa que mais fica para o ano seguinte como restos a pagar; o memo restos_a_pagar mostra o investimento pago no ano somando os restos (Anexo 06). Não inclui inversões financeiras (grupo 5) nem o investimento das estatais.\n",
+   "status": "implementado",
+   "disponivel": false,
+   "fonte_valor": null,
+   "total": 0.0,
+   "share": 0.0,
+   "centavos": 0.0,
+   "estagios": {},
+   "liquidado_sobre_empenhado": null,
+   "por_linha": [],
+   "excluidos": 0.0,
+   "nota": "sem valor neste período: o chip vem do SIOP e só é calculado em ano fechado",
+   "ficha": {
+    "fonte": {
+     "id": "S8"
+    },
+    "filtro": "cod_gnd = '4'",
+    "sql": "",
+    "universo": "ofss AND NOT intra"
+   }
+  }
+ ]
+}

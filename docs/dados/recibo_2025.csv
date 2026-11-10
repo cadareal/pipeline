@@ -1,0 +1,11 @@
+id,nome,valor_reais,share,centavos,valor_ano_anterior,variacao_anual
+previdencia_inss,Previdência (INSS),990184611011.60,0.307263,31,914487012363.37,0.082776
+inativos_pensionistas,Aposentados e pensionistas do setor público,179658112284.00,0.055749,5,167870984671.00,0.070215
+assistencia,"Assistência social (Bolsa Família, BPC)",289214723819.35,0.089746,9,283135479748.49,0.021471
+saude,Saúde,217071661725.24,0.067359,7,194757974320.97,0.114571
+educacao,Educação,253395892173.65,0.078631,8,221070885329.96,0.146220
+trabalho,"Trabalho (abono, seguro-desemprego)",86689222126.42,0.026900,3,80589900620.78,0.075683
+defesa_seguranca,Defesa e segurança,71092211979.98,0.022061,2,70348684153.01,0.010569
+transferencias,Transferências a estados e municípios,459460942316.68,0.142575,14,424245265317.64,0.083008
+juros,Juros da dívida,363469278379.43,0.112788,11,352023046079.93,0.032516
+maquina_demais,Encargos especiais e demais funções,312364183621.05,0.096929,10,277174796307.95,0.126957

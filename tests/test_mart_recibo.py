@@ -121,7 +121,9 @@ def test_memos_from_anexo06_and_receitas(staging, config_dir):
     assert rap.valor == 100.0 and comp["investimentos_pagos_no_ano"] == 80.0 and comp["investimentos_liquidados"] == 60.0 and comp["investimentos_restos"] == 30.0
     ret = memos["emprestimos_retorno"]
     assert ret.valor == 30.0 and {c["id"]: c["valor"] for c in ret.componentes}["emprestado"] == pytest.approx(EXCLUSAO_TESOURO)
-    assert not memos["imposto_futuro"].disponivel and "planejado" in memos["imposto_futuro"].notas[0]
+    # sem staging do IBGE, os dois memos por habitante ficam indisponíveis com o motivo (nenhum centavo depende deles)
+    assert not memos["imposto_futuro"].disponivel and "staging do IBGE ausente" in memos["imposto_futuro"].notas[0]
+    assert not memos["por_habitante"].disponivel and memos["por_habitante"].fonte_id == "S4+S14"
 
     # memo marcado como implementado sem cálculo no código é erro de configuração, não silêncio
     linhas["memos"].append({"id": "inventado", "nome": "x", "status": "implementado"})
@@ -255,7 +257,8 @@ def test_export_contains_ficha_and_writes_files(staging, config_dir, tmp_path):
     memos = {m["id"]: m for m in export["memos"]}
     assert memos["tributos"]["valor"] == TRIBUTOS and memos["tributos"]["disponivel"] and memos["tributos"]["ficha"]["fontes"]
     assert memos["origem_do_real_gasto"]["componentes"][0]["centavos"] == 87
-    assert memos["imposto_futuro"]["disponivel"] is False and memos["imposto_futuro"]["status"] == "fase_1_1"
+    assert memos["imposto_futuro"]["disponivel"] is False and memos["imposto_futuro"]["status"] == "implementado" and memos["imposto_futuro"]["ficha"]["fonte"]["id"] == "S4+S14"
+    assert export["populacao"]["disponivel"] is False and "staging do IBGE ausente" in export["populacao"]["motivo"]
     assert export["anexo06_referencias"]["receita_primaria_total:realizadas"] == RECEITA_PRIMARIA
     assert export["anexo01_receitas"]["operacoes_credito"] == 600.0
 
@@ -285,7 +288,8 @@ def test_print_summary_mentions_memos_and_exclusion(staging, config_dir, capsys)
     assert "Gasto por R$ 1,00 de tributo" in out and "R$ 1.15 por R$ 1,00" in out
     assert "por grupo (Anexo 01 - Anexo 06 primária): pessoal 0.00; outras_despesas_correntes 1.00; investimentos 0.00; inversoes_financeiras 41.00" in out
     assert "sem detalhe por linha neste período: 42.00 saem do resíduo" in out
-    assert "memos sem valor neste período ou planejados: Dívida nova por habitante" in out
+    assert "memos sem valor neste período ou planejados: Gasto e tributos por habitante, Dívida nova por habitante" in out
+    assert "população (S14): população indisponível: staging do IBGE ausente" in out
 
 
 def test_largest_remainder_sums_to_total():

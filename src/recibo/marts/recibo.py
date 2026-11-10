@@ -163,6 +163,7 @@ class Memo:
     componentes: list[dict] = field(default_factory=list)  # [{"id", "nome", "valor", "fonte", ...}]
     notas: list[str] = field(default_factory=list)
     fontes: list[str] = field(default_factory=list)  # chaves do Anexo 06 ("conta:coluna") e do Anexo 01 usadas
+    fonte_id: str = "S4"  # "S4+S14" nos memos por habitante (população do IBGE)
 
 
 @dataclass
@@ -202,6 +203,9 @@ class Resultado:
     anexo06: dict = field(default_factory=dict)
     anexo01_receitas: dict = field(default_factory=dict)
     memos: list[Memo] = field(default_factory=list)
+    populacao: dict = field(default_factory=dict)  # S14: população do ano usada nos memos por habitante (ou o motivo de não haver)
+    niveis: dict = field(default_factory=dict)  # por linha: o que há dentro dela (subfunções, funções, elementos), com ajustes nomeados (marts/niveis.py)
+    fontes: dict = field(default_factory=dict)  # com que dinheiro cada despesa foi paga, pelo carimbo da fonte no SIOP (marts/fontes.py); só ano fechado
 
 
 def _tol(total: float) -> float:
@@ -306,7 +310,7 @@ def _nota(texto) -> str:
 
 
 def calcular(
-    q: Callable[[str], float], linhas_cfg: dict, exercicio: int, periodo: int, siop: bool = False, rows: Callable[[str], list] | None = None
+    q: Callable[[str], float], linhas_cfg: dict, exercicio: int, periodo: int, siop: bool = False, rows: Callable[[str], list] | None = None, populacao: dict | None = None
 ) -> Valores:
     """Linhas, exclusões, referências dos Anexos 01 e 06, ajuste e memos para um (exercicio, periodo). Sem reconciliações.
 
@@ -458,7 +462,7 @@ def calcular(
 
     total_recibo = sum(x.valor for x in linhas)
     v = Valores(exercicio, periodo, total_base, anexo01, linhas, excluidos, fora_843_844, ajuste, total_recibo, exclusao_financeira, anexo06, r01)
-    v.memos = calcular_memos(linhas_cfg, v)
+    v.memos = calcular_memos(linhas_cfg, v, populacao)
     return v
 
 
@@ -466,10 +470,12 @@ def _comp(cid: str, nome: str, valor: float, fonte: str, **extra) -> dict:
     return {"id": cid, "nome": nome, "valor": valor, "fonte": fonte, **extra}
 
 
-def calcular_memos(linhas_cfg: dict, v: Valores) -> list[Memo]:
-    """Memos (fora do R$ 1,00) a partir do Anexo 06, das receitas do Anexo 01 e do total do recibo. O id em
-    linhas.yaml escolhe o cálculo; um memo "implementado" sem cálculo aqui é erro de configuração."""
+def calcular_memos(linhas_cfg: dict, v: Valores, populacao: dict | None = None) -> list[Memo]:
+    """Memos (fora do R$ 1,00) a partir do Anexo 06, das receitas do Anexo 01, do total do recibo e, nos memos por
+    habitante, da população do IBGE (`populacao`, de marts.populacao.carregar_populacao). O id em linhas.yaml escolhe
+    o cálculo; um memo "implementado" sem cálculo aqui é erro de configuração."""
     a06, r01, anexo01 = v.anexo06, v.anexo01_receitas, v.anexo01
+    pop = populacao or {"disponivel": False, "motivo": "população indisponível: staging do IBGE ausente (rode `recibo fetch ibge` e `recibo transform ibge`)"}
     tem06 = bool(a06) and a06.get("despesa_primaria_total:liquidadas", 0.0) != 0.0
     tem01 = bool(r01) and r01.get("receitas_exceto_intra", 0.0) != 0.0
 
@@ -566,7 +572,7 @@ def calcular_memos(linhas_cfg: dict, v: Valores) -> list[Memo]:
                 _comp("antes_do_ajuste", "Receita menos tudo o que foi pago (calculado)", antes, "calculado"),
                 _comp("ajuste_metodologico", "Ajuste metodológico do Tesouro (não detalhado no anexo)", ajuste, "Anexo 06: ajuste_metodologico:valor"),
                 _comp("acima_da_linha", "Resultado primário acima da linha (IX), a conta do Tesouro", acima, "Anexo 06: primario_acima:valor"),
-                _comp("abaixo_da_linha", "Resultado primário abaixo da linha (XXVII), a conta do Banco Central", abaixo, "Anexo 06: primario_abaixo:valor"),
+                _comp("abaixo_da_linha", "Resultado primário abaixo da linha (XXVII), pela variação da dívida consolidada líquida do RREO", abaixo, "Anexo 06: primario_abaixo:valor"),
                 _comp("despesa_liquidada", "Despesa primária liquidada (a base do recibo)", g("despesa_primaria_total:liquidadas"), "Anexo 06: despesa_primaria_total:liquidadas"),
             ]
             m.fontes = ["anexo06: receita_primaria_total, despesa_primaria_total (pagas, rp_processados_pagos, rpnp_pagos), ajuste_metodologico, primario_acima, primario_abaixo"]
@@ -592,7 +598,7 @@ def calcular_memos(linhas_cfg: dict, v: Valores) -> list[Memo]:
             m.valor = g("nominal_acima:valor")
             m.componentes = [
                 _comp("acima_da_linha", "Resultado nominal acima da linha (XII), Tesouro", g("nominal_acima:valor"), "Anexo 06: nominal_acima:valor"),
-                _comp("abaixo_da_linha", "Resultado nominal abaixo da linha (XVII), Banco Central", g("nominal_abaixo:valor"), "Anexo 06: nominal_abaixo:valor"),
+                _comp("abaixo_da_linha", "Resultado nominal abaixo da linha (XVII), a variação da dívida consolidada líquida do RREO", g("nominal_abaixo:valor"), "Anexo 06: nominal_abaixo:valor"),
                 _comp("ajustado", "Resultado nominal ajustado (XXVI)", g("nominal_ajustado:valor"), "Anexo 06: nominal_ajustado:valor"),
                 _comp("variacao_saldo_rpp", "Ajuste: variação do saldo de restos a pagar processados (XVIII)", g("variacao_saldo_rpp:valor"), "Anexo 06"),
                 _comp("passivos_reconhecidos", "Ajuste: passivos reconhecidos na dívida (XX)", g("passivos_reconhecidos:valor"), "Anexo 06"),
@@ -639,6 +645,42 @@ def calcular_memos(linhas_cfg: dict, v: Valores) -> list[Memo]:
                 _comp("emprestado", "Emprestado ou aplicado no período (fora do R$ 1,00)", exclusao.valor if exclusao else 0.0, "exclusão emprestimos_financeiros"),
             ]
             m.fontes = ["anexo01: AmortizacoesDeEmprestimos", "recibo: exclusão emprestimos_financeiros"]
+        elif mid == "por_habitante":
+            m.fonte_id = "S4+S14"
+            m.disponivel = bool(pop.get("disponivel")) and v.total_recibo > 0
+            if not pop.get("disponivel"):
+                m.notas.append(pop.get("motivo") or "população indisponível")
+            else:
+                n = float(pop["valor"])
+                m.valor = v.total_recibo / n
+                m.componentes = [
+                    _comp("populacao", f"População do Brasil em {pop.get('data_referencia')} (IBGE, projeção revisão {pop.get('revisao')})", float(pop["valor"]), "S14: IBGE, projeção revisão 2024", unidade="pessoas"),
+                    _comp("total_recibo", "Gasto do recibo por habitante (despesa primária + juros pagos)", v.total_recibo / n, "recibo: total / população", unidade="reais_por_habitante"),
+                    _comp("tributos", "Tributos federais por habitante (impostos, taxas e contribuições)", (tributos / n) if tem06 else None, "Anexo 06: tributarias + contribuicoes / população", unidade="reais_por_habitante"),
+                ] + [
+                    _comp(x.id, f"{x.nome} por habitante", x.valor / n, "recibo: linha / população", unidade="reais_por_habitante") for x in v.linhas
+                ]
+                m.fontes = ["recibo: total e linhas", "anexo06: tributarias:realizadas + contribuicoes:realizadas", f"S14 IBGE: {pop['fonte']['arquivo']} (snapshot {pop['fonte']['snapshot_id']})"]
+                if pop.get("estimativa"):
+                    m.notas.append(f"a estimativa oficial do IBGE para {v.exercicio} (SIDRA {pop['estimativa']['tabela']}) é igual à projeção: {pop['estimativa']['valor']:,} pessoas")
+                if pop.get("censo"):
+                    c = pop["censo"]
+                    m.notas.append(f"o Censo {c['ano']} contou {c['valor']:,} pessoas; a projeção corrige a cobertura do Censo e dá {c['projecao_no_mesmo_ano']:,} para o mesmo ano: per capita pelo Censo sairia maior na mesma proporção")
+        elif mid == "imposto_futuro":
+            m.fonte_id = "S4+S14"
+            dcl_i, dcl_f = g("divida_liquida:saldo_inicial"), g("divida_liquida:saldo_final")
+            m.disponivel = tem06 and bool(pop.get("disponivel"))
+            if not pop.get("disponivel"):
+                m.notas.append(pop.get("motivo") or "população indisponível")
+            elif tem06:
+                n = float(pop["valor"])
+                m.valor = (dcl_f - dcl_i) / n
+                m.componentes = [
+                    _comp("variacao_liquida", "Dívida nova no período (variação da dívida consolidada líquida, Anexo 06)", dcl_f - dcl_i, "Anexo 06: divida_liquida (saldo_final - saldo_inicial)"),
+                    _comp("populacao", f"População do Brasil em {pop.get('data_referencia')} (IBGE)", float(pop["valor"]), "S14: IBGE, projeção revisão 2024", unidade="pessoas"),
+                    _comp("divida_liquida_por_habitante", "Dívida consolidada líquida no fim do período, por habitante", dcl_f / n, "Anexo 06: divida_liquida:saldo_final / população", unidade="reais_por_habitante"),
+                ]
+                m.fontes = ["anexo06: divida_liquida (saldo_inicial, saldo_final)", f"S14 IBGE: {pop['fonte']['arquivo']} (snapshot {pop['fonte']['snapshot_id']})"]
         else:
             raise ConfigInvalida(f"memo '{mid}' marcado como implementado em linhas.yaml, mas o mart não sabe calculá-lo")
         out.append(m)
@@ -914,10 +956,15 @@ def siop_cobre(q: Callable[[str], float], linhas_cfg: dict, exercicio: int, peri
 
 
 def compute(
-    stg_path: Path, linhas_cfg: dict, exercicio: int, periodo: int, siop_path: Path | None = None, config_dir: Path | None = None, strict: bool = True
+    stg_path: Path, linhas_cfg: dict, exercicio: int, periodo: int, siop_path: Path | None = None, config_dir: Path | None = None, strict: bool = True,
+    stg_ibge: Path | None = None,
 ) -> Resultado:
     """Calcula o recibo de (exercicio, periodo). `strict=True` recusa rodar quando o staging do RREO não tem o
-    período (SemDados). `config_dir` liga a conferência dos apelidos de subfunção contra os rótulos do SIOP."""
+    período (SemDados). `config_dir` liga a conferência dos apelidos de subfunção contra os rótulos do SIOP.
+    `stg_ibge` (staging da população, S14) liga os memos por habitante; sem ele, saem como indisponíveis."""
+    from .populacao import carregar_populacao
+
+    populacao = carregar_populacao(stg_ibge, linhas_cfg, exercicio)
     con = duckdb.connect()
     con.execute(f"CREATE VIEW stg AS SELECT * FROM read_parquet({lit(str(stg_path))})")
     tem_siop = siop_path is not None and Path(siop_path).exists()
@@ -947,7 +994,7 @@ def compute(
         )
 
     usa_siop = tem_siop and siop_cobre(q, linhas_cfg, exercicio, periodo)
-    v = calcular(q, linhas_cfg, exercicio, periodo, siop=usa_siop, rows=rows if tem_siop else None)
+    v = calcular(q, linhas_cfg, exercicio, periodo, siop=usa_siop, rows=rows if tem_siop else None, populacao=populacao)
     linhas, excluidos, anexo01, a06, r01 = v.linhas, v.excluidos, v.anexo01, v.anexo06, v.anexo01_receitas
     total_base, total_recibo, fora_843_844 = v.total_base, v.total_recibo, v.fora_843_844
     excl_tes = next((e for e in excluidos if e.cfg.get("calculo") == "tesouro"), None)
@@ -961,7 +1008,8 @@ def compute(
     ex_ant = exercicio - 1
     anterior: Valores | None = None
     if tem_dados(q, linhas_cfg, ex_ant, periodo):
-        anterior = calcular(q, linhas_cfg, ex_ant, periodo, siop=tem_siop and siop_cobre(q, linhas_cfg, ex_ant, periodo), rows=rows if tem_siop else None)
+        anterior = calcular(q, linhas_cfg, ex_ant, periodo, siop=tem_siop and siop_cobre(q, linhas_cfg, ex_ant, periodo), rows=rows if tem_siop else None,
+                            populacao=carregar_populacao(stg_ibge, linhas_cfg, ex_ant))
         prev = {x.id: x for x in anterior.linhas}
         for x in linhas:
             xa = prev.get(x.id)
@@ -1124,6 +1172,26 @@ def compute(
         if excl_tes is not None and lt:
             excl_tes.notas.append(lt["nota"])
 
+    # Níveis de dentro de cada linha (o que o site abre ao clicar): subfunções, funções do resíduo, elementos do SIOP.
+    # Informativa: a conta tem que fechar linha a linha; se não fechar, a linha sai sem abertura e o recibo não muda.
+    from .niveis import calcular_niveis
+
+    niveis = calcular_niveis(con, q, rows, linhas_cfg, exercicio, periodo, v, usa_siop, tem_siop, siop_info)
+    abertas = [x.id for x in linhas if niveis.get(x.id, {}).get("tipo")]
+    nao_fecham = [f"{k}: partes {d['soma']:,.2f} vs linha {next(x.valor for x in linhas if x.id == k):,.2f}" for k, d in niveis.items() if d.get("tipo") and not d.get("fecha")]
+    add("niveis_fecham", 0.0, float(len(nao_fecham)), ok=not nao_fecham, critica_padrao=False,
+        detalhe="; ".join(nao_fecham) if nao_fecham else f"{len(abertas)} linhas abertas em níveis, todas fecham: " + ", ".join(abertas))
+
+    # Fontes de recursos (carimbo da fonte no SIOP): a visão do caixa do site usa isto em vez de rateio. Informativa.
+    from .fontes import calcular_fontes
+
+    fontes_rec = calcular_fontes(q, rows, linhas_cfg, exercicio, anexo01, usa_siop, tem_siop)
+    if fontes_rec.get("disponivel"):
+        cf = fontes_rec.get("conferencia") or {}
+        if "total_rreo" in cf:
+            add("fontes_total_vs_anexo01", cf["total_rreo"], cf["total_siop"], critica_padrao=False,
+                detalhe="SIOP por fonte (todos os GND, com refinanciamento) contra Anexo 01 (total exceto intra + refinanciamento)")
+
     chips = calcular_chips(q, linhas_cfg, exercicio, linhas, excluidos, total_recibo, usa_siop)
     if usa_siop:
         # os totais por grupo do SIOP têm que bater com o Anexo 01 (mesmo universo): confere o que sustenta os chips
@@ -1147,6 +1215,13 @@ def compute(
             detalhe += f" | nomes que o SIOP usa e o CSV não conhece ({len(novos)}): " + "; ".join(novos[:8])
         add("subfuncoes_ref_vs_siop", 0.0, float(len(erros)), ok=not erros, detalhe=detalhe)
 
+    # População (S14): projeção contra estimativa oficial do IBGE, quando o staging existe e o ano tem as duas. Informativa:
+    # nenhum centavo do recibo depende dela; se falhar, os memos por habitante saem como indisponíveis.
+    conf_pop = populacao.get("conferencia") if populacao else None
+    if conf_pop and conf_pop.get("calculada", True):
+        c_pop = {r["id"]: r for r in (linhas_cfg.get("populacao") or {}).get("reconciliacoes", [])}.get("populacao_projecao_vs_estimativa", {})
+        recs.append(Reconciliacao(conf_pop["id"], bool(conf_pop["ok"]), False, float(conf_pop["esperado"]), float(conf_pop["obtido"]), float(conf_pop["diff"]), c_pop.get("descricao", ""), conf_pop.get("detalhe", "")))
+
     # Conferências "explicadas": acima da própria tolerância, mas com o valor nomeado ao real por outra conferência
     # (explicada_por em linhas.yaml). Deixam de acusar; a explicação vai para o detalhe.
     for r in recs:
@@ -1167,7 +1242,7 @@ def compute(
         ).fetchall()
     ]
     con.close()
-    return Resultado(exercicio, periodo, linhas, excluidos, total_base, total_recibo, recs, publicavel, anexo01, snaps, comparacao, siop_info, chips, a06, r01, v.memos)
+    return Resultado(exercicio, periodo, linhas, excluidos, total_base, total_recibo, recs, publicavel, anexo01, snaps, comparacao, siop_info, chips, a06, r01, v.memos, populacao, niveis, fontes_rec)
 
 
 def ficha(item: Item, linhas_cfg: dict, fontes: dict[str, dict], res: Resultado) -> dict:
@@ -1238,7 +1313,7 @@ def exportar_memo(m: Memo) -> dict:
         "valor": m.valor,
         "componentes": m.componentes,
         "notas": m.notas,
-        "ficha": {"fonte": {"id": "S4"}, "fontes": m.fontes},
+        "ficha": {"fonte": {"id": m.fonte_id}, "fontes": m.fontes},
     }
 
 
@@ -1274,6 +1349,7 @@ def to_export(res: Resultado, linhas_cfg: dict, fontes_cfg: dict, estado: dict) 
                 "piso": x.piso,
                 "notas": x.notas,
                 "transferencias": [_sem_sql(t) for t in x.transferencias],
+                "niveis": res.niveis.get(x.id),
                 "ficha": ficha(x, linhas_cfg, fontes, res),
             }
             for x in res.linhas
@@ -1304,6 +1380,8 @@ def to_export(res: Resultado, linhas_cfg: dict, fontes_cfg: dict, estado: dict) 
         "anexo01_receitas": res.anexo01_receitas,
         "anexo06_referencias": res.anexo06,
         "memos": [exportar_memo(m) for m in res.memos],
+        "populacao": res.populacao,
+        "fontes_de_recursos": res.fontes,
         "reconciliacoes": [r.__dict__ for r in res.reconciliacoes],
         "chips": [
             {
@@ -1356,7 +1434,18 @@ def _fmt_memo_valor(m: dict) -> str:
         return "-"
     if m.get("unidade") == "reais_por_real":
         return f"R$ {m['valor']:.2f} por R$ 1,00"
+    if m.get("unidade") == "reais_por_habitante":
+        return f"R$ {m['valor']:,.2f} por habitante"
     return f"{m['valor']:,.2f}"
+
+
+def _fmt_comp_valor(c: dict) -> str:
+    v = c.get("valor")
+    if v is None:
+        return f"{'-':>22}"
+    if c.get("unidade") == "pessoas":
+        return f"{int(round(v)):>22,}"
+    return f"{v:>22,.2f}"
 
 
 def print_summary(export: dict) -> None:
@@ -1435,12 +1524,15 @@ def print_summary(export: dict) -> None:
                 print(f"  {m['nome'][:60]:<62}{_fmt_memo_valor(m):>24}")
             for c in m["componentes"]:
                 extra = "  (fora do total)" if c.get("no_total") is False else ""
-                print(f"      {c['nome'][:70]:<72}{c['valor']:>22,.2f}{extra}")
+                print(f"      {c['nome'][:70]:<72}{_fmt_comp_valor(c)}{extra}")
             for n in m.get("notas", []):
                 print(f"      nota: {n}")
     pend = [m["nome"] for m in export.get("memos", []) if not m.get("disponivel")]
     if pend:
         print(f"  memos sem valor neste período ou planejados: {', '.join(pend)}")
+    pop = export.get("populacao") or {}
+    if pop and not pop.get("disponivel"):
+        print(f"  população (S14): {pop.get('motivo')}")
     if export.get("anexo01_referencias"):
         print("\nReferências do Anexo 01 (despesas):")
         for k, v in export["anexo01_referencias"].items():

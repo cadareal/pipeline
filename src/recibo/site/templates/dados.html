@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Dados abertos: baixar, fontes e lacres · {{ site.titulo }}{% endblock %}
+{% block descricao %}Os arquivos que geram cada página do {{ site.titulo }} (JSON e CSV por ano), as fontes oficiais e o lacre (hash) de cada arquivo original baixado.{% endblock %}
+{% block conteudo %}
+<section class="abre">
+  <p class="eyebrow">Dados abertos</p>
+  <h1>Baixe os números, confira os lacres</h1>
+  <p class="lead">Cada página do site nasce de um arquivo JSON gerado pelo pipeline, a partir de relatórios oficiais baixados por programa. Os arquivos estão aqui para download, com a lista das fontes e o lacre de cada original: uma impressão digital (hash SHA-256) que prova que o arquivo usado é o que a fonte publicou naquele dia.</p>
+</section>
+
+<section aria-labelledby="h-arq">
+  <h2 id="h-arq" class="h2" style="margin-bottom:12px">Arquivos por ano</h2>
+  <table class="tabela">
+    <thead><tr><th>ano</th><th>recibo (tudo: linhas, níveis, memos, conferências)</th><th>linhas, em CSV</th><th>dívida</th><th>comparação internacional</th><th>gerado em</th></tr></thead>
+    <tbody>
+      {% for a in arquivos %}
+      <tr><td>{{ a.ano }}</td><td><a href="{{ raiz }}{{ a.recibo_json }}">recibo_{{ a.ano }}.json</a></td><td><a href="{{ raiz }}{{ a.recibo_csv }}">recibo_{{ a.ano }}.csv</a></td><td>{% if a.divida_json %}<a href="{{ raiz }}{{ a.divida_json }}">divida_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td>{% if a.cofog_json %}<a href="{{ raiz }}{{ a.cofog_json }}">cofog_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td class="num">{{ a.gerado_em }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="mini" style="margin-top:8px">O JSON do recibo tem, para cada linha, a consulta exata que gerou o número, a fonte, o filtro e os lacres. Versão da especificação: {{ arquivos[0].versao_spec }}.</p>
+</section>
+
+<section aria-labelledby="h-lacres">
+  <h2 id="h-lacres" class="h2" style="margin-bottom:12px">Lacres dos arquivos originais</h2>
+  <p style="font-size:15px;color:#3A423F;margin-bottom:12px">Para conferir um lacre: baixe o mesmo arquivo da fonte (ou use o guardado no repositório), calcule o SHA-256 (no Windows, <code>certutil -hashfile arquivo SHA256</code>; no Mac e no Linux, <code>shasum -a 256 arquivo</code>) e compare. O pipeline normaliza a resposta da API antes de calcular (ordena as linhas), por isso o hash é do arquivo canônico guardado em <code>data/raw</code>, que o repositório descreve.</p>
+  {% for a in arquivos %}
+  <details style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">{{ a.ano }}: {{ a.lacres|length }} arquivos lacrados</summary>
+  <table class="lacres" style="margin-top:8px"><thead><tr><th>arquivo</th><th>baixado em</th><th>identificador</th><th>SHA-256</th></tr></thead><tbody>
+    {% for s in a.lacres %}<tr><td>{{ s.arquivo }}</td><td>{{ s.baixado_em }}</td><td class="num">{{ s.snapshot_id }}</td><td><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
+  </tbody></table></details>
+  {% endfor %}
+</section>
+
+<section aria-labelledby="h-fontes">
+  <h2 id="h-fontes" class="h2" style="margin-bottom:12px">As fontes</h2>
+  <table class="tabela">
+    <thead><tr><th>id</th><th>fonte</th><th>órgão</th><th>formato e cadência</th></tr></thead>
+    <tbody>
+      {% for f in fontes %}<tr><td>{{ f.id }}</td><td>{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td>{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="escuro" aria-label="Código">
+  <div><h2>O código</h2><p>Pipeline em Python, aberto ({{ site.licenca }}): baixa, lacra, transforma, confere e publica. <a href="{{ site.url_github }}">{{ site.url_github }}</a></p></div>
+  <div><h2>Refazer em casa</h2><p>Com o repositório no seu computador: <code>uv run recibo run --exercicios {{ atual }}</code> refaz os números e <code>uv run recibo site</code> refaz estas páginas. Os detalhes estão no README.</p></div>
+  <div><h2>Encontrou um erro?</h2><p><a href="{{ raiz }}quem-somos/#contato">Diga qual número e qual fonte</a>. Toda correção aceita entra no histórico da metodologia.</p></div>
+</section>
+{% endblock %}

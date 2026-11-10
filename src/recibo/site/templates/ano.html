@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+{% block titulo %}{{ site.titulo }}: {{ m.titulo }}{% endblock %}
+{% block descricao %}{{ m.titulo }} {{ m.total_txt }} em dez linhas que somam R$ 1,00, com a fonte e o lacre de cada número.{% endblock %}
+{% macro linha_tabela(n, cent, pct, total, visao_id, pop, ano, raiz, dentro=false) -%}
+<details class="item{% if dentro %} item-dentro{% endif %}" id="item-{{ visao_id }}-{{ n.id }}">
+  <summary>
+    <span class="cor" style="background:{{ n.cor or '#A8ADAA' }}{% if n.tracejado %};background:#E6E4DD;border:1px dashed #5B625F{% endif %}" aria-hidden="true"></span>
+    <span style="display:flex;flex-direction:column;min-width:0"><span class="nome">{% if dentro %}↳ {% endif %}{{ n.nome }}</span><span class="barra"><span style="width:{{ ([(n.valor / total * 180) if total else 0, 100]|min)|round(1) }}%;background:{{ n.cor or '#A8ADAA' }}"></span></span></span>
+    <span class="num cent">{{ cent|replace(' centavos','')|replace(' centavo','') }}</span>
+    <span class="num valor">{{ n.txt }}</span>
+    <span class="num hab">{{ n.hab if pop else '' }}</span>
+    <span class="num var"></span>
+    <span class="seta" aria-hidden="true">▾</span>
+  </summary>
+  <div class="detalhe">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <p>{{ n.definicao or n.proximo }}</p>
+      {% if n.nota %}<p class="mini">{{ n.nota }}</p>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+        {% if n.pagina %}<a class="btn cheio" href="{{ raiz }}{{ ano }}/{{ n.pagina }}">Página de {{ n.nome }} →</a>{% endif %}
+        <button class="btn" type="button" data-ver-no-desenho="{{ n.id }}" data-visao-alvo="{{ visao_id }}">Ver no desenho</button>
+      </div>
+    </div>
+    <dl class="dl">
+      <dt>Valor exato</dt><dd class="num">{{ n.exato }}</dd>
+      <dt>Dentro do R$ 1,00 desta visão</dt><dd class="num">{{ cent }} ({{ pct }})</dd>
+      {% if dentro and n.cent_pai %}<dt>Dentro do conjunto</dt><dd class="num">{{ n.cent_pai }} de cada R$ 1,00 ({{ n.pct_pai }})</dd>{% endif %}
+      {% if pop and n.hab %}<dt>Dividido pela população</dt><dd class="num">{{ n.hab }}</dd>{% endif %}
+      {% if n.fonte %}<dt>Fonte</dt><dd>{{ n.fonte }}</dd>{% endif %}
+      <dt>O que tem dentro</dt><dd>{% if n.filhos %}{% for f in n.filhos[:8] %}{{ f.nome }} ({{ f.txt }}){% if not loop.last %}; {% endif %}{% endfor %}{% if n.filhos|length > 8 %}; e mais {{ n.filhos|length - 8 }} no desenho{% endif %}{% else %}{{ n.proximo or 'ainda sem abertura nesta fonte' }}{% endif %}</dd>
+    </dl>
+  </div>
+</details>
+{%- endmacro %}
+{% block conteudo %}
+{% set frases = site.frases %}
+
+<section class="abre">
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+    <div class="seg" role="group" aria-label="Esfera de governo">
+      {% for e in site.esferas %}
+      {% if e.ativa %}<span class="on" aria-current="true">{{ e.rotulo }}</span>{% else %}<span class="off" title="{{ e.nota }}">{{ e.rotulo }} · {{ e.nota }}</span>{% endif %}
+      {% endfor %}
+    </div>
+    <p class="eyebrow">{{ frases.servico }}</p>
+  </div>
+  <h1>{{ m.titulo }}</h1>
+  <p class="lead">{{ frases.recibo }} O ano inteiro deu <strong class="num">{{ m.total_txt }}</strong>, ou, para caber na cabeça, <strong>R$ 1,00</strong>. {{ frases.como_ler }}</p>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px" role="group" aria-label="Ano">
+    {% for a in anos|sort(attribute='ano') %}
+    <a class="pill{% if a.ano == m.ano %} on{% endif %}" href="{{ raiz }}{{ a.caminho }}"{% if a.ano == m.ano %} aria-current="page"{% endif %}>{{ a.ano }}{% if not a.fechado %}, até o {{ a.periodo }}º bimestre{% endif %}</a>
+    {% endfor %}
+    <span class="selo{% if not m.conferencias.todas_ok %} aviso{% endif %}">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 8.5l2.2 2.2L11.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <a href="#conferencias" style="color:inherit;text-decoration:none">{{ m.selo }}</a>
+    </span>
+  </div>
+</section>
+
+<section class="visoes" aria-labelledby="h-visoes">
+  <h2 id="h-visoes" class="vis-oculto">Visões do desenho</h2>
+  <div class="abas" role="group" aria-label="Escolha a visão">
+    {% for v in m.visoes %}
+    <button type="button" class="aba" data-visao="{{ v.id }}" aria-pressed="{{ 'true' if v.id == m.visao_inicial else 'false' }}">{{ v.rotulo }}</button>
+    {% endfor %}
+    {% if not m.divida_visao %}<span class="aba off" title="{{ m.divida_motivo }}">{{ site.visoes.divida.rotulo if site.visoes and site.visoes.divida else 'A dívida' }} · sem dados para {{ m.ano }}</span>{% endif %}
+  </div>
+  {% for v in m.visoes %}
+  <p class="visao-explica" data-visao="{{ v.id }}"{% if v.id != m.visao_inicial %} hidden{% endif %}><strong>{{ v.titulo }}.</strong> {{ v.explica }}{% if v.frase_rolagem %} <strong>{{ v.frase_rolagem }}</strong>{% endif %}</p>
+  {% endfor %}
+</section>
+
+{% for v in m.visoes %}
+<section class="palavras" data-visao="{{ v.id }}"{% if v.id != m.visao_inicial %} hidden{% endif %} aria-label="As palavras do desenho">
+  {% if v.id == 'caixa' %}
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>O que entrou</b><span class="mini">o que entrou no caixa (receita realizada)</span></div>
+    {% for n in v.entradas if n.grupo != 'ficou' %}<p><strong>{{ n.nome }}</strong> ({{ n.txt }}): {{ n.definicao }}</p>{% endfor %}
+  </div>
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>O que saiu</b><span class="mini">o que saiu do caixa (despesa liquidada)</span></div>
+    {% for n in v.saidas if n.grupo != 'ficou' %}<p><strong>{{ n.nome }}</strong> ({{ n.txt }}): {{ n.definicao }}</p>{% endfor %}
+  </div>
+  {% if v.ficou %}
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>O que ficou</b><span class="mini">nem receita nem despesa: a diferença entre as duas, desenhada tracejada</span></div>
+    <p><strong>{{ v.ficou.nome }}</strong> ({{ v.ficou.txt }}): {{ v.ficou.definicao }}</p>
+    <p>{{ v.conta_diferenca }}</p>
+    <p class="mini">{{ v.nota_diferenca }}</p>
+  </div>
+  {% endif %}
+  {% if not v.por_fonte %}
+  <p class="mini">Nesta visão, dentro de cada faixa o outro lado mostra o destino (ou a origem) do dinheiro pelo carimbo da fonte no orçamento, que vem do SIOP. {{ v.sem_fonte_motivo|capitalize }}: por isso, neste período, o outro lado fica em branco em vez de uma aproximação.</p>
+  {% endif %}
+  {% elif v.id == 'divida' %}
+  <div class="destaques">
+    {% for x in v.destaques %}
+    <div><span class="eyebrow">{{ x.rotulo }}</span><b class="num">{{ x.numero }}</b><p>{{ x.texto }}</p></div>
+    {% endfor %}
+  </div>
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>Quanto devemos</b><span class="mini">a dívida da União fora do Banco Central em {{ v.data }} (DPF em poder do público, Tesouro)</span></div>
+    <p class="grande num">{{ v.total_txt }}</p>
+    {% if v.por_habitante.disponivel %}<p><strong>{{ v.por_habitante.divida }}</strong>: a mesma dívida dividida pelos {{ v.por_habitante.populacao_txt }} habitantes (IBGE). É a parte média de cada um de nós.{% if v.por_habitante.juros_pagos %} Só de juros pagos em dinheiro no ano: {{ v.por_habitante.juros_pagos }}.{% endif %}</p>{% else %}<p class="mini">Por habitante: {{ v.por_habitante.divida_motivo }}.</p>{% endif %}
+    <p class="mini">{{ v.notas.nota_publico }}</p>
+  </div>
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>A conta do ano</b><span class="mini">como a dívida saiu de um número para o outro, pelos fatores do Tesouro{% if v.conta and not v.fechado %} (meses {{ v.conta.meses[0] }} a {{ v.conta.meses[-1] }}){% endif %}</span></div>
+    {% if v.conta %}
+    <table class="tabela conta-ano"><tbody>
+      {% for i in v.conta.itens %}<tr class="{{ i.id }}"><td>{{ i.nome }}</td><td class="num" title="{{ i.exato }}">{{ i.txt }}</td></tr>{% endfor %}
+    </tbody></table>
+    <p><strong>{{ v.conta.variacao_rotulo }} {{ v.conta.variacao_txt }}</strong>{% if v.conta.variacao_hab %} ({{ v.conta.variacao_hab }}){% endif %}{% if v.conta.fecha %}. A conta fecha com o estoque do fim do período (conferência crítica).{% else %}. <span class="falha">Atenção: a conta não fechou nesta rodada</span>; veja as conferências abaixo.{% endif %}</p>
+    <p class="mini">{{ v.conta.nota }}</p>
+    {% else %}
+    <p class="mini">A conta do ano não está disponível: {{ v.conta_motivo }}.</p>
+    {% endif %}
+  </div>
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>Do que é feita e quando vence</b><span class="mini">os dois lados do desenho, título a título (CSV do Tesouro, {{ v.celulas }} células)</span></div>
+    {% for n in v.entradas %}<p><strong>{{ n.nome }}</strong> ({{ n.cent }}): {{ n.definicao }}</p>{% endfor %}
+    {% for n in v.saidas %}<p><strong>{{ n.nome }}</strong> ({{ n.cent }}): {{ n.definicao }}</p>{% endfor %}
+    <p class="mini">{{ v.notas.nota_vencimento }}</p>
+  </div>
+  {% else %}
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>O que entrou: a receita</b><span class="mini">o dinheiro que chegou ao caixa da União no período, de três jeitos</span></div>
+    {% for n in v.entradas %}<p><strong>{{ n.nome }}</strong> ({{ n.cent }}): {{ n.definicao }}</p>{% endfor %}
+  </div>
+  <div class="palavras-grade">
+    <div class="cab-grupo"><b>O que saiu: a despesa</b><span class="mini">o R$ 1,00 é tudo o que a União gastou de verdade; o que é só troca de dinheiro por dinheiro fica fora</span></div>
+    <p><strong>Despesa primária</strong>: o gasto em si. Aposentadorias, benefícios, salários, saúde, educação, repasses a estados e municípios, obras, custeio. Nove das dez linhas.</p>
+    <p><strong>Juros</strong>: o custo da dívida pago em dinheiro no período. Saiu do caixa e não volta, por isso é a décima linha, dentro do R$ 1,00.</p>
+    <p><strong>Fora do R$ 1,00</strong>: {% for f in m.fora %}{{ f.nome|lower }} ({{ f.valor }}){% if not loop.last %}, {% endif %}{% endfor %}. Trocam uma dívida por outra ou voltam depois: não são gasto. Estão na visão "Tudo o que passou pelo caixa" e <a href="#fora">listados abaixo</a>.</p>
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+<section class="fluxo" aria-labelledby="h-fluxo">
+  <h2 id="h-fluxo" class="vis-oculto">De onde veio e para onde foi o dinheiro</h2>
+  <div class="trilha-linha">
+    <div class="trilha" id="trilha" aria-label="Onde você está no desenho"></div>
+    <button class="btn" type="button" id="subir" hidden>← Subir um nível</button>
+  </div>
+  <div class="sankey">
+    <div class="cols">
+      <div><div class="titulo-col" id="titulo-esq">De onde veio</div><div class="mini" id="legenda-esq"></div></div>
+      <div class="centro"><b class="num" id="centro-txt"></b><span class="mini" id="centro-nome"></span></div>
+      <div style="text-align:right"><div class="titulo-col" id="titulo-dir">Para onde foi</div><div class="mini" id="legenda-dir"></div></div>
+    </div>
+    <div class="area-svg">
+      <svg id="svg" viewBox="0 0 1120 760" role="img" aria-label="Diagrama de fluxo: de onde o dinheiro veio à esquerda, o total no meio, os destinos à direita; a largura de cada faixa é proporcional ao valor; clicar numa faixa entra nela. A mesma informação está na lista abaixo."></svg>
+      <div class="tip" id="tip" hidden aria-hidden="true"></div>
+    </div>
+  </div>
+  <p class="mini" id="estado"></p>
+  <p class="mini legenda-tracejado" id="legenda-tracejado" hidden></p>
+  <noscript><style>[data-visao][hidden]{display:revert !important}</style><p class="sem-js">O desenho interativo precisa de JavaScript. Sem ele, os mesmos números estão na lista "Os números, linha por linha", logo abaixo, e nas páginas de cada linha.</p></noscript>
+</section>
+
+<section aria-labelledby="h-ficha">
+  <h2 id="h-ficha" class="vis-oculto">Ficha da faixa selecionada</h2>
+  <div class="ficha-vazia" id="ficha-vazia">Clique numa faixa do desenho para ver a ficha dela aqui: valor exato, parte do R$ 1,00, dividido pela população, fonte e lacre.</div>
+  <div class="ficha" id="ficha" hidden></div>
+</section>
+
+{# ---- abaixo do desenho, tudo é da aba ativa: as três frases, a lista "linha por linha" e o que mais a visão tem #}
+{% for v in m.visoes %}
+{% if v.frases %}
+<section class="tres" data-visao="{{ v.id }}"{% if v.id != m.visao_inicial %} hidden{% endif %} aria-label="Em três frases: {{ v.rotulo }}">
+  {% for f in v.frases %}
+  <div><b class="num">{{ f.numero }}</b><p>{{ f.texto }}</p></div>
+  {% endfor %}
+</section>
+{% endif %}
+{% endfor %}
+
+{% for v in m.visoes if v.tabela %}
+<section data-visao="{{ v.id }}"{% if v.id != m.visao_inicial %} hidden{% endif %} aria-labelledby="h-tabela-{{ v.id }}">
+  <div class="secao-cab">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2 id="h-tabela-{{ v.id }}" class="h2">{{ v.rotulo }}, linha por linha</h2>
+      <span class="mini">Os dois lados do desenho, com o que cada um tem dentro. Toque numa linha para abrir o detalhe; "Ver no desenho" leva à faixa.</span>
+    </div>
+    {% if m.populacao %}
+    <p class="mini" style="max-width:420px;text-align:right"><strong>÷ população</strong>: o valor dividido pelos {{ m.populacao_txt }} habitantes (IBGE, {{ m.populacao_data }}). {% if v.id == 'divida' %}A parte média de cada habitante.{% else %}Não é o que cada pessoa pagou nem recebeu; é só um jeito de ver o tamanho.{% endif %}</p>
+    {% endif %}
+  </div>
+  <div class="cabec" aria-hidden="true">
+    <span></span><span>linha</span><span style="text-align:right">centavos</span><span style="text-align:right">valor{% if v.id == 'divida' %} em {{ v.data_curta }}{% else %} em {{ m.ano }}{% endif %}</span><span class="col-hab" style="text-align:right">÷ população</span><span class="col-var" style="text-align:right"></span><span></span>
+  </div>
+  {% for grupo in v.tabela %}
+  <div class="grupo-tabela">
+    <div class="cab-grupo"><b>{{ grupo.grupo }}</b><span class="mini">{{ grupo.nota }}</span></div>
+    <div class="linhas">
+      {% for l in grupo.linhas %}{{ linha_tabela(l.no, l.cent, l.pct, v.total, v.id, m.populacao, m.ano, raiz, l.dentro) }}{% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+  <div class="total-linha">
+    <span>{% if v.id == 'divida' %}Total: a DPF em poder do público, título a título (CSV do Tesouro), em {{ v.data }}{% else %}Total: tudo o que passou pelo caixa (Anexo 01 do RREO: receitas realizadas e despesas liquidadas, o que for maior){% endif %}</span>
+    <span class="num" style="font-weight:600;color:#15201F">{{ v.total_exato }}{% if m.populacao and v.id == 'divida' and v.por_habitante.divida %} · {{ v.por_habitante.divida }}{% endif %} · 100 centavos</span>
+  </div>
+</section>
+{% endfor %}
+
+<section data-visao="gasto"{% if m.visao_inicial != 'gasto' %} hidden{% endif %} aria-labelledby="h-linhas">
+  <div class="secao-cab">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2 id="h-linhas" class="h2">Os números, linha por linha</h2>
+      <span class="mini">Toque numa linha para abrir o detalhe; cada linha tem a sua própria página.</span>
+    </div>
+    {% if m.populacao %}
+    <p class="mini" style="max-width:420px;text-align:right"><strong>÷ população</strong>: o valor dividido pelos {{ m.populacao_txt }} habitantes (IBGE, {{ m.populacao_data }}). Não é o que cada pessoa pagou nem recebeu; é só um jeito de ver o tamanho.</p>
+    {% endif %}
+  </div>
+  <div class="cabec" aria-hidden="true">
+    <span></span><span>linha</span><span style="text-align:right">centavos</span><span style="text-align:right">valor em {{ m.ano }}</span><span class="col-hab" style="text-align:right">÷ população</span><span class="col-var" style="text-align:right">vs {{ m.ano - 1 }}</span><span></span>
+  </div>
+  <div class="linhas">
+    {% for n in m.linhas %}
+    <details class="item" id="linha-{{ n.id }}">
+      <summary>
+        <span class="cor" style="background:{{ n.cor }}" aria-hidden="true"></span>
+        <span style="display:flex;flex-direction:column;min-width:0"><span class="nome">{{ n.nome_completo }}</span><span class="barra"><span style="width:{{ (n.valor / m.total * 300)|round(1) }}%;background:{{ n.cor }}"></span></span></span>
+        <span class="num cent">{{ n.cent|replace(' centavos','')|replace(' centavo','') }}</span>
+        <span class="num valor">{{ n.txt }}</span>
+        <span class="num hab">{{ n.hab if m.populacao else '' }}</span>
+        <span class="num var">{{ n.var }}</span>
+        <span class="seta" aria-hidden="true">▾</span>
+      </summary>
+      <div class="detalhe">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <p>{{ n.definicao }}</p>
+          {% if n.nao_inclui %}<p class="mini">{{ n.nao_inclui }}</p>{% endif %}
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+            <a class="btn cheio" href="{{ raiz }}{{ m.ano }}/{{ n.pagina }}">Página de {{ n.nome }} →</a>
+            <button class="btn" type="button" data-ver-no-desenho="{{ n.id }}" data-visao-alvo="gasto">Ver no desenho</button>
+          </div>
+        </div>
+        <dl class="dl">
+          <dt>Valor exato</dt><dd class="num">{{ n.exato }}</dd>
+          <dt>Dentro do R$ 1,00</dt><dd class="num">{{ n.cent }} ({{ n.pct }})</dd>
+          {% if m.populacao %}<dt>Dividido pela população</dt><dd class="num">{{ n.hab }}</dd>{% endif %}
+          {% if n.var %}<dt>Variação</dt><dd class="num">{{ n.var }} contra o mesmo período de {{ m.ano - 1 }}</dd>{% endif %}
+          <dt>Fonte</dt><dd>{{ n.fonte }}</dd>
+          <dt>O que tem dentro</dt><dd>{% if n.filhos %}{% for f in n.filhos[:6] %}{{ f.nome }} ({{ f.txt }}){% if not loop.last %}; {% endif %}{% endfor %}{% if n.filhos|length > 6 %}; e mais {{ n.filhos|length - 6 }} na página da linha{% endif %}{% else %}{{ n.proximo or 'ainda sem abertura nesta fonte' }}{% endif %}</dd>
+        </dl>
+      </div>
+    </details>
+    {% endfor %}
+  </div>
+  <div class="total-linha">
+    <span>Total: despesa primária liquidada + juros pagos (Anexos 06 e 01 do RREO)</span>
+    <span class="num" style="font-weight:600;color:#15201F">{{ m.total_exato }}{% if m.populacao %} · {{ m.hab_total }}{% endif %} · 100 centavos</span>
+  </div>
+</section>
+
+<section id="fora" class="card" data-visao="gasto"{% if m.visao_inicial != 'gasto' %} hidden{% endif %} aria-labelledby="h-fora">
+  <h2 id="h-fora" class="h3" style="margin-bottom:12px">Fora do R$ 1,00, de propósito</h2>
+  <p style="font-size:15px;color:#3A423F;margin-bottom:14px">Dinheiro que passou pelo caixa mas não é gasto: troca uma dívida por outra ou volta depois. Aparece listado, não escondido, e está desenhado na visão "Tudo o que passou pelo caixa".</p>
+  <table class="tabela">
+    <tbody>
+      {% for f in m.fora %}<tr><td><strong>{{ f.nome }}</strong><br><span class="mini">{{ f.explica }}</span></td><td class="num">{{ f.valor }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% if m.divida_visao %}{% set d = m.divida_visao %}
+<section class="divida-secao" data-visao="divida"{% if m.visao_inicial != 'divida' %} hidden{% endif %} aria-labelledby="h-divida">
+  <div class="secao-cab">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2 id="h-divida" class="h2">A dívida, com todas as réguas</h2>
+      <span class="mini">Cada número abaixo tem a fonte ao lado. Quando duas fontes medem a mesma coisa de jeitos diferentes, as duas aparecem, com a pergunta que cada uma responde.</span>
+    </div>
+    <p class="mini" style="max-width:560px;text-align:right">Mart da dívida: {{ d.selo }}.</p>
+  </div>
+
+  <div class="grade-2">
+    <div class="card">
+      <h3 class="h3" style="margin-bottom:10px">Os juros do ano, uma régua por pergunta</h3>
+      <p class="mini" style="margin-bottom:12px">"Juros da dívida" tem vários números oficiais porque cada um responde a uma pergunta diferente. Nenhum está errado; o que muda é a pergunta.</p>
+      <table class="tabela reguas"><tbody>
+        {% for r in d.reguas_juros %}
+        <tr><td><strong>{{ r.pergunta }}</strong><br><span class="mini">{{ r.explica }}</span>{% if not r.disponivel %}<br><span class="mini falta">Indisponível: {{ r.motivo }}</span>{% endif %}<br><span class="mini">Fonte: {{ r.fonte }}</span></td><td class="num">{{ r.valor_txt }}{% if r.hab %}<br><span class="mini">{{ r.hab }}</span>{% endif %}</td></tr>
+        {% endfor %}
+      </tbody></table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:10px">Outras medidas do que se deve</h3>
+        <p class="mini" style="margin-bottom:12px">O número do desenho é a dívida do Tesouro fora do Banco Central. Estas são as outras réguas oficiais, cada uma com sua pergunta.</p>
+        <table class="tabela reguas"><tbody>
+          {% for r in d.medidas_estoque %}
+          <tr><td><strong>{{ r.nome }}</strong><br><span class="mini">{{ r.explica }}</span>{% if not r.disponivel %}<br><span class="mini falta">Indisponível: {{ r.motivo }}</span>{% endif %}<br><span class="mini">Fonte: {{ r.fonte }}</span></td><td class="num">{{ r.valor_txt }}{% if r.hab %}<br><span class="mini">{{ r.hab }}</span>{% endif %}</td></tr>
+          {% endfor %}
+        </tbody></table>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:10px">Quanto vence logo e o prazo médio</h3>
+        <table class="tabela reguas"><tbody>
+          {% for r in d.rolagem %}
+          <tr><td><strong>{{ r.nome }}</strong><br><span class="mini">{{ r.explica }}</span>{% if not r.disponivel %}<br><span class="mini falta">Indisponível: {{ r.motivo }}</span>{% endif %}<br><span class="mini">Fonte: {{ r.fonte }}</span></td><td class="num">{{ r.valor_txt }}</td></tr>
+          {% endfor %}
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  {% if d.vencimentos_12m %}
+  <div class="card">
+    <h3 class="h3" style="margin-bottom:10px">Calendário: quanto vence em cada mês, nos próximos 12 meses</h3>
+    <p class="mini" style="margin-bottom:12px">Só o principal dos títulos e contratos em mercado, pelo vencimento final de cada um, na posição de {{ d.data }}. A mesma informação está no desenho, dentro de "Vence em até 12 meses".</p>
+    <table class="tabela calendario"><tbody>
+      {% for p in d.vencimentos_12m %}<tr><td>{{ p.nome }}</td><td class="num">{{ p.txt }}</td><td class="num mini">{{ p.pct_pai }} do que vence em 12 meses · {{ p.cent_pai }}</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+  {% endif %}
+
+  <details class="conferencias">
+    <summary>Conferências da dívida: {{ d.conferencias.ok }} de {{ d.conferencias.n }} OK ({{ d.conferencias.criticas_ok }} de {{ d.conferencias.criticas }} críticas); fontes e lacres</summary>
+    <ul class="conf-lista">
+      {% for r in d.conferencias.lista %}
+      <li><span class="{{ 'ok' if r.ok else ('falha' if r.calculada else 'mini') }}">{{ 'OK' if r.ok else ('AVISO' if r.calculada else 'SEM BASE') }}</span><span><strong>{{ r.id }}</strong>{% if r.critica %} <span class="mini">(crítica)</span>{% endif %}<br><span class="mini">{{ r.descricao }}</span>{% if r.detalhe %}<br><span class="mini">{{ r.detalhe }}</span>{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+    <table class="lacres" style="margin-top:14px"><tbody>
+      {% for f in d.fontes %}<tr><td><strong>{{ f.nome }}</strong><br><span class="mini">{{ f.arquivo }}{% if f.recurso_data %} · publicado em {{ f.recurso_data }}{% endif %}</span></td><td class="mini">{% if f.sha256 %}lacre sha256 {{ f.sha256 }}{% endif %}{% if f.snapshot %}<br>snapshot {{ f.snapshot }}{% endif %}</td></tr>{% endfor %}
+    </tbody></table>
+    {% if d.avisos %}<p class="mini" style="margin-top:10px">Avisos do mart: {% for a in d.avisos %}{{ a }}{% if not loop.last %}; {% endif %}{% endfor %}.</p>{% endif %}
+    <p class="mini" style="margin-top:10px">{{ d.nota_detalhe }} O arquivo completo está em <a href="{{ raiz }}dados/">Dados</a> (divida_{{ m.ano }}.json).</p>
+  </details>
+</section>
+{% endif %}
+
+<section id="conferencias" class="conferencias" aria-labelledby="h-conf">
+  <h2 id="h-conf" class="h2" style="margin-bottom:12px">{{ m.conferencias.n }} conferências{% if m.conferencias.todas_ok %}, todas OK{% else %}, {{ m.conferencias.falhas }} com aviso{% endif %}</h2>
+  <p style="font-size:15px;color:#3A423F;margin-bottom:14px">Uma conferência é uma conta que tem que fechar antes de publicar: as dez linhas somam o total ao centavo, o total do relatório de despesa bate com o de receita, os tributos são iguais nos dois anexos, o RREO bate com o SIOP função por função. As marcadas como críticas travam a publicação se falharem; as demais são avisos, explicados.</p>
+  <details>
+    <summary>Ver as {{ m.conferencias.n }} conferências de {{ m.ano }}</summary>
+    <ul class="conf-lista">
+      {% for r in m.conferencias.lista %}
+      <li><span class="{{ 'ok' if r.ok else 'falha' }}">{{ 'OK' if r.ok else 'AVISO' }}</span><span><strong>{{ r.id }}</strong>{% if r.critica %} <span class="mini">(crítica)</span>{% endif %}{% if r.explicada %} <span class="mini">(explicada)</span>{% endif %}<br><span class="mini">{{ r.descricao }}</span>{% if r.detalhe %}<br><span class="mini">{{ r.detalhe }}</span>{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+  </details>
+</section>
+
+<section class="escuro" aria-label="Como fazemos e como conferir">
+  <div><h2>Nenhum número é digitado à mão</h2><p>Tudo nasce de arquivos oficiais baixados por programa e lacrados por hash (uma impressão digital do arquivo): RREO do SICONFI, SIOP, Tesouro, Banco Central, IBGE. O código é aberto e qualquer pessoa refaz a conta.</p></div>
+  <div><h2>Falhou a conferência, não publica</h2><p>{{ m.conferencias.n }} conferências rodam a cada execução. Se uma crítica falha, a página do ano não sai. Nesta página: {{ m.conferencias.ok }} de {{ m.conferencias.n }} OK.</p></div>
+  <div><h2>Como fazemos, passo a passo</h2><p>Da página do governo até "{{ m.linhas[0].cent }} foram para {{ m.linhas[0].nome }}": cada regra, cada escolha e cada coisa que deu errado no caminho, escritas para quem nunca ouviu falar de orçamento. <a href="{{ raiz }}metodologia/">Ler a metodologia →</a> · <a href="{{ raiz }}metodologia/#conferir">Conferir sem programar →</a></p></div>
+</section>
+{% endblock %}
+{% block rodape_direita %}Recibo {{ m.ano }} gerado em {{ m.gerado_em }} a partir do RREO{% if m.fechado %} do 6º bimestre{% else %} do {{ m.periodo }}º bimestre{% endif %}{% if m.siop_usado %} e do SIOP{% endif %}. Atualização a cada bimestre. Páginas geradas em {{ gerado_em }} (versão {{ versao }}).{% endblock %}
+{% block scripts %}
+<script id="dados-fluxo" type="application/json">{{ dados_json|tojson_html|safe }}</script>
+<script src="{{ raiz }}static/fluxo.js"></script>
+{% endblock %}

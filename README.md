@@ -5,7 +5,11 @@ Pipeline aberto de dados fiscais. Pergunta que responde: **de cada R$ 1,00 de im
 Fase 1: Recibo do Contribuinte (União). Fontes implementadas: SICONFI (RREO da União, S4), SIOP (execução do
 orçamento federal por classificador, S8) e COFOG (despesa do Governo Central na classificação internacional de
 funções, S7; produto separado do recibo, `mart cofog`, desde a v0.6.3), Dívida Pública Federal do Tesouro (S1) e séries do
-SGS do Banco Central (S16; as duas com raw, staging e inspect na v0.7.0, o `mart divida` vem na v0.7.1). As demais fontes estão catalogadas em
+SGS do Banco Central (S16; raw, staging e inspect na v0.7.0, layout fixado em config na v0.7.1 e o `mart divida`, também
+produto separado, na v0.7.2, conferido contra os arquivos reais na v0.7.3) e população do IBGE (S14; per capita como
+memo do recibo e grupo do mart da dívida, v0.8.0). O site estático (`recibo site`, v0.9.0) gera as páginas em `docs/` a
+partir dos exports, com o desenho de fluxo que abre cada linha nível a nível e, desde a v0.10.0, a visão "A dívida"
+(quanto a União deve, do que a dívida é feita e quando vence, título a título). As demais fontes estão catalogadas em
 `config/sources.yaml` e entram em seguida.
 
 Princípios (ver documento "Transparência do Orçamento: Regras e Fontes"):
@@ -31,7 +35,14 @@ config/sources.yaml ──┤  (spec como código: dirige o fetch, o SQL, a fich
                                                                                  (régua internacional; produto separado,
                                                                                   com a ponte para o total do recibo)
  fetch divida  ──> raw/divida  ──> transform divida  ──> staging/stg_divida__*.parquet  ──┐
- fetch bcb     ──> raw/bcb     ──> transform bcb     ──> staging/stg_bcb_sgs.parquet     ──┴─> mart divida (v0.7.1)
+ fetch bcb     ──> raw/bcb     ──> transform bcb     ──> staging/stg_bcb_sgs.parquet     ──┴─> mart divida ──> marts/ + export/
+                                                                                 (quatro medidas da dívida, cada uma com suas
+                                                                                  réguas nomeadas; produto separado do recibo)
+ fetch ibge    ──> raw/ibge    ──> transform ibge    ──> staging/stg_ibge_populacao.parquet ──> população do ano: memos por
+                                                                                  habitante no recibo e grupo por habitante
+                                                                                  no mart divida (nenhum centavo muda)
+ export/recibo_AAAA.json + export/divida_AAAA.json ──> site ──> docs/ (HTML estático: página do ano com o desenho, uma
+ conteudo/site.yaml, metodologia.md, quem-somos.md ──┘       página por linha, metodologia, quem somos, dados; GitHub Pages)
 ```
 
 | Camada | Onde | O que |
@@ -42,10 +53,14 @@ config/sources.yaml ──┤  (spec como código: dirige o fetch, o SQL, a fich
 | raw | `data/raw/divida/{dataset}/{arquivo}/{snapshot}/` e `data/raw/bcb/sgs/{codigo}/{snapshot}/` | Tesouro: `package_show.json` de cada dataset e o CSV/XLSX como veio; BCB: o JSON da série e, em `sgs_meta`, a ficha da série no portal de dados abertos |
 | staging | `data/staging/stg_divida__{dataset}__{arquivo}.parquet` + `stg_divida_arquivos.parquet` | um parquet por arquivo do Tesouro: CSV com as colunas originais como texto mais `{coluna}__num` e `{coluna}__data` quando a leitura é segura; XLSX como grade (planilha, linha, coluna, valor). O índice lista arquivos, procedência e resumo |
 | staging | `data/staging/stg_bcb_sgs.parquet` | um ponto por linha: código, data, valor, ficha de sources.yaml (nome, tipo, unidade), título no BC, procedência |
+| raw | `data/raw/ibge/projecao/{arquivo}/{snapshot}/` e `data/raw/ibge/sidra/t{tabela}_v{variavel}/{snapshot}/` | IBGE: a planilha da projeção revisão 2024 como veio e o JSON de cada tabela do SIDRA |
+| staging | `data/staging/stg_ibge_populacao.parquet` | uma linha por (régua, ano, local): projeção (1º de julho, 2000 a 2070, Brasil, regiões e UFs, com sexo e 65+), estimativas oficiais e Censo 2022; procedência |
 | staging | `data/staging/stg_cofog.parquet` | uma linha por linha do CSV do Tesouro (ano, natureza detalhada, ação, UO, classificação econômica GFS, código COFOG, valor) + derivações (`cofog_divisao/grupo/classe`, `categoria`, `gnd`, `modalidade`, `elemento`, `gfs2`, `ajuste`) + unidade (`valor` em reais, `valor_fonte` como veio, `unidade_fonte`, `fator_unidade`, `resolucao_reais`) |
 | marts | `data/marts/recibo_{ano}_p{bimestre}.json` e `.csv` | linhas do recibo, shares, centavos, exclusões, memos (receitas, resultado, dívida), reconciliações |
 | marts | `data/marts/cofog_{ano}.json` e `.csv` | régua COFOG (dez divisões e 69 grupos), ajustes do Tesouro, ponte com o recibo, reconciliações, glossário |
-| export | `data/export/recibo_{ano}.json` e `data/export/cofog_{ano}.json` | o que o site consome (recibo; aba separada do COFOG) |
+| marts | `data/marts/divida_{ano}.json` e `.csv` | dívida em quatro medidas (juros do ano, dívida nova, estoque, risco de rolagem), cada uma com várias réguas oficiais nomeadas, composição por indexador, reconciliações, glossário |
+| export | `data/export/recibo_{ano}.json`, `data/export/cofog_{ano}.json` e `data/export/divida_{ano}.json` | o que o site consome (recibo, com o bloco `niveis` de cada linha desde a v0.9.0 e `fontes_de_recursos` desde a v0.9.1; dívida com `execucao.por_carteira` e, desde a v0.10.0, `estoque_detalhe`, `conta_do_ano` e `estoque_mensal`; COFOG) |
+| site | `docs/` | páginas HTML geradas por `recibo site`: `index.html` (ano atual), `AAAA/`, `AAAA/linha/<linha>/`, `metodologia/`, `quem-somos/`, `dados/` (com os exports copiados e um CSV por ano), `static/` (um CSS e um JS, nada de fora) |
 
 Idempotência: rodar de novo sem mudança na fonte não cria snapshot (só registra a verificação). Mudança em
 período já publicado gera snapshot novo com `previous_snapshot_id`, e um aviso `REVISAO NA FONTE` no log.
@@ -56,7 +71,7 @@ Pré-requisitos: Python 3.11+ e [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync --extra dev
-uv run pytest                      # 54 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida e séries do BC sintéticos
+uv run pytest                      # 84 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida, séries do BC e população do IBGE sintéticos, e o site gerado a partir deles
 
 # 1) baixar RREO da União (anexos 01, 02, 04-RGPS, 04-RPPS, 06; bimestres 1 a 6)
 uv run recibo fetch siconfi --exercicios 2024 2025 2026
@@ -98,7 +113,7 @@ uv run recibo inspect cofog --exercicio 2024 --por acao --cofog 10.2 --rows 40 -
 #    do mesmo ano (precisa do staging do RREO com o 6º bimestre do ano); sai em data/marts/cofog_AAAA.json e data/export/
 uv run recibo mart cofog --exercicio 2024 --out ~/Downloads/cofog_mart_2024.txt
 
-# 9) dívida (S1, CKAN do Tesouro) e BCB (S16, séries do SGS): só acesso, lacre e leitura na v0.7.0; o mart vem depois de ver os arquivos
+# 9) dívida (S1, CKAN do Tesouro) e BCB (S16, séries do SGS): acesso, lacre e leitura
 uv run recibo fetch divida                                  # os datasets de sources.yaml (S1.datasets); --datasets estoque_dpf fatores_variacao para só esses
 uv run recibo transform divida                              # um parquet por arquivo, sem adivinhar layout
 uv run recibo inspect divida --rows 25 --out ~/Downloads/divida_inspect.txt           # colunas, tipos lidos, valores distintos, somas por ano; planilhas em grade
@@ -110,8 +125,42 @@ uv run recibo transform bcb
 uv run recibo inspect bcb --ano 2024 --out ~/Downloads/bcb_2024.txt                   # todas as séries no ano: soma dos meses (fluxos) ou último valor (saldos, taxas)
 uv run recibo inspect bcb --serie 4607 --rows 24                                      # uma série: ficha, por ano, últimos valores
 
-# tudo de uma vez (fetch e transform de SICONFI e SIOP, depois os recibos); --sem-siop pula o SIOP; o COFOG é à parte
+# 10) mart da dívida (produto separado do recibo): quatro medidas, cada uma com suas réguas nomeadas (Tesouro, BC, RREO,
+#     COFOG), lidas do staging da dívida, do BCB, do recibo do ano e do COFOG quando existe; o layout dos arquivos do
+#     Tesouro vem de linhas.yaml (bloco `divida`). Num ano em andamento usa o último mês presente em todas as fontes.
+#     Sai em data/marts/divida_AAAA.json e .csv e data/export/divida_AAAA.json; código de saída 3 se uma conferência crítica falhar
+uv run recibo mart divida --exercicio 2024 --out ~/Downloads/divida_2024.txt
+uv run recibo mart divida --exercicio 2025 --periodo 4      # --periodo força o bimestre do RREO usado para a linha do recibo
+
+# 11) população (S14, IBGE): a planilha da projeção revisão 2024 (ftp.ibge) e as estimativas oficiais (apisidra, tabela 6579);
+#     de fora do Brasil o IBGE barra o catálogo e o site, mas serve esses dois; IPv4 forçado. Liga os memos por habitante do
+#     recibo e o grupo por habitante do mart divida (basta o staging existir; sem ele, saem como indisponíveis)
+uv run recibo fetch ibge
+uv run recibo transform ibge
+uv run recibo inspect ibge --ano 2019 --out ~/Downloads/ibge.txt   # réguas lado a lado por ano (projeção, estimativa, censo) e sexo/65+
+uv run recibo inspect ibge --local "São Paulo"                      # uma UF ou região, pelo nome da planilha
+uv run recibo mart recibo --exercicio 2024                           # agora com "Gasto e tributos por habitante" e "Dívida nova por habitante"
+
+# tudo de uma vez (fetch e transform de SICONFI, SIOP e IBGE, depois os recibos); --sem-siop e --sem-ibge pulam essas fontes
+# (o IBGE falha macio: sem resposta, os recibos saem sem per capita); COFOG e dívida são à parte
 uv run recibo run --exercicios 2024 2025 2026
+
+# 12) o site (v0.9.0; carimbo da fonte na v0.9.1; bandeira, Constituição e desenho sem cortes na v0.9.2; visão "A dívida"
+#     na v0.10.0): lê data/export/*.json (recibo de cada ano; dívida e COFOG quando existem) e escreve docs/.
+#     Só anos publicáveis viram página; o comando diz qual ficou de fora e por quê. Textos em conteudo/ (site.yaml,
+#     metodologia.md, quem-somos.md): edite e gere de novo. Antes, refaça os exports com a versão atual (o bloco
+#     `niveis` das linhas e a execução por carteira da dívida nasceram na 0.9.0; `fontes_de_recursos`, na 0.9.1; o
+#     detalhe título a título, a conta do ano e o estoque mensal da dívida, na 0.10.0). Sem o export da dívida de um
+#     ano, a página sai sem a aba "A dívida" (uma aba desativada diz o motivo); 2026 em andamento também tem a aba
+uv run recibo mart recibo --exercicio 2023 && uv run recibo mart recibo --exercicio 2024 && uv run recibo mart recibo --exercicio 2025 && uv run recibo mart recibo --exercicio 2026
+uv run recibo mart divida --exercicio 2023 && uv run recibo mart divida --exercicio 2024 && uv run recibo mart divida --exercicio 2025 && uv run recibo mart divida --exercicio 2026
+uv run recibo site --limpar                                  # docs/ na raiz do repositório; --out para outra pasta; --exercicios 2025 para um ano só
+python -m http.server -d docs 8000                          # abra http://localhost:8000/ (Ctrl+C para parar)
+
+# 13) publicar no GitHub Pages: commite docs/ e, no GitHub, Settings > Pages > "Deploy from a branch" > main, pasta /docs.
+#     Domínio próprio: `dominio` e `url` em conteudo/site.yaml (o gerador escreve docs/CNAME, robots.txt, sitemap.xml e
+#     404.html); no registrador, registros A do GitHub Pages e CNAME www; em Settings > Pages, "Custom domain" e
+#     "Enforce HTTPS". A cada rodada nova: mart, site, commit. O site é estático: sem servidor, sem banco, sem cookie.
 ```
 
 `diff` mostra, para cada item, os dois valores, a diferença, a variação e o **excesso**: quanto o item variou além
@@ -228,8 +277,14 @@ Para recalibrar depois de uma mudança na fonte, cole a saída do `inspect` (Ane
   pelo menos 90% das células não vazias são números (vírgula decimal e ponto de milhar, ou ponto decimal, decidido por
   coluna) e `{coluna}__data` quando 90% são datas (dd/mm/aaaa, aaaa-mm-dd, mm/aaaa, aaaa-mm, aaaamm; mês vira dia 1).
   XLSX: grade longa (planilha, linha, coluna, valor_texto, valor_num, eh_data), porque as planilhas do Tesouro são
-  relatórios formatados. O layout de cada arquivo será fixado em config na v0.7.1, depois de visto pelo `inspect divida`.
+  relatórios formatados. O layout de cada arquivo está fixado em `linhas.yaml` (bloco `divida`, v0.7.1/0.7.2), depois de
+  visto pelo `inspect divida`: aba, unidade, rótulos de linha, nomes de coluna e valores de texto que o mart usa.
   Arquivo ilegível fica registrado no índice com o erro e não derruba os outros.
+- **Como o mart lê as planilhas do Tesouro (`src/recibo/grade.py`).** Os anexos 2.1 (estoque, R$ bilhões) e 2.9
+  (fatores de variação, R$ milhões) têm rótulos na coluna 1, uma linha de cabeçalho com os meses no formato `Mmm/aa`
+  (Jan/07 ... Dez/24) e, depois de cada dezembro, uma coluna com o total do ano. O rótulo de `linhas.yaml` é comparado
+  sem acento, sem caixa, sem espaços duplicados e sem os números de nota de rodapé que o Tesouro cola no fim
+  ("Estoque anterior1", "DPFe ¹"). Rótulo não encontrado ou aba sem cabeçalho param com erro que lista os parecidos.
 - **S16, Banco Central.** SGS é o sistema de séries do BC; cada série tem um número e sai pela API pública de dados
   abertos (`https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json&dataInicial=...&dataFinal=...`),
   sem chave. As 34 séries de `sources.yaml` (`S16.series`, códigos lidos no portal de dados abertos do BC em 9/nov/2026)
@@ -243,8 +298,81 @@ Para recalibrar depois de uma mudança na fonte, cole a saída do `inspect` (Ane
   cria snapshot novo; a ficha da série no portal de dados abertos é lacrada em `sgs_meta` (opcional: se o portal falhar,
   a série é gravada mesmo assim). `transform bcb` para se uma data vier fora de dd/mm/aaaa ou um valor não for número.
 - **`inspect bcb --ano AAAA`** é a tabela que se compara com o Anexo 06 e com o COFOG: fluxos somados nos meses do ano
-  (com o número de meses publicados), saldos e taxas no último valor do ano. A hipótese a conferir na primeira rodada:
-  a soma de 2024 de uma das séries de juros nominais (4607 ou 4606) é igual aos R$ 937,68 bi da linha JUROS do COFOG.
+  (com o número de meses publicados), saldos e taxas no último valor do ano. A hipótese da primeira rodada (a soma de
+  2024 de uma das séries de juros nominais, 4607 ou 4606, seria igual aos R$ 937,68 bi da linha JUROS do COFOG) não se
+  confirmou: em 2024 a 4607 (Governo Federal) soma R$ 648,4 bi, a 4608 (Banco Central) 206,8 bi, a 4606 (os dois) 855,2 bi
+  e a 4616 (setor público) 950,4 bi, contra 937,7 bi no COFOG; o número do COFOG fica nomeado como "informado pelo BC".
+
+### O que o `mart divida` publica (v0.7.2)
+
+Quatro medidas, cada uma com várias réguas oficiais, **nomeadas e nunca somadas entre si**. Produto separado: nada no
+recibo depende dele.
+
+1. **Juros do ano.** Pagos em dinheiro pelo orçamento (Anexo 01, a linha do recibo) e pela execução da DPF do Tesouro
+   (devem bater; a execução inclui a cobertura do resultado negativo do BC, ação 0669); apropriados no estoque da DPF
+   (Tesouro, Anexo 2.9: o que a dívida gerou de juros, pagos ou não); nominais pelo Banco Central (NFSP, líquidos; Governo
+   Federal e Governo Central); por competência no RREO (Anexo 06, XI brutos e XI menos X líquidos); e o número do COFOG.
+2. **Dívida nova no ano.** Variação da DPF em poder do público aberta como o Tesouro abre (estoque anterior, mais
+   emissões, menos resgates, mais juros apropriados, mais operações com o BC, estoque final); variação da dívida
+   consolidada líquida do RREO (o "abaixo da linha" do RREO, com o sinal trocado); variação da dívida líquida do Governo
+   Federal pelo BC; resultado nominal e primário do Governo Central pelo BC.
+3. **Estoque.** DPF em poder do público (planilha 2.1 e, título a título, o CSV: têm que dar o mesmo número), carteira
+   do BC, dívida consolidada e consolidada líquida do RREO, dívida líquida do Governo Federal e do setor público (reais e
+   % do PIB), dívida bruta do governo geral (% do PIB) e Tesouro Direto.
+4. **Risco de rolagem.** Fatia da DPF em mercado que vence em 12 meses (título a título), prazo médio (BC), composição
+   por indexador pelo nome do título (Selic, prefixado, índice de preços, câmbio, demais; regras em `linhas.yaml`),
+   conferida com as séries 4177 e 4178 do BC. Colchão de liquidez e detentores por classe não têm fonte aberta em
+   planilha ou API (só o Relatório Mensal da Dívida, em PDF) e aparecem como indisponíveis, com o motivo.
+
+Mês de referência: dezembro num ano fechado; num ano em andamento, o último mês presente em todas as fontes mensais
+(fluxos somados de janeiro até ele, saldos nele). As comparações com o Anexo 01 recortam a execução da DPF até o fim do
+bimestre do RREO usado. Linhas da execução iguais em tudo menos em "Tipo de Dívida" são contadas uma vez, com aviso: o
+arquivo de 2025 repete a cobertura do resultado negativo do BC (12,78 bi de juros e 111,25 bi de principal) sob "Interna"
+e sob "Política Monetária", e o Anexo 01 e o SIOP a trazem uma vez só. Conferências críticas (falhou, não publica): identidade dos fatores do Tesouro (estoque anterior +
+emissões + resgates + juros + operações com o BC = estoque final), planilha 2.1 contra CSV título a título e planilha 2.1
+contra planilha 2.9. Informativas: carteira do BC e DPMFi contra o BC, juros e principal do Anexo 01 contra a execução
+da DPF, cobertura do BC contra o serviço fora de 843/844 do recibo, indexadores contra o BC, coluna anual do Tesouro
+contra a soma dos meses. Uma conferência cujo lado falta (fonte indisponível) sai como "não calculada", não como falha
+de número.
+
+Rodadas reais (10/nov/2026, 2023 a 2025): identidade dos fatores fechada a R$ 0,05 (2024: 6.520.328.667.414,06 +
+1.492.472.570.279,10 − 1.458.474.245.086,66 + 762.426.822.297,24 − 681.099.657,97 = 7.316.072.715.245,72); planilha 2.1 e
+CSV título a título iguais a R$ 0,17; carteira do BC igual à série 4152 (que só tem R$ 10 mil de resolução); série 4154
+do BC 23 a 29 mi acima da DPMFi do Tesouro em 7 tri; juros da execução da DPF iguais ao Anexo 01 a R$ 363 (2023), 55 mi
+(2024, juros fora da DPF) e R$ 1,23 (2025, depois de contar a cobertura do BC uma vez); cobertura do BC contra o serviço
+fora de 843/844 do recibo: 72,29 mi (2024, o cacau 00QM) e 460 mil (2025); LFT e prefixados iguais ao BC em duas casas
+nos três anos. Contra o Relatório Mensal da Dívida de dezembro de 2024 (PDF): composição 46,29 / 21,99 / 26,96 / 4,76
+lá e 46,18 / 21,99 / 26,84 / 4,73 aqui (mais 0,25 de "demais": TDA e securitizadas, que o Tesouro distribui pelo
+indexador contratual); "vincendo em 12 meses" 17,87% lá contra 15,67% aqui, porque o Tesouro conta o fluxo de principal
+e juros a valor presente e o mart só o principal dos títulos que vencem (a medida está nomeada assim); prazo médio 4,05
+anos lá (DPF inteira, fluxos a valor presente) contra 47,04 meses na série 10618 do BC (dívida mobiliária interna).
+Em 2025 os juros apropriados da dívida externa saem negativos (−16,35 bi): a linha inclui a variação do câmbio e o real
+se valorizou.
+
+### Como a população é acessada (S14, IBGE) e vira per capita
+
+- **Duas réguas, nunca misturadas.** A Projeção da População, revisão 2024 (`ftp.ibge.gov.br`, planilha tab3 "grupos
+  etários específicos": uma linha por ano e lugar, 2000 a 2070, com total, sexo e grupos de idade) é a régua do per
+  capita: população em 1º de julho, numa série só. As estimativas oficiais que o IBGE publica para o TCU (SIDRA, tabela
+  6579, variável 9324) saem dessa projeção de 2024 em diante e entram como conferência (`populacao_projecao_vs_estimativa`,
+  tolerância zero): 212.583.750 (2024), 213.421.037 (2025) e 214.211.951 (2026) são iguais nas duas. A 6579 não tem
+  2007, 2010, 2022 nem 2023, e de 2001 a 2021 vem da projeção antiga (1,1% a 1,5% acima da revisão 2024 em 2019 a
+  2021). O Censo 2022 contou 203.080.756 pessoas em 1º de agosto de 2022; a projeção dá 210.862.983 para o mesmo ano
+  (+3,83%), porque corrige a cobertura do Censo. Por isso 2023 só existe na projeção (211.695.158). O Censo é lido da
+  tabela 4709 do SIDRA como `opcional`: se não vier, fica sem a nota.
+- **Acesso de fora do Brasil (10/nov/2026, Buenos Aires).** `servicodados.ibge.gov.br` (o catálogo da API) não responde
+  e `www.ibge.gov.br` devolve 403; `apisidra.ibge.gov.br` e `ftp.ibge.gov.br` respondem em menos de um segundo. O
+  fetcher usa só esses dois, força IPv4 (a rota IPv6 fica pendurada até o timeout) e não depende de catálogo: baixa os
+  arquivos inteiros e o lacre por hash do store decide se há snapshot novo. Se o IBGE não responder, o raw lacrado
+  continua valendo; `run` segue sem per capita.
+- **O que o per capita é e não é.** Valor do ano dividido pela população de 1º de julho do mesmo ano: uma média, não o
+  que cada pessoa pagou. No recibo são dois memos (`por_habitante`: total do recibo, tributos e cada linha; `imposto_futuro`:
+  variação da dívida consolidada líquida), com a ficha (arquivo, lacre, data de referência) e as notas da estimativa e do
+  Censo. No mart da dívida é o grupo "por habitante": DPF em poder do público, dívida nova no ano, dívida líquida do
+  Governo Federal (BC), dívida consolidada líquida (RREO) e juros pagos. Nenhum centavo do recibo muda; se a projeção e a
+  estimativa divergirem, o per capita sai como indisponível com o motivo e os dois produtos continuam publicáveis.
+  Números reais de 2024: R$ 14.045 de gasto do recibo por habitante, R$ 1.656 de juros pagos, R$ 34.415 de DPF em poder
+  do público; em 2025 a DPF passa a R$ 40.460 por habitante (R$ 6.180 a mais no ano).
 
 ### Como o SIOP é acessado (S8)
 
@@ -427,12 +555,121 @@ Para recalibrar depois de uma mudança na fonte, cole a saída do `inspect` (Ane
 
 Tudo isso está em `config/linhas.yaml`, que gera o SQL, a ficha e os testes.
 
+### O que o site publica (v0.9.0 a v0.10.3)
+
+- **Uma página por ano** (`docs/AAAA/`; a do ano fechado mais recente também é a `index.html`): a frase do ano, as
+  palavras do desenho explicadas, o desenho de fluxo com duas visões, a ficha da faixa selecionada, três frases, a
+  lista linha por linha (cada linha abre em gaveta e tem página própria), o que ficou fora do R$ 1,00, as conferências
+  do ano e os lacres. **Visão "Tudo o que passou pelo caixa"**: entradas (receita; títulos vendidos, abertos em rolagem e
+  dívida nova) e saídas (o gasto de verdade; dívida antiga paga, aberta por carteira; empréstimos feitos; o que ficou no
+  caixa ou para o ano seguinte), pelo Anexo 01; a rolagem aparece dos dois lados. **Visão "O gasto de verdade"**: o R$ 1,00
+  do recibo (tributos, outras receitas e dívida nova ou caixa de um lado; as dez linhas do outro). Clicar numa faixa
+  entra nela: ela vira o R$ 1,00 e o outro lado vira rateio; a trilha e "Subir um nível" voltam.
+- **Níveis de dentro de cada linha** (`linhas[].niveis` no export; `src/recibo/marts/niveis.py`): subfunções do RREO com os
+  ajustes nomeados por subfunção (o que saiu para outra linha ou para fora do R$ 1,00, medido no SIOP); no resíduo,
+  funções e subfunções, menos o que o SIOP mostra que saiu (aposentados, empréstimos pela lei, serviço da dívida fora de
+  843/844) e mais o que a lei chama de empréstimo e o Tesouro conta como gasto; nas linhas do SIOP, elementos e órgãos;
+  ações do SIOP dentro de cada subfunção no ano fechado (sem GND 5 com RP 0 e sem GND 2 e 6). Juros abrem pelas carteiras
+  do mart da dívida (`execucao.por_carteira`: mercado, Banco Central, externa, contratos, cobertura do BC). O que não tem
+  detalhe por subfunção (ano em andamento) fica em `nao_alocado`, com nome e valor; a conferência informativa
+  `niveis_fecham` acusa qualquer linha em que as partes não somem a linha.
+- **Carimbo da fonte no lugar do rateio (v0.9.1).** Na visão do caixa, dentro de uma faixa o outro lado nunca é rateio:
+  é o carimbo da fonte de recursos na lei orçamentária, lido do SIOP (bloco `fontes_de_recursos` do export,
+  `src/recibo/marts/fontes.py`): com que dinheiro cada despesa foi paga, por grupo de fonte (títulos de refinanciamento,
+  códigos terminados em 443; títulos novos, 444; receitas carimbadas para a dívida, 1400/1401; receita), por origem do
+  dinheiro (primeiro dígito: 1 e 2 no próprio ano, 3 e 6 de anos anteriores, o colchão) e por destino (rolagem, principal,
+  juros, despesa primária, inversões). Dentro de "Títulos vendidos" aparece o que o dinheiro de título pagou no ano e
+  quanto ficou no caixa para os anos seguintes; dentro de "O gasto de verdade" e "Dívida antiga paga", com que dinheiro
+  foram pagos. Observado em 2025: 1443 + 3443 = R$ 1,42 tri, igual à rolagem do RREO; o Tesouro vendeu R$ 1,75 tri para
+  a rolagem e gastou R$ 966 bi dela no ano, o resto ficou guardado. Conferência informativa `fontes_total_vs_anexo01`.
+  No ano em andamento (sem SIOP comparável) o outro lado fica em branco, com o motivo, em vez de uma aproximação. A
+  faixa "o que ficou" (entradas menos saídas liquidadas) sai tracejada, em grupo próprio, com a conta aberta na ficha:
+  não é lucro, é o que o Tesouro levantou além do que o ano consumiu (restos a pagar e colchão).
+- **Nada é cortado no desenho (v0.9.2).** Todas as partes de todos os níveis entram (ações por subfunção e órgãos por
+  elemento sem limite: `siop.niveis_acoes_maximo: 0`). A altura do SVG é calculada a cada desenho: barra central, mais
+  os espaços entre as faixas, mais o espaço exato que cada rótulo ocupa; nada começa acima do topo nem passa do fim. Os
+  rótulos quebram em até duas linhas de nome e duas de números pelo que cabe de fato (texto medido, não contagem de
+  letras) e só ganham "…" se nem assim couberem; o nome inteiro está no card e na ficha. Com 100 partes o desenho tem
+  uns 4.000 px e a página rola: é o combinado, tudo aparece. Antes da 0.9.2 os espaços entre as faixas não entravam na
+  conta e a segunda passada dos rótulos usava outro passo, e uma faixa com 40 partes vazava pelo topo e pelo fim.
+- **Bandeira e Constituição (v0.9.2).** A Bandeira Nacional é desenhada pelo próprio site (`templates/_bandeira.html`,
+  geometria da Lei 5.700/1971: 20 por 14 módulos, losango a 1,7, círculo de raio 3,5, faixa entre arcos de raio 8 e 8,5,
+  lema, 27 estrelas em cinco tamanhos; posições das estrelas pelo desenho de domínio público do anexo da lei, conferidas
+  com o traçado do flag-icons, MIT), sem imagem de fora. Fica no alto de Quem somos e no rodapé de todas as páginas, ao
+  lado do art. 1º, parágrafo único, da Constituição. Em Quem somos, três artigos entram como citações com uma frase em
+  linguagem comum cada (art. 1º, parágrafo único; art. 70, parágrafo único; art. 74, § 2º), no lugar do marcador
+  `[CONSTITUICAO]` de `conteudo/quem-somos.md`; os textos estão em `conteudo/site.yaml` (`constituicao`).
+- **Visão "A dívida" (v0.10.0).** Terceira aba da home, no mesmo desenho. No centro, a dívida da União fora do Banco
+  Central no último dia do período (DPF em poder do público, pelo CSV título a título do Tesouro; conferida com a
+  planilha do estoque). À esquerda, do que ela é feita: o índice que corrige cada título (Selic, prefixado, inflação,
+  câmbio, demais; regra em `divida.estoque_csv.indexadores`), e dentro de cada índice as famílias de título (LFT, LTN,
+  NTN-B..., nome sem o código de vencimento, com nome para leigo em `site.yaml`). À direita, quando vence: faixas pelo
+  vencimento final (`divida.estoque_csv.faixas_vencimento`: até 12 meses, 1 a 2 anos, 2 a 5, mais de 5; sem data à
+  parte), e dentro delas mês a mês (primeira faixa) ou ano a ano. Ao entrar numa faixa, o outro lado não é rateio: é o
+  cruzamento título a título (dentro de um índice, quando ele vence; dentro de um prazo, do que ele é feito), porque
+  cada título tem um índice e um vencimento. O mart exporta as células índice x família x faixa x período
+  (`estoque_detalhe.celulas`, soma igual ao total do CSV ao centavo), a conta do ano pelos fatores do Tesouro
+  (`conta_do_ano`: começou devendo, vendeu, pagou, juros apropriados, operações com o BC, terminou devendo; fecha com a
+  conferência crítica `dpf_fatores_identidade`) e o estoque mês a mês (`estoque_mensal`). A tira da visão traz o total,
+  o valor por habitante (a parte média de cada um) e a conta do ano; abaixo do desenho, a seção "A dívida, com todas
+  as réguas": os juros por pergunta (as oito réguas), as outras medidas de estoque (carteira do BC, LRF, BC, % do PIB,
+  Tesouro Direto), vencimento em 12 meses e prazo médio, o calendário mês a mês, as conferências e os lacres da dívida.
+  Textos em `site.yaml` (`visoes.divida`), com as duas ressalvas escritas: "em poder do público" exclui o BC; a fatia
+  que vence em 12 meses conta só o principal (o RMD conta cupons e sai maior).
+- **Abaixo do desenho, tudo é da aba ativa (v0.10.1).** Cada visão tem o seu scorecard (três frases) e a sua tabela
+  "linha por linha": no caixa, a visão inteira com a rolagem (o que entrou, o que saiu, o que ficou, cada um com as
+  partes de dentro e os centavos de cada real que passou pelo caixa); no gasto, a lista das dez linhas e o quadro "Fora
+  do R$ 1,00"; na dívida, índices e prazos e, abaixo, a seção das réguas. Sem JavaScript, tudo aparece de uma vez.
+  Dentro de uma parte que o carimbo da fonte não separa (tributos, cada imposto, outras receitas), o outro lado do
+  zoom mostra o do conjunto de onde ela veio, tracejado e dito como tal (`outro_lado_de` no JSON do desenho): o SIOP
+  diz com que fonte cada despesa foi paga, e os tributos entram juntos na fonte "recursos livres". Na seção da dívida,
+  uma medida indisponível mostra "indisponível" e o motivo em linguagem comum (`motivo_leigo`), sem comando de terminal
+  na página. No mart da dívida, quando o arquivo de execução da DPF no CKAN para antes do fim do bimestre do RREO (2026:
+  publicado em agosto com dados até julho), as conferências contra ele saem como "não comparável" (`calculada: false`),
+  com os dois meses escritos, em vez de "falhou"; `execucao.ultimo_mes_com_dados` registra até onde o arquivo vai.
+- **Reserva de liquidez, tracejado explicado, faixas mínimas, perguntas abertas e domínio (v0.10.2).** Dentro de
+  "Títulos vendidos", a sobra passa a se chamar "Reserva de liquidez (não usado no ano)" e traz a conta inteira no card e
+  na ficha: o que entrou de título no ano (RREO), o que foi pago com título do ano (carimbo, SIOP), a sobra, o que o
+  Tesouro usou de títulos de anos anteriores e o saldo (textos em `site.yaml`, `nos.reserva_liquidez`, com os números do
+  ano preenchidos). Toda faixa tracejada diz por quê (`tracejado_motivo`) no card, na ficha e numa legenda abaixo do
+  desenho; faixas com menos de 5 px são desenhadas com 5 px (as maiores cedem o espaço; o valor escrito é o verdadeiro).
+  A aba da dívida abre com três números grandes (por habitante, quanto cresceu, quanto vence em 12 meses). Página
+  `perguntas-abertas/` (`conteudo/perguntas.yaml`): as pontas soltas, cada uma com contexto, o que o site mediu (números
+  lidos dos exports do último ano fechado, nunca digitados), a pergunta pronta para a LAI e o status (aberta, enviada,
+  respondida); a conferência informativa `titulos_rreo_vs_emissoes_dpf` (títulos vendidos pelo RREO contra emissões da
+  DPF) registra a diferença todo ano. Metodologia ganhou "Limitações e próximos passos". Tubulação do domínio: com
+  `dominio` e `url` em `site.yaml`, o gerador escreve `docs/CNAME` (obrigatório: `--limpar` apaga a pasta e o GitHub
+  Pages guarda o domínio nesse arquivo), `robots.txt`, `sitemap.xml`, `404.html` e as tags canonical, Open Graph e
+  Twitter em toda página, com `static/social.png` (1200x630) como imagem da prévia do link.
+- **O carimbo termina, mas aponta o caminho; perguntas expandíveis com protocolo (v0.10.3).** As faixas do outro lado
+  de um zoom (carimbo da fonte no caixa, cruzamento título a título na dívida) nunca abriram, porque o SIOP diz com que
+  fonte cada despesa foi paga e só; agora o card diz isso na hora e a ficha ganha o botão "Ir para X", que leva à faixa
+  de verdade correspondente (o gasto, a linha de juros, a dívida paga, a receita, os títulos; na dívida, a faixa de
+  prazo ou o índice inteiro), inteira, e entra nela quando ela abre (`ir_para` em cada nó de carimbo, em `dados.py`;
+  `irParaNo` em `fluxo.js`). Em `perguntas-abertas/`, cada pergunta é um bloco que abre e fecha (`<details>`), com o
+  status no resumo; o status sai dos campos de `conteudo/perguntas.yaml` (sem `protocolo` = aberta; com `protocolo` =
+  enviada; com `resposta` ou `respondida_em` = respondida), e a página traz protocolo, datas, a resposta e o que mudou no
+  site. O rodapé da página convida quem tem outra dúvida a perguntar ao órgão pela LAI (Fala.BR) e mandar a resposta
+  para entrar no site. "Quem somos" passa a pedir também bugs (página que não abre, botão que não funciona, desenho
+  que vaza), com o que mandar junto.
+- **Formatação uma vez só.** `src/recibo/site/dados.py` transforma o export no modelo das páginas com todas as strings
+  prontas ("R$ 990,2 bi", "31 centavos", "30,7%", "R$ 4.640 por habitante", em pt-BR); o HTML (Jinja2) e o `fluxo.js`
+  só colocam as strings no lugar. Dentro de uma faixa, as porcentagens e os centavos são de cada R$ 1,00 daquela faixa
+  (`pct_pai`, `cent_pai`); no lado do rateio, os do todo.
+- **Sem nada de fora**: um CSS e um JS próprios, fontes do sistema, sem rastreamento; funciona aberto do disco. A
+  página do ano funciona sem JavaScript (a lista e as páginas das linhas têm todos os números); o desenho precisa dele.
+- **Páginas fixas**: `metodologia/` (texto de `conteudo/metodologia.md` mais "confira você mesmo", a lista das conferências
+  do ano, as fontes e o glossário), `quem-somos/` (texto de `conteudo/quem-somos.md` mais contato), `dados/` (download dos
+  exports e de um CSV por ano, lacres, fontes). Os textos de cada nó e de cada linha (nome curto, explicação para
+  leigo, o que não está nela, o que a página vai ter) estão em `conteudo/site.yaml`.
+
 ## Operação
 
 - **V1 roda à mão**, de propósito: `uv run recibo run --exercicios 2024 2025 2026` quando sair RREO novo (a cada
-  bimestre) ou quando o SIOP mudar (o fetcher só refaz um exercício se a data de atualização do grafo mudou). Cada
-  etapa é lida antes de publicar; a automação (GitHub Actions semanal, dados commitados em `data/`) fica para quando o
-  processo estiver estável. Os arquivos do Cloud Run (`infra/`) foram removidos: não fazem parte da V1.
+  bimestre) ou quando o SIOP mudar (o fetcher só refaz um exercício se a data de atualização do grafo mudou), depois
+  `uv run recibo site --limpar` e o commit de `docs/`. Cada etapa é lida antes de publicar; a automação (GitHub Actions
+  semanal, dados commitados em `data/`) fica para quando o processo estiver estável. Os arquivos do Cloud Run (`infra/`)
+  foram removidos: não fazem parte da V1.
 - `RECIBO_STORE=gcs` grava o raw num bucket com versionamento, se alguém preferir rodar fora da máquina local.
 
 ## Licença

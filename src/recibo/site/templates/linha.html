@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block titulo %}{{ n.nome_completo }} em {{ m.ano }}: {{ n.cent }} de cada real · {{ site.titulo }}{% endblock %}
+{% block descricao %}{{ n.nome_completo }} em {{ m.ano }}: {{ n.txt }}, {{ n.cent }} de cada R$ 1,00 que a União gastou. {{ n.definicao }}{% endblock %}
+{% macro arvore(filhos, nivel, pai) %}
+<ul class="arvore">
+  {% for f in filhos %}
+  <li>
+    <span class="v num">{{ f.txt }}{% if f.cent_pai %} · {{ f.cent_pai }} de cada R$ 1,00 de {{ pai }}{% endif %}{% if f.cent and nivel == 0 %} · {{ f.cent }} do real inteiro{% endif %}</span>
+    <strong>{{ f.nome }}</strong>
+    {% if f.fonte %}<span class="mini"> · {{ f.fonte }}</span>{% endif %}
+    {% if f.ajustes %}<span class="aj">No RREO: {{ f.valor_rreo_txt }}; {% for a in f.ajustes %}{{ a.nome }}: {{ a.txt }}{% if not loop.last %}; {% endif %}{% endfor %}.</span>{% endif %}
+    {% if f.nota and not f.ajustes %}<span class="aj">{{ f.nota }}</span>{% endif %}
+    {% if f.negativo %}<span class="aj">Valor negativo depois dos ajustes: fica fora do desenho, mas conta na soma.</span>{% endif %}
+    {% if f.filhos %}{{ arvore(f.filhos, nivel + 1, f.nome) }}{% elif f.proximo %}<span class="aj">{{ f.proximo }}</span>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+{% block conteudo %}
+<nav class="mini" aria-label="Você está em"><a href="{{ raiz }}">Início</a> › <a href="{{ raiz }}{{ m.ano }}/">{{ m.ano }}</a> › {{ n.nome_completo }}</nav>
+
+<section class="abre">
+  <p class="eyebrow">Linha do recibo de {{ m.ano }}{% if not m.fechado %}, até o {{ m.periodo }}º bimestre{% endif %}</p>
+  <h1 style="display:flex;align-items:center;gap:16px"><span style="display:inline-block;width:22px;height:22px;border-radius:6px;background:{{ n.cor }};flex:none" aria-hidden="true"></span>{{ n.nome_completo }}</h1>
+  <p class="lead">{{ n.definicao }}</p>
+  <div class="grandes">
+    <div><b class="num">{{ n.cent }}</b><span>de cada R$ 1,00 gasto pela União em {{ m.ano }} ({{ n.pct }})</span></div>
+    <div><b class="num">{{ n.txt }}</b><span>valor exato: {{ n.exato }}</span></div>
+    {% if m.populacao %}<div><b class="num">{{ n.hab|replace(' por habitante','') }}</b><span>por habitante (÷ {{ m.populacao_txt }}; não é o que cada pessoa pagou nem recebeu)</span></div>{% endif %}
+    {% if n.var %}<div><b class="num">{{ n.var }}</b><span>contra o mesmo período de {{ m.ano - 1 }} ({{ n.anterior_txt }})</span></div>{% endif %}
+  </div>
+  {% if n.nao_inclui %}<p style="font-size:15px;color:#3A423F"><strong>O que não está aqui:</strong> {{ n.nao_inclui }}</p>{% endif %}
+  <p class="mini"><a href="{{ raiz }}{{ m.ano }}/#linha-{{ n.id }}">Ver no desenho do ano</a> · <a href="#ficha-tecnica">Ficha técnica</a> · <a href="{{ raiz }}dados/">Baixar os dados</a></p>
+</section>
+
+<section aria-labelledby="h-dentro">
+  <h2 id="h-dentro" class="h2" style="margin-bottom:8px">O que tem dentro</h2>
+  {% if n.niveis_fonte %}<p class="mini" style="margin-bottom:12px">Fonte dos níveis: {{ n.niveis_fonte }}.{% if n.nota %} {{ n.nota }}{% endif %}</p>{% endif %}
+  {% if n.filhos %}
+  {{ arvore(n.filhos, 0, n.nome) }}
+  {% else %}
+  <p style="font-size:15px;color:#3A423F">{{ n.proximo or 'Esta linha ainda não abre em partes nesta fonte.' }}</p>
+  {% endif %}
+  {% if n.nao_alocado %}
+  <h3 class="h3" style="margin:20px 0 8px">Ajustes sem subfunção</h3>
+  <ul class="arvore">{% for a in n.nao_alocado %}<li><span class="v num">{{ a.txt }}</span>{{ a.nome }}</li>{% endfor %}</ul>
+  {% endif %}
+  {% if not n.niveis_fecham %}<p class="mini">Atenção: as partes desta linha não fecham com o valor dela; a conferência niveis_fecham do recibo registra a diferença.</p>{% endif %}
+</section>
+
+{% if transferencias or linha.notas %}
+<section class="card" aria-labelledby="h-notas">
+  <h2 id="h-notas" class="h3" style="margin-bottom:12px">O que saiu desta linha, e por quê</h2>
+  {% if transferencias %}
+  <table class="tabela"><tbody>
+    {% for t in transferencias %}
+    <tr><td>{% if t.valor < 0 %}Saiu para {{ t.para }}{% else %}Veio de {{ t.de }}{% endif %}{% if t.tipo == 'exclusao' %} (fora do R$ 1,00: empréstimos e aplicações financeiras){% endif %}{% if t.acoes %}<br><span class="mini">{% for a in t.acoes[:4] %}{{ a.acao }} {{ a.nome }}{% if not loop.last %}; {% endif %}{% endfor %}</span>{% endif %}</td><td class="num">{{ t.txt }}</td></tr>
+    {% endfor %}
+  </tbody></table>
+  {% endif %}
+  {% if linha.notas %}
+  <h3 class="h3" style="margin:16px 0 8px;font-size:16px">Notas do pipeline (texto como sai do programa)</h3>
+  <ul style="margin:0;padding-left:20px;font-size:14px;color:#3A423F">{% for nota in linha.notas %}<li>{{ nota }}</li>{% endfor %}</ul>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if historico|length > 1 %}
+<section aria-labelledby="h-hist">
+  <h2 id="h-hist" class="h2" style="margin-bottom:12px">Ano a ano</h2>
+  <table class="tabela">
+    <thead><tr><th>ano</th><th>valor</th><th>centavos de cada R$ 1,00</th>{% if m.populacao %}<th>por habitante</th>{% endif %}<th>variação</th></tr></thead>
+    <tbody>
+      {% for h in historico %}
+      <tr><td>{{ h.ano }}{% if not h.fechado %} (até o {{ h.periodo }}º bimestre){% endif %}</td><td class="num">{{ h.valor_txt }}</td><td class="num">{{ h.cent }}</td>{% if m.populacao %}<td class="num">{{ h.hab }}</td>{% endif %}<td class="num">{{ h.var }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="mini">Comparação sempre no mesmo período (6º bimestre com 6º bimestre), porque o gasto não é um sexto por bimestre.</p>
+</section>
+{% endif %}
+
+<section id="ficha-tecnica" class="card" aria-labelledby="h-ficha">
+  <h2 id="h-ficha" class="h3" style="margin-bottom:12px">Ficha técnica</h2>
+  <dl class="dl">
+    <dt>Definição no pipeline</dt><dd>{{ n.definicao_tecnica }}</dd>
+    <dt>Fonte</dt><dd>{{ linha.ficha.fonte.nome }} ({{ linha.ficha.fonte.id }}){% if linha.ficha.fonte.url %}, <a href="{{ linha.ficha.fonte.url }}">{{ linha.ficha.fonte.url }}</a>{% endif %}</dd>
+    <dt>Onde está</dt><dd>{{ n.fonte }}</dd>
+    <dt>Medida</dt><dd>{{ linha.ficha.metrica }}</dd>
+    {% if linha.ficha.filtro %}<dt>Filtro</dt><dd><code>{{ linha.ficha.filtro }}</code></dd>{% endif %}
+    <dt>Valor veio de</dt><dd>{{ linha.fonte_valor }}{% if linha.piso %} (piso: valor pelo RREO, sem o SIOP neste período){% endif %}</dd>
+    <dt>Denominador</dt><dd>{{ linha.ficha.denominador }}</dd>
+  </dl>
+  <details style="margin-top:12px"><summary class="mini" style="cursor:pointer">Consulta SQL que gerou o número</summary><pre style="white-space:pre-wrap;font-size:12px;background:#F1F0EA;padding:12px;border-radius:8px">{{ linha.ficha.sql }}</pre></details>
+  <h3 class="h3" style="margin:16px 0 8px;font-size:16px">Lacres dos arquivos originais</h3>
+  <table class="lacres"><tbody>
+    {% for s in m.lacres %}<tr><td>{{ s.arquivo }}</td><td>{{ s.baixado_em }}</td><td class="num">{{ s.snapshot_id }}</td><td><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
+  </tbody></table>
+</section>
+
+{% if texto.pagina_futuro %}
+<section class="card" aria-labelledby="h-futuro">
+  <h2 id="h-futuro" class="h3" style="margin-bottom:8px">O que esta página ainda vai ter</h2>
+  <p style="font-size:15px;color:#3A423F">{{ texto.pagina_futuro|capitalize }}</p>
+  <p class="mini" style="margin-top:8px">Cada fonte nova entra com lacre e conferência, como as de agora. <a href="{{ raiz }}quem-somos/#contato">Quer ajudar?</a></p>
+</section>
+{% endif %}
+{% endblock %}

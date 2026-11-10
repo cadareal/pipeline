@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block titulo %}Página não encontrada · {{ site.titulo }}{% endblock %}
+{% block descricao %}Esta página não existe no {{ site.titulo }}.{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block conteudo %}
+<article class="prosa">
+  <h1>Esta página não existe</h1>
+  <p>O endereço pode ter mudado quando o site foi gerado de novo, ou pode ter um erro de digitação. O que existe:</p>
+  <ul>
+    <li><a href="{{ raiz }}">Início</a>: o ano fechado mais recente, com as três visões (o caixa, o gasto de verdade e a dívida).</li>
+    {% for a in anos|sort(attribute='ano', reverse=true) %}<li><a href="{{ raiz }}{{ a.caminho }}">{{ a.ano }}{% if not a.fechado %}, até o {{ a.periodo }}º bimestre{% endif %}</a></li>{% endfor %}
+    <li><a href="{{ raiz }}metodologia/">Metodologia</a>, <a href="{{ raiz }}quem-somos/">Quem somos</a>, <a href="{{ raiz }}perguntas-abertas/">Perguntas abertas</a> e <a href="{{ raiz }}dados/">Dados</a>.</li>
+  </ul>
+</article>
+{% endblock %}

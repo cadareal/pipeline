@@ -1,0 +1,6026 @@
+{
+ "produto": "divida",
+ "versao_spec": "0.10.0",
+ "gerado_em": "2026-11-10T17:17:49+00:00",
+ "exercicio": 2026,
+ "mes_referencia": 8,
+ "fechado": false,
+ "publicavel": true,
+ "selo": "em andamento: até o mês 08/2026; conferências críticas OK",
+ "o_que_e": "A dívida da União em quatro medidas, cada uma com várias réguas oficiais nomeadas (Tesouro, Banco Central, RREO, COFOG) e nunca misturadas, mais o per capita pela população do IBGE. Produto separado do recibo.",
+ "grupos": [
+  {
+   "id": "juros",
+   "nome": "Juros do ano: o mesmo ano, cinco réguas",
+   "medidas": [
+    {
+     "id": "juros_pagos",
+     "nome": "Pagos em dinheiro pelo orçamento (a linha do recibo)",
+     "valor": 415811371479.51,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "O que saiu do caixa em juros e encargos da dívida no ano (Anexo 01, liquidado). É a régua do recibo: dinheiro que saiu.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_execucao_dpf",
+     "nome": "Pagos em dinheiro pela execução da DPF (Tesouro)",
+     "valor": 253095843484.70004,
+     "unidade": "reais",
+     "fonte": "Tesouro, Execução Orçamentária e Financeira da DPF por natureza (CSV), até o mês 08/2026, reais; o arquivo do Tesouro tem dados até o mês 06/2026, antes do mês de referência 08",
+     "definicao": "Juros e encargos pagos da Dívida Pública Federal, grupo 2, inclusive a cobertura do resultado negativo do Banco Central. Deve ser igual à linha do recibo, a menos de juros fora da DPF.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "politica_monetaria_juros",
+       "nome": "dos quais cobertura do resultado negativo do BC (ação 0669)",
+       "valor": 0.0
+      }
+     ]
+    },
+    {
+     "id": "juros_apropriados_dpf",
+     "nome": "Apropriados no estoque da DPF (Tesouro)",
+     "valor": 694940065389.7583,
+     "unidade": "reais",
+     "fonte": "Tesouro, Fatores de Variação da DPF (Anexo 2.9), meses 1 a 8 de 2026, R$ milhões",
+     "definicao": "Os juros que a dívida do Tesouro gerou no período, pagos ou não; na externa, inclui a variação do câmbio. É quanto a dívida cresceu só por juros.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "juros_dpmfi",
+       "nome": "dívida interna (DPMFi)",
+       "valor": 700787864627.75
+      },
+      {
+       "id": "juros_dpfe",
+       "nome": "dívida externa (DPFe), com câmbio (negativo quando o real se valoriza)",
+       "valor": -5847799237.991649
+      }
+     ]
+    },
+    {
+     "id": "juros_bcb_gf",
+     "nome": "Nominais pelo Banco Central, Governo Federal (NFSP, líquidos)",
+     "valor": 671006450000.0001,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4607 (NFSP sem desvalorização cambial - Fluxo mensal corrente - Juros nominais - Total - Governo Federal); soma dos meses 1 a 8",
+     "definicao": "Juros devidos menos juros recebidos pelo Governo Federal (Tesouro e INSS), pela conta de necessidades de financiamento do BC. Líquidos, por isso menores que os brutos.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_bcb_gc",
+     "nome": "Nominais pelo Banco Central, Governo Central (Governo Federal e BC)",
+     "valor": 714402570000.0001,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4606 (NFSP sem desvalorização cambial - Fluxo mensal corrente - Juros nominais - Total - Governo Federal e Banco Central); soma dos meses 1 a 8",
+     "definicao": "A mesma conta incluindo o próprio Banco Central (por exemplo, o custo das operações de câmbio).",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_rreo_brutos",
+     "nome": "Por competência no RREO, brutos (Anexo 06, XI)",
+     "valor": 960331479179.65,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "Juros, encargos e variações monetárias que a dívida gerou no ano, pela competência, sem descontar o que o governo recebeu.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_rreo_liquidos",
+     "nome": "Por competência no RREO, líquidos (XI menos X)",
+     "valor": 707566976760.15,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "Os brutos menos os juros que o governo recebeu de quem lhe deve e do caixa aplicado (Anexo 06, X).",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_cofog",
+     "nome": "No COFOG (número informado pelo BC ao Tesouro)",
+     "valor": null,
+     "unidade": "reais",
+     "fonte": "Tesouro, base COFOG 2026, linha de ajuste JUROS",
+     "definicao": "O que a base COFOG usa como juros. Não é reconstruível pelas séries abertas do BC nem pelas planilhas do Tesouro; fica nomeado como está.",
+     "disponivel": false,
+     "motivo": "COFOG 2026 não está no staging (anos disponíveis: 2010 a 2024). O Tesouro publica o COFOG com cerca de um ano de defasagem; se o CKAN já tem o ano, rode `recibo fetch cofog` e `recibo transform cofog`.",
+     "componentes": []
+    }
+   ]
+  },
+  {
+   "id": "divida_nova",
+   "nome": "Dívida nova no ano",
+   "medidas": [
+    {
+     "id": "variacao_dpf",
+     "nome": "Variação da DPF em poder do público (Tesouro)",
+     "valor": 657641181820.5684,
+     "unidade": "reais",
+     "fonte": "Tesouro, Fatores de Variação da DPF (Anexo 2.9), meses 1 a 8 de 2026, R$ milhões",
+     "definicao": "Quanto a dívida do Tesouro cresceu no período, aberta como o Tesouro abre: emissões menos resgates, mais juros apropriados, mais operações com o BC.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "estoque_anterior",
+       "nome": "estoque no fim de 2025",
+       "valor": 8635093226553.33
+      },
+      {
+       "id": "emissoes",
+       "nome": "mais emissões (dívida nova vendida)",
+       "valor": 1362859272179.27
+      },
+      {
+       "id": "resgates",
+       "nome": "menos resgates (dívida paga)",
+       "valor": -1400158155748.45
+      },
+      {
+       "id": "juros",
+       "nome": "mais juros apropriados",
+       "valor": 694940065389.7583
+      },
+      {
+       "id": "operacoes_bc",
+       "nome": "mais operações de mercado com o BC",
+       "valor": 0.0
+      },
+      {
+       "id": "estoque_fim",
+       "nome": "estoque em 08/2026",
+       "valor": 9292734408373.898
+      }
+     ]
+    },
+    {
+     "id": "variacao_dcl_rreo",
+     "nome": "Variação da dívida consolidada líquida (RREO)",
+     "valor": 801933437469.0996,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "A medida da Lei de Responsabilidade Fiscal: dívida consolidada menos caixa e haveres, no fim do ano menos no início. É o que o RREO chama de resultado nominal abaixo da linha, com o sinal trocado.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "variacao_dlsp_gf",
+     "nome": "Variação da dívida líquida do Governo Federal (BC)",
+     "valor": 761006760000.0,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4469 (Dívida Líquida do Setor Público - Saldos em R$ milhões - Total - Governo Federal); saldo de 08/2026 menos dezembro de 2025",
+     "definicao": "Pela conta do Banco Central: o que o Governo Federal deve menos o que tem a receber, no fim do período menos no fim do ano anterior.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "nominal_bcb_gc",
+     "nome": "Resultado nominal do Governo Central pelo BC (NFSP)",
+     "valor": 811489300000.0,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4573 (NFSP sem desvalorização cambial - Fluxo mensal corrente - Resultado nominal - Total - Governo Federal e Banco Central); soma dos meses 1 a 8",
+     "definicao": "O déficit completo, com juros, medido pelo Banco Central pela variação da dívida líquida (positivo = déficit).",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "primario_bcb_gc",
+     "nome": "Resultado primário do Governo Central pelo BC (NFSP)",
+     "valor": 97086739999.99998,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4639 (NFSP sem desvalorização cambial - Fluxo mensal corrente - Resultado primário - Total - Governo Federal e Banco Central); soma dos meses 1 a 8",
+     "definicao": "O déficit antes dos juros, pela conta do Banco Central (positivo = déficit). Compare com o acima da linha do Tesouro no recibo.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    }
+   ]
+  },
+  {
+   "id": "estoque",
+   "nome": "Estoque: medidas nomeadas",
+   "medidas": [
+    {
+     "id": "dpf_publico",
+     "nome": "DPF em poder do público (Tesouro)",
+     "valor": 9292734408373.896,
+     "unidade": "reais",
+     "fonte": "Tesouro, Estoque da DPF (Anexo 2.1), posição de 08/2026, R$ bilhões",
+     "definicao": "Tudo o que o Tesouro deve fora do Banco Central: títulos no mercado e contratos. A medida de estoque do próprio Tesouro.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "dpmfi",
+       "nome": "interna em títulos (DPMFi)",
+       "valor": 8944478209356.248
+      },
+      {
+       "id": "dpfe",
+       "nome": "externa (DPFe)",
+       "valor": 348256199017.64996
+      }
+     ]
+    },
+    {
+     "id": "dpf_publico_csv",
+     "nome": "DPF em poder do público, título a título (CSV do Tesouro)",
+     "valor": 9292734408373.691,
+     "unidade": "reais",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "A mesma dívida somada título por título e contrato por contrato (carteira Mercado). Tem que dar o mesmo número da planilha.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "mercado_interna",
+       "nome": "interna",
+       "valor": 8944478209356.25
+      },
+      {
+       "id": "mercado_externa",
+       "nome": "externa",
+       "valor": 348256199017.44006
+      }
+     ]
+    },
+    {
+     "id": "carteira_bc",
+     "nome": "Títulos do Tesouro na carteira do Banco Central",
+     "valor": 2929821820885.3496,
+     "unidade": "reais",
+     "fonte": "Tesouro, Estoque da DPF (Anexo 2.1), posição de 08/2026, R$ bilhões",
+     "definicao": "Dívida do Tesouro na mão do BC, usada na política monetária. Não entra na DPF em poder do público.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "carteira_bc_csv",
+       "nome": "no CSV título a título",
+       "valor": 2929821820885.35
+      },
+      {
+       "id": "carteira_bc_bcb",
+       "nome": "na série 4152 do BC",
+       "valor": 2929821820000.0
+      }
+     ]
+    },
+    {
+     "id": "dc_rreo",
+     "nome": "Dívida consolidada (RREO, Anexo 06, XIII)",
+     "valor": 12264073856966.4,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "A dívida bruta na régua da Lei de Responsabilidade Fiscal, no fim do período.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dcl_rreo",
+     "nome": "Dívida consolidada líquida (RREO, Anexo 06, XVI)",
+     "valor": 8824948368201.45,
+     "unidade": "reais",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4)",
+     "definicao": "A consolidada menos caixa e haveres financeiros, no fim do período.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dlsp_gf",
+     "nome": "Dívida líquida do Governo Federal (BC)",
+     "valor": 8201934660000.0,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4469 (Dívida Líquida do Setor Público - Saldos em R$ milhões - Total - Governo Federal); saldo de 08/2026",
+     "definicao": "O que o Governo Federal deve menos o que tem a receber e em caixa, pela conta do Banco Central.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dlsp_gf_pib",
+     "nome": "Dívida líquida do Governo Federal, em % do PIB (BC)",
+     "valor": 61.48,
+     "unidade": "% do PIB",
+     "fonte": "Banco Central, SGS 4504 (Dívida Líquida do Setor Público (% PIB) - Total - Governo Federal)",
+     "definicao": "A mesma medida dividida pelo tamanho da economia.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dlsp_consolidado",
+     "nome": "Dívida líquida do setor público (BC)",
+     "valor": 9240949790000.0,
+     "unidade": "reais",
+     "fonte": "Banco Central, SGS 4478 (Dívida Líquida do Setor Público - Saldos em R$ milhões - Total - Setor público consolidado); saldo de 08/2026",
+     "definicao": "União, estados, municípios e estatais, líquida, pela conta do Banco Central.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dlsp_consolidado_pib",
+     "nome": "Dívida líquida do setor público, em % do PIB (BC)",
+     "valor": 69.27,
+     "unidade": "% do PIB",
+     "fonte": "Banco Central, SGS 4513 (Dívida Líquida do Setor Público (% PIB) - Total - Setor público consolidado)",
+     "definicao": "",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dbgg_pib",
+     "nome": "Dívida bruta do governo geral, em % do PIB (BC)",
+     "valor": 82.87,
+     "unidade": "% do PIB",
+     "fonte": "Banco Central, SGS 13762 (Dívida bruta do governo geral (% PIB) - Metodologia utilizada a partir de 2008)",
+     "definicao": "União, estados e municípios, bruta (sem descontar caixa e haveres), em % do PIB. A medida mais citada no noticiário.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "tesouro_direto",
+     "nome": "Tesouro Direto (pessoas físicas)",
+     "valor": 271991924729.70007,
+     "unidade": "reais",
+     "fonte": "Tesouro, Estoque do Tesouro Direto (CSV), posição de 08/2026",
+     "definicao": "A parte da dívida interna comprada diretamente por pessoas físicas. É a única fatia de detentores com fonte aberta; o restante (bancos, fundos, previdência, estrangeiros) está só no Relatório Mensal da Dívida, em PDF.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "Tesouro Selic",
+       "nome": "Tesouro Selic",
+       "valor": 100413333006.55
+      },
+      {
+       "id": "Tesouro IPCA+",
+       "nome": "Tesouro IPCA+",
+       "valor": 86710105363.95
+      },
+      {
+       "id": "Tesouro Prefixado",
+       "nome": "Tesouro Prefixado",
+       "valor": 31076344368.71
+      },
+      {
+       "id": "Tesouro IPCA+ com Juros Semestrais",
+       "nome": "Tesouro IPCA+ com Juros Semestrais",
+       "valor": 21911813218.39
+      },
+      {
+       "id": "Tesouro RendA+",
+       "nome": "Tesouro RendA+",
+       "valor": 15580014170.13
+      },
+      {
+       "id": "Tesouro Reserva",
+       "nome": "Tesouro Reserva",
+       "valor": 6493614627.01
+      },
+      {
+       "id": "Tesouro Prefixado com Juros Semestrais",
+       "nome": "Tesouro Prefixado com Juros Semestrais",
+       "valor": 5977504713.85
+      },
+      {
+       "id": "Tesouro Educa+",
+       "nome": "Tesouro Educa+",
+       "valor": 3786279937.45
+      },
+      {
+       "id": "Tesouro IGPM+ com Juros Semestrais",
+       "nome": "Tesouro IGPM+ com Juros Semestrais",
+       "valor": 42915323.66
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rolagem",
+   "nome": "Risco de rolagem",
+   "medidas": [
+    {
+     "id": "vincendo_12m",
+     "nome": "Fatia da DPF em poder do público cujo principal vence em 12 meses",
+     "valor": 14.354400422059593,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais; vencimentos até 2027-08-31",
+     "definicao": "Valor do estoque dos títulos e contratos em mercado cujo vencimento final cai nos próximos 12 meses, dividido pela DPF em poder do público: o principal que precisa ser pago ou rolado logo. Não é o 'percentual vincendo em 12 meses' do Relatório Mensal da Dívida: lá o Tesouro divide pelo estoque o fluxo de principal e juros (cupons) dos 12 meses seguintes, trazido a valor presente, e o número sai maior.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "vincendo_valor",
+       "nome": "valor que vence",
+       "valor": 1333916307136.4702
+      },
+      {
+       "id": "vincendo_linhas",
+       "nome": "títulos e contratos",
+       "valor": 106
+      }
+     ]
+    },
+    {
+     "id": "prazo_medio_bcb",
+     "nome": "Prazo médio da dívida mobiliária federal (BC)",
+     "valor": 47.99,
+     "unidade": "meses",
+     "fonte": "Banco Central, SGS 10618 (Dívida mobiliária federal - Títulos do Tesouro Nacional - Emitidos - Prazo médio - Total)",
+     "definicao": "Quanto tempo, em média, falta para os títulos do Tesouro em mercado vencerem, pela série do Banco Central (dívida mobiliária interna). O Tesouro publica a própria medida, para a DPF inteira e ponderando fluxos de principal e juros a valor presente, só no Relatório Mensal da Dívida (PDF); por isso os dois números diferem.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "indexador_selic",
+     "nome": "Fatia da DPF em poder do público: Selic (taxa flutuante)",
+     "valor": 52.69327981700743,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "Classificação pelo começo do nome do título (regras em linhas.yaml); a dívida externa que não casa com nenhuma regra conta como câmbio (o Global BRL, emitido em reais, é prefixado). O Tesouro classifica cada papel pelo indexador do contrato (TDA pela TR, securitizadas pelo IGP-DI ou em dólar), que o nome não revela: a composição do Relatório Mensal difere daqui em até 0,1 ponto percentual.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "valor",
+       "nome": "valor",
+       "valor": 4896646544455.68
+      },
+      {
+       "id": "share_dpmfi",
+       "nome": "fatia da dívida interna em mercado (DPMFi), em %",
+       "valor": 54.7449099862931
+      }
+     ]
+    },
+    {
+     "id": "indexador_prefixado",
+     "nome": "Fatia da DPF em poder do público: Prefixado",
+     "valor": 20.30863762603338,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "Classificação pelo começo do nome do título (regras em linhas.yaml); a dívida externa que não casa com nenhuma regra conta como câmbio (o Global BRL, emitido em reais, é prefixado). O Tesouro classifica cada papel pelo indexador do contrato (TDA pela TR, securitizadas pelo IGP-DI ou em dólar), que o nome não revela: a composição do Relatório Mensal difere daqui em até 0,1 ponto percentual.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "valor",
+       "nome": "valor",
+       "valor": 1887227756546.33
+      },
+      {
+       "id": "share_dpmfi",
+       "nome": "fatia da dívida interna em mercado (DPMFi), em %",
+       "valor": 21.044915801438982
+      }
+     ]
+    },
+    {
+     "id": "indexador_precos",
+     "nome": "Fatia da DPF em poder do público: Índice de preços (IPCA, IGP-M)",
+     "valor": 23.12014896303632,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "Classificação pelo começo do nome do título (regras em linhas.yaml); a dívida externa que não casa com nenhuma regra conta como câmbio (o Global BRL, emitido em reais, é prefixado). O Tesouro classifica cada papel pelo indexador do contrato (TDA pela TR, securitizadas pelo IGP-DI ou em dólar), que o nome não revela: a composição do Relatório Mensal difere daqui em até 0,1 ponto percentual.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "valor",
+       "nome": "valor",
+       "valor": 2148494037955.3296
+      },
+      {
+       "id": "share_dpmfi",
+       "nome": "fatia da dívida interna em mercado (DPMFi), em %",
+       "valor": 24.020339562210868
+      }
+     ]
+    },
+    {
+     "id": "indexador_cambio",
+     "nome": "Fatia da DPF em poder do público: Câmbio",
+     "valor": 3.7152615385474217,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "Classificação pelo começo do nome do título (regras em linhas.yaml); a dívida externa que não casa com nenhuma regra conta como câmbio (o Global BRL, emitido em reais, é prefixado). O Tesouro classifica cada papel pelo indexador do contrato (TDA pela TR, securitizadas pelo IGP-DI ou em dólar), que o nome não revela: a composição do Relatório Mensal difere daqui em até 0,1 ponto percentual.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "valor",
+       "nome": "valor",
+       "valor": 345249387353.67004
+      },
+      {
+       "id": "share_dpmfi",
+       "nome": "fatia da dívida interna em mercado (DPMFi), em %",
+       "valor": 0.02082890473735175
+      }
+     ]
+    },
+    {
+     "id": "indexador_demais",
+     "nome": "Fatia da DPF em poder do público: Demais (TDA, securitizada, CVS...)",
+     "valor": 0.16267205537541612,
+     "unidade": "%",
+     "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+     "definicao": "Classificação pelo começo do nome do título (regras em linhas.yaml); a dívida externa que não casa com nenhuma regra conta como câmbio (o Global BRL, emitido em reais, é prefixado). O Tesouro classifica cada papel pelo indexador do contrato (TDA pela TR, securitizadas pelo IGP-DI ou em dólar), que o nome não revela: a composição do Relatório Mensal difere daqui em até 0,1 ponto percentual.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "valor",
+       "nome": "valor",
+       "valor": 15116682062.679998
+      },
+      {
+       "id": "share_dpmfi",
+       "nome": "fatia da dívida interna em mercado (DPMFi), em %",
+       "valor": 0.16900574531969229
+      }
+     ]
+    },
+    {
+     "id": "indexador_selic_bcb",
+     "nome": "Fatia da dívida mobiliária atrelada à Selic (BC)",
+     "valor": 54.74,
+     "unidade": "%",
+     "fonte": "Banco Central, SGS 4177 (Dívida mobiliária - Participação por indexador - Posição em carteira - Over/Selic)",
+     "definicao": "Participação por indexador na posição em carteira, pelo Banco Central (dívida interna em mercado).",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "indexador_prefixado_bcb",
+     "nome": "Fatia prefixada da dívida mobiliária (BC)",
+     "valor": 21.04,
+     "unidade": "%",
+     "fonte": "Banco Central, SGS 4178 (Dívida mobiliária - Participação por indexador - Posição em carteira - Prefixado)",
+     "definicao": "",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "indexador_cambio_bcb",
+     "nome": "Fatia cambial da dívida mobiliária interna (BC)",
+     "valor": 0.04,
+     "unidade": "%",
+     "fonte": "Banco Central, SGS 4173 (Dívida mobiliária - Participação por indexador - Posição em carteira - Câmbio)",
+     "definicao": "Só a dívida interna em mercado (a externa fica fora desta série). Compare com a fatia da DPMFi em câmbio acima: a diferença são papéis internos em dólar que o nome não revela.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "colchao_liquidez",
+     "nome": "Colchão de liquidez do Tesouro",
+     "valor": null,
+     "unidade": "reais",
+     "fonte": "Relatório Mensal da Dívida (PDF); sem fonte aberta em planilha ou API",
+     "definicao": "A reserva em dinheiro que o Tesouro mantém para pagar vencimentos sem depender do mercado por alguns meses.",
+     "disponivel": false,
+     "motivo": "sem fonte aberta: o Tesouro publica só no Relatório Mensal da Dívida, em PDF",
+     "componentes": []
+    },
+    {
+     "id": "detentores",
+     "nome": "Detentores da dívida por classe (bancos, fundos, previdência, estrangeiros)",
+     "valor": null,
+     "unidade": "reais",
+     "fonte": "Relatório Mensal da Dívida (PDF); sem fonte aberta em planilha ou API",
+     "definicao": "Quem são os credores, por tipo. A única fatia aberta é o Tesouro Direto (pessoas físicas), no grupo de estoque.",
+     "disponivel": false,
+     "motivo": "sem fonte aberta: só no Relatório Mensal da Dívida, em PDF",
+     "componentes": []
+    }
+   ]
+  },
+  {
+   "id": "por_habitante",
+   "nome": "Por habitante (população do IBGE, S14)",
+   "medidas": [
+    {
+     "id": "populacao",
+     "nome": "População do Brasil em 2026-07-01 (IBGE)",
+     "valor": 214211951.0,
+     "unidade": "pessoas",
+     "fonte": "IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "A régua do per capita: a projeção revisão 2024 do IBGE, população em 1º de julho. As estimativas oficiais (TCU) saem dela de 2024 em diante; o Censo 2022 contou menos porque a projeção corrige a cobertura.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": [
+      {
+       "id": "estimativa",
+       "nome": "estimativa oficial (SIDRA 6579)",
+       "valor": 214211951
+      },
+      {
+       "id": "censo",
+       "nome": "Censo 2022 (contagem, sem correção de cobertura)",
+       "valor": 203080756
+      }
+     ]
+    },
+    {
+     "id": "dpf_publico_por_habitante",
+     "nome": "DPF em poder do público por habitante (Tesouro)",
+     "valor": 43381.02689879285,
+     "unidade": "reais por habitante",
+     "fonte": "Tesouro, Estoque da DPF (Anexo 2.1), posição de 08/2026, R$ bilhões; IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "O que o Tesouro deve fora do Banco Central, dividido pela população. Média, não o que cada um deve.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "variacao_dpf_por_habitante",
+     "nome": "Dívida nova no ano por habitante (variação da DPF, Tesouro)",
+     "valor": 3070.0489806965456,
+     "unidade": "reais por habitante",
+     "fonte": "Tesouro, Fatores de Variação da DPF (Anexo 2.9), meses 1 a 8 de 2026, R$ milhões; IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "Quanto a DPF em poder do público cresceu no período, por pessoa.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dlsp_gf_por_habitante",
+     "nome": "Dívida líquida do Governo Federal por habitante (BC)",
+     "valor": 38288.87520846118,
+     "unidade": "reais por habitante",
+     "fonte": "Banco Central, SGS 4469 (Dívida Líquida do Setor Público - Saldos em R$ milhões - Total - Governo Federal); IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "O que o Governo Federal deve menos o que tem a receber, pela conta do Banco Central, por pessoa.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "dcl_rreo_por_habitante",
+     "nome": "Dívida consolidada líquida por habitante (RREO)",
+     "valor": 41197.27366752497,
+     "unidade": "reais por habitante",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4); IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "A medida da Lei de Responsabilidade Fiscal, por pessoa. É a mesma conta do memo 'imposto futuro' do recibo.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    },
+    {
+     "id": "juros_pagos_por_habitante",
+     "nome": "Juros pagos no ano por habitante (a linha do recibo)",
+     "valor": 1941.1212564863386,
+     "unidade": "reais por habitante",
+     "fonte": "RREO da União via recibo (Anexos 01 e 06, 2026/p4); IBGE, projeção revisão 2024, população em 2026-07-01 (214,211,951 pessoas; snapshot 20261110T043229602702Z)",
+     "definicao": "O que saiu do caixa em juros no período, por pessoa.",
+     "disponivel": true,
+     "motivo": null,
+     "componentes": []
+    }
+   ]
+  }
+ ],
+ "composicao_indexador": [
+  {
+   "id": "selic",
+   "nome": "Selic (taxa flutuante)",
+   "valor": 4896646544455.68,
+   "share_dpf": 0.5269327981700743,
+   "valor_interna": 4896646544455.68,
+   "share_dpmfi": 0.547449099862931,
+   "linhas": 19
+  },
+  {
+   "id": "prefixado",
+   "nome": "Prefixado",
+   "valor": 1887227756546.33,
+   "share_dpf": 0.20308637626033382,
+   "valor_interna": 1882357908037.08,
+   "share_dpmfi": 0.21044915801438982,
+   "linhas": 21
+  },
+  {
+   "id": "precos",
+   "nome": "Índice de preços (IPCA, IGP-M)",
+   "valor": 2148494037955.3296,
+   "share_dpf": 0.23120148963036322,
+   "valor_interna": 2148494037955.3296,
+   "share_dpmfi": 0.24020339562210868,
+   "linhas": 48
+  },
+  {
+   "id": "cambio",
+   "nome": "Câmbio",
+   "valor": 345249387353.67004,
+   "share_dpf": 0.037152615385474215,
+   "valor_interna": 1863036845.4799993,
+   "share_dpmfi": 0.00020828904737351753,
+   "linhas": 212
+  },
+  {
+   "id": "demais",
+   "nome": "Demais (TDA, securitizada, CVS...)",
+   "valor": 15116682062.679998,
+   "share_dpf": 0.0016267205537541611,
+   "valor_interna": 15116682062.679998,
+   "share_dpmfi": 0.001690057453196923,
+   "linhas": 307
+  }
+ ],
+ "execucao": {
+  "disponivel": true,
+  "motivo": null,
+  "fonte": "Tesouro, Execução Orçamentária e Financeira da DPF por natureza (CSV), até o mês 08/2026, reais",
+  "meses": 8,
+  "ultimo_mes_com_dados": 6,
+  "juros": 253095843484.70004,
+  "principal": 863540488924.72,
+  "por_carteira": [
+   {
+    "id": "mercado",
+    "nome": "Títulos no mercado (dívida interna)",
+    "definicao": "Juros e principal pagos a quem tem título do Tesouro no mercado: bancos, fundos, previdência privada, pessoas (Tesouro Direto) e estrangeiros.",
+    "juros": 175694718309.6,
+    "principal": 643066645237.6,
+    "grupos_originais": [
+     {
+      "tipo": "Interna",
+      "modalidade": "Mobiliária",
+      "carteira": "MERCADO",
+      "juros": 175694718309.6,
+      "principal": 643066645237.6
+     }
+    ]
+   },
+   {
+    "id": "banco_central",
+    "nome": "Títulos na carteira do Banco Central",
+    "definicao": "Pagos ao Banco Central pelos títulos do Tesouro que ele carrega para fazer política monetária.",
+    "juros": 67195278199.0,
+    "principal": 205224646009.0,
+    "grupos_originais": [
+     {
+      "tipo": "Interna",
+      "modalidade": "Mobiliária",
+      "carteira": "BACEN",
+      "juros": 67195278199.0,
+      "principal": 205224646009.0
+     }
+    ]
+   },
+   {
+    "id": "externa",
+    "nome": "Títulos e contratos no exterior",
+    "definicao": "Dívida externa: títulos em dólar e euro e contratos com organismos internacionais e bancos de fora.",
+    "juros": 9659834366.970001,
+    "principal": 14065698368.5,
+    "grupos_originais": [
+     {
+      "tipo": "Externa",
+      "modalidade": "Mobiliária",
+      "carteira": "MERCADO",
+      "juros": 8042191868.200001,
+      "principal": 11234864813.0
+     },
+     {
+      "tipo": "Externa",
+      "modalidade": "Contratual",
+      "carteira": "MERCADO",
+      "juros": 1617642498.77,
+      "principal": 2830833555.5
+     }
+    ]
+   },
+   {
+    "id": "contratos",
+    "nome": "Contratos (dívida interna)",
+    "definicao": "Dívida interna que não é título: contratos com bancos e fundos.",
+    "juros": 546012609.13,
+    "principal": 1183499309.62,
+    "grupos_originais": [
+     {
+      "tipo": "Interna",
+      "modalidade": "Contratual",
+      "carteira": "MERCADO",
+      "juros": 546012609.13,
+      "principal": 1183499309.62
+     }
+    ]
+   }
+  ],
+  "nota": "Soma por carteira = total do período. Mercado, Banco Central, externa e contratos são as carteiras que o Tesouro publica mês a mês; quem são os donos dos títulos no mercado (bancos, fundos, previdência, pessoas, estrangeiros) só sai no Relatório Mensal da Dívida, em PDF."
+ },
+ "estoque_detalhe": {
+  "disponivel": true,
+  "mes": 8,
+  "total": 9292734408373.69,
+  "indexadores": [
+   {
+    "id": "selic",
+    "nome": "Selic (taxa flutuante)"
+   },
+   {
+    "id": "prefixado",
+    "nome": "Prefixado"
+   },
+   {
+    "id": "precos",
+    "nome": "Índice de preços (IPCA, IGP-M)"
+   },
+   {
+    "id": "cambio",
+    "nome": "Câmbio"
+   },
+   {
+    "id": "demais",
+    "nome": "Demais (TDA, securitizada, CVS...)"
+   }
+  ],
+  "faixas": [
+   {
+    "id": "ate_12m",
+    "nome": "Vence em até 12 meses",
+    "ate_meses": 12,
+    "valor": 1333916307136.47,
+    "share": 0.14354400422059593
+   },
+   {
+    "id": "de_1_a_2_anos",
+    "nome": "Vence de 1 a 2 anos",
+    "ate_meses": 24,
+    "valor": 1370236279670.79,
+    "share": 0.1474524310558224
+   },
+   {
+    "id": "de_2_a_5_anos",
+    "nome": "Vence de 2 a 5 anos",
+    "ate_meses": 60,
+    "valor": 3648425434411.37,
+    "share": 0.3926105357238846
+   },
+   {
+    "id": "mais_de_5_anos",
+    "nome": "Vence em mais de 5 anos",
+    "ate_meses": null,
+    "valor": 2940156387155.06,
+    "share": 0.3163930289996971
+   }
+  ],
+  "celulas": [
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 49283287.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26090300",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 18448.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I339",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 603414.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I415",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 237521.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12I237",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 200745.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13I236",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 56217.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE070977",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 1312468.22,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "ate_12m",
+    "periodo": "2026-09",
+    "periodo_nome": "setembro de 2026",
+    "externa": false,
+    "valor": 178390555980.08,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 58767975.44,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26100200",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 591024.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26100300",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 505731.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD06J418",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 1091205.92,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08J340",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 47812.99,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J339",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 11224.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J415",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 273710.64,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11J238",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 65993.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J237",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 1217610.9,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J336",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 323358.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J412",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13J236",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 3429152.1,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "ate_12m",
+    "periodo": "2026-10",
+    "periodo_nome": "outubro de 2026",
+    "externa": false,
+    "valor": 91189313150.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 46265199.49,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26110300",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 235835.73,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD06K418",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 500579.08,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08K340",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 18317.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08K416",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 97999.79,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09K339",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 303100.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K237",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 2083740.66,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K336",
+    "faixa": "ate_12m",
+    "periodo": "2026-11",
+    "periodo_nome": "novembro de 2026",
+    "externa": false,
+    "valor": 385314.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 43680962.02,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26120200",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 1515661.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA26120300",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 5645968.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD07L417",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 191456.54,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L238",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 3913457.44,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L337",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 606049.38,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L413",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 628613.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L237",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 2189182.37,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L336",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 4352174.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L236",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 1201389.82,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L335",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 849910.57,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE071277",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 3277757.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAH071277",
+    "faixa": "ate_12m",
+    "periodo": "2026-12",
+    "periodo_nome": "dezembro de 2026",
+    "externa": false,
+    "valor": 336790.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 45464922.44,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "CVSA970101",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 2092221974.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "CVSB970101",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 1664129111.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "CVSC970101",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 8096425.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "CVSD970101",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 7768786.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "NTN-P",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 973444.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27010300",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 7783.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12A238",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 55022.9,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 5714659305.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "ate_12m",
+    "periodo": "2027-01",
+    "periodo_nome": "janeiro de 2027",
+    "externa": false,
+    "valor": 111815863076.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-02",
+    "periodo_nome": "fevereiro de 2027",
+    "externa": false,
+    "valor": 32823852.54,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27020300",
+    "faixa": "ate_12m",
+    "periodo": "2027-02",
+    "periodo_nome": "fevereiro de 2027",
+    "externa": false,
+    "valor": 2264.64,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27020600",
+    "faixa": "ate_12m",
+    "periodo": "2027-02",
+    "periodo_nome": "fevereiro de 2027",
+    "externa": false,
+    "valor": 4577802.46,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09B340",
+    "faixa": "ate_12m",
+    "periodo": "2027-02",
+    "periodo_nome": "fevereiro de 2027",
+    "externa": false,
+    "valor": 51894.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE120258",
+    "faixa": "ate_12m",
+    "periodo": "2027-02",
+    "periodo_nome": "fevereiro de 2027",
+    "externa": false,
+    "valor": 1172915.17,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 43363480.81,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27030100",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 1896410.55,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27030300",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 490949.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09C340",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 295430.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C339",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 114211.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C415",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 596562.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12C238",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 95522.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12C337",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 3425.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE100375",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 103702.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "ate_12m",
+    "periodo": "2027-03",
+    "periodo_nome": "março de 2027",
+    "externa": false,
+    "valor": 575508258358.03,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 52971316.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27040300",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 86706.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD07D418",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 1490.02,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08D417",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 231698.11,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10D339",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 778761.69,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D238",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 1880178.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D337",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 327877.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D413",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 19370.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "ate_12m",
+    "periodo": "2027-04",
+    "periodo_nome": "abril de 2027",
+    "externa": false,
+    "valor": 128862271290.22,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": true,
+    "valor": 4061717200.67,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 40304593.45,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27050200",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27050300",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 224141.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11E338",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 419185.01,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13E237",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 253042.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "ate_12m",
+    "periodo": "2027-05",
+    "periodo_nome": "maio de 2027",
+    "externa": false,
+    "valor": 129411751146.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-06",
+    "periodo_nome": "junho de 2027",
+    "externa": false,
+    "valor": 36444108.39,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27060300",
+    "faixa": "ate_12m",
+    "periodo": "2027-06",
+    "periodo_nome": "junho de 2027",
+    "externa": false,
+    "valor": 583873.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12F238",
+    "faixa": "ate_12m",
+    "periodo": "2027-06",
+    "periodo_nome": "junho de 2027",
+    "externa": false,
+    "valor": 240895.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13F237",
+    "faixa": "ate_12m",
+    "periodo": "2027-06",
+    "periodo_nome": "junho de 2027",
+    "externa": false,
+    "valor": 396260.58,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 38862703.99,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27070200",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 20417.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27070300",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 1253622.7,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27070600",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 115496.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD07G418",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 230367.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10G339",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 24883.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G338",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 998851.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G414",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 1883278.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13G237",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 35041.79,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "ate_12m",
+    "periodo": "2027-07",
+    "periodo_nome": "julho de 2027",
+    "externa": false,
+    "valor": 104610600735.78,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 27053758.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27080100",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 51974.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27080200",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 530.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27080300",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 1423856.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD07H418",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 197714.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09H340",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 941639.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09H416",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 10394.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12H238",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 1489731.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13H237",
+    "faixa": "ate_12m",
+    "periodo": "2027-08",
+    "periodo_nome": "agosto de 2027",
+    "externa": false,
+    "valor": 25393.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 148374356.67,
+    "titulos": 4
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27090300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 18448.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27100200",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 606998.32,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27100300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 505731.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27110300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 235835.73,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27120200",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 1515661.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA27120300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 5505737.85,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD07L418",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 197970.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08K417",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 122686.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 626547.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I416",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 237521.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 13383.32,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J416",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 275208.08,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09K340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 303855.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L338",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 606049.38,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L414",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 795938.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12I238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 201072.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 1232965.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J337",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 321847.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J413",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 2104054.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K337",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 442852.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 2181054.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L337",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 4352174.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13I237",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 56217.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13J237",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 3353466.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L237",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 1201389.82,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L336",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 819145.55,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE070978",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 1352461.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE071278",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 3347418.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAH071278",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 338452.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 108149475472.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2027",
+    "periodo_nome": "2027",
+    "externa": false,
+    "valor": 495987985387.06,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": true,
+    "valor": 15627653784.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 234706035.78,
+    "titulos": 8
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A005",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 9686.7,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A008",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 40943.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28010300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 7783.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28020600",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 4577802.46,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28030100",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 2048400.32,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28030300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 490949.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28040300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 86706.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28050200",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28050300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 214722.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28060300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 5005098.94,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28070200",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 20417.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28070300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 1254474.78,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28080100",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 51974.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28080200",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 530.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28080300",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 1604587.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08D418",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 232017.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09H417",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 10394.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 115603.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C416",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 596562.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10D340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 768502.17,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10G340",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 30625.92,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11E339",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 419185.01,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G339",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 998851.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G415",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 1883278.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12C338",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 3425.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D338",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 327877.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D414",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 19370.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13E238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 254327.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13F238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 408860.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13G238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 36213.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13H238",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 27412.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE100376",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 61129.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 227275444667.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "Global BRL",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": true,
+    "valor": 4869848509.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 176453437220.08002,
+    "titulos": 3
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_1_a_2_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 341433962896.87,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 112054120.28999999,
+    "titulos": 4
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A011",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 12432.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A014",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 6121.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A015",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 130671.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HSTN A001",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 2077362162.67,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28090300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 19757.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28100200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 622108.52,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28100300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 506711.7,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28110300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 236596.14,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28120200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 1515661.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA28120300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 5547893.78,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD08K418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 118411.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 237521.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 264512.08,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 606049.38,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L415",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 744683.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J338",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 375920.19,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J414",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K338",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 442852.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L338",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 4352174.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13I238",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 58618.92,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13J238",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 3361307.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L238",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 1211251.49,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L337",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 824631.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 20074210485.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2028",
+    "periodo_nome": "2028",
+    "externa": false,
+    "valor": 345917432728.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": true,
+    "valor": 10484760336.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 263180798.88,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A017",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 2962.82,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A018",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 5906.44,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A021",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 4378.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A023",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 5831.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29010300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 7783.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29020600",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 4577802.46,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29030100",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1876919.22,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29030300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 491810.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29040300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 86706.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29050200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29050300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 208085.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29060300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 5005205.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29070200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 21906.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29070300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1251705.52,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29080100",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 51974.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29080200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 530.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29080300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1564425.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29100200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 616712.02,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29100300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 186763.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29110300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 171200.88,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29120200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1515661.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA29120300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1936680.27,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09H418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 9652.37,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09I418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 241268.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD09J418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 222369.84,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 596562.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11E340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 420358.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1009910.98,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G416",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 1883278.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 610674.89,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L416",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 748421.02,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12C339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 3425.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 327877.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D415",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 19370.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 386281.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J415",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 442852.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 4352174.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L338",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 849910.57,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE100377",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 108177.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 75763522287.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 26315563192.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 355298610679.65,
+    "titulos": 2
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 121049264793.31,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2029",
+    "periodo_nome": "2029",
+    "externa": false,
+    "valor": 700782573435.3401,
+    "titulos": 2
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Euro",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": true,
+    "valor": 12111444646.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": true,
+    "valor": 31467616793.68,
+    "titulos": 3
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 197663709.28000003,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A025",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 15915.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A031",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 15676.98,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFIB10001",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 33492374.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE1230",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 4016388.18,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "NTN-P",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 307820304.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30010300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 7783.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30030100",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 1862433.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30030300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 444156.53,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30040300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 86706.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30050200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30050300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 182931.36,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30060300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30070300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 690717.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30080100",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 52822.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30080200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 743.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30080300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 1230906.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30100200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 622108.52,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30100300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 49767.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30110300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 78756.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30120200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 1515661.3,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA30120300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 1783228.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD10C418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 597840.63,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 1883278.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 755041.38,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12C340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 4174.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 332045.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D416",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 19370.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 382288.06,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J416",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12K340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 423457.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12L340",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 4364652.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L339",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 849910.57,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAE100378",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 111998.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 223903310237.83,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 938135453.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 121637064353.89,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2030",
+    "periodo_nome": "2030",
+    "externa": false,
+    "valor": 851758607001.44,
+    "titulos": 4
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global 2031 ESG",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": true,
+    "valor": 10553468352.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 97769066.84,
+    "titulos": 8
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A036",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 35332.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A037",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 28264.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A038",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 75799.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTD10001",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 320347171.64,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTD10002",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 1561894341.8,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0431",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 2098327.11,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0631",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 2917531.34,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31010300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 7783.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31030300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 418662.44,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31040300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 87564.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31050200",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31050300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 182931.36,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31060300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31070300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 14059.32,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31080300",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 1156850.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11G418",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 1886463.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D417",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 19370.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 18032299128.33,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-C",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 78437515934.57,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 2866280537.88,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 214202455168.5,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "de_2_a_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 421762661143.55,
+    "titulos": 2
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": true,
+    "valor": 7864269768.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 45263143.92,
+    "titulos": 4
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31100200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 622108.52,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31110300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 88533.45,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31120200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 1516521.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA31120300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 1347580.95,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD11L418",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 695564.92,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J417",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 771502.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD13L340",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 851093.84,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 862835875.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2031",
+    "periodo_nome": "2031",
+    "externa": false,
+    "valor": 301966510492.8,
+    "titulos": 2
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global 2032 ESG",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": true,
+    "valor": 10303507968.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 90015863.59,
+    "titulos": 11
+   },
+   {
+    "indexador": "cambio",
+    "familia": "ntn-i",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 10229042.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "AINSS A043",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 106192.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE1232",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 138260.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA32050200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA32050300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 183573.6,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA32060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA32100200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 623727.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA32120300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 730955.65,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12D418",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 19689.55,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDAD12J418",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 773641.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 107180604836.58,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 14354153922.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 348850705.14,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "LTN",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 98919745797.08,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2032",
+    "periodo_nome": "2032",
+    "externa": false,
+    "valor": 676644382405.5,
+    "titulos": 3
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Euro",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": true,
+    "valor": 9104709987.65,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": true,
+    "valor": 11810278386.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global 2033 ESG",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": true,
+    "valor": 7699650336.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 66597261.92999999,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0533",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 103379.79,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA33050200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA33060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA33120300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 105877.49,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 76669261255.34,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 255212448.26,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2033",
+    "periodo_nome": "2033",
+    "externa": false,
+    "valor": 85071484757.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": true,
+    "valor": 18839888292.98,
+    "titulos": 2
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 41195457.5,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0134",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 3521941.48,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA34050200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 139977.28,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA34060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA34120300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 105877.49,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2034",
+    "periodo_nome": "2034",
+    "externa": false,
+    "valor": 266216370.65,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": true,
+    "valor": 23984771436.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 23416836.82,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0135",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 11572880.75,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA35050200",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 140404.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA35060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 253535203199.19,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 20385690931.04,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 184535914.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2035",
+    "periodo_nome": "2035",
+    "externa": false,
+    "valor": 100309676648.55,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Euro",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": true,
+    "valor": 9118613754.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": true,
+    "valor": 18246952584.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": false,
+    "valor": 11202219.049999999,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0136",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": false,
+    "valor": 26921390.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA36060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": false,
+    "valor": 136476032.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "selic",
+    "familia": "LFT-TD1 Reserva",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2036",
+    "periodo_nome": "2036",
+    "externa": false,
+    "valor": 6493614627.01,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": true,
+    "valor": 8375134109.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": false,
+    "valor": 4102934.7600000007,
+    "titulos": 12
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA37060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": false,
+    "valor": 17842848965.74,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": false,
+    "valor": 73902284.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "prefixado",
+    "familia": "NTN-F",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2037",
+    "periodo_nome": "2037",
+    "externa": false,
+    "valor": 36133494565.29,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2038",
+    "periodo_nome": "2038",
+    "externa": false,
+    "valor": 1132565.83,
+    "titulos": 7
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0138",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2038",
+    "periodo_nome": "2038",
+    "externa": false,
+    "valor": 121329314.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA38060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2038",
+    "periodo_nome": "2038",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2038",
+    "periodo_nome": "2038",
+    "externa": false,
+    "valor": 65515131.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2039",
+    "periodo_nome": "2039",
+    "externa": false,
+    "valor": 596301.35,
+    "titulos": 2
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0139",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2039",
+    "periodo_nome": "2039",
+    "externa": false,
+    "valor": 74372851.71,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA39060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2039",
+    "periodo_nome": "2039",
+    "externa": false,
+    "valor": 4995061.62,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2039",
+    "periodo_nome": "2039",
+    "externa": false,
+    "valor": 172442910.65,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NTN-I",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 250969.68,
+    "titulos": 2
+   },
+   {
+    "indexador": "demais",
+    "familia": "BNCC920116",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 43501.07,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0140",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 103646549.14,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "JUST920116",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 7838880.66,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "SUMA920199",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 240.33,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA40060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 4996342.98,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 145718083673.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 8927259925.95,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2040",
+    "periodo_nome": "2040",
+    "externa": false,
+    "valor": 75352665.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2041",
+    "periodo_nome": "2041",
+    "externa": true,
+    "valor": 11402292565.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0141",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2041",
+    "periodo_nome": "2041",
+    "externa": false,
+    "valor": 109036874.4,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "TDA41060300",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2041",
+    "periodo_nome": "2041",
+    "externa": false,
+    "valor": 4435747.98,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2041",
+    "periodo_nome": "2041",
+    "externa": false,
+    "valor": 53219727.45,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0142",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2042",
+    "periodo_nome": "2042",
+    "externa": false,
+    "valor": 206423907.97,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2042",
+    "periodo_nome": "2042",
+    "externa": false,
+    "valor": 45242816.12,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0143",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2043",
+    "periodo_nome": "2043",
+    "externa": false,
+    "valor": 25551650.56,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2043",
+    "periodo_nome": "2043",
+    "externa": false,
+    "valor": 39056160.69,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0144",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2044",
+    "periodo_nome": "2044",
+    "externa": false,
+    "valor": 139727862.91,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2044",
+    "periodo_nome": "2044",
+    "externa": false,
+    "valor": 114305273.47,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2045",
+    "periodo_nome": "2045",
+    "externa": true,
+    "valor": 15530474321.46,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0145",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2045",
+    "periodo_nome": "2045",
+    "externa": false,
+    "valor": 2184093195.41,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2045",
+    "periodo_nome": "2045",
+    "externa": false,
+    "valor": 180666325795.07,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2045",
+    "periodo_nome": "2045",
+    "externa": false,
+    "valor": 12547357518.68,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2045",
+    "periodo_nome": "2045",
+    "externa": false,
+    "valor": 55151713.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0146",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2046",
+    "periodo_nome": "2046",
+    "externa": false,
+    "valor": 2895991829.34,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2046",
+    "periodo_nome": "2046",
+    "externa": false,
+    "valor": 52341758.98,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2047",
+    "periodo_nome": "2047",
+    "externa": true,
+    "valor": 12447929470.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2047",
+    "periodo_nome": "2047",
+    "externa": false,
+    "valor": 31421668.96,
+    "titulos": 1
+   },
+   {
+    "indexador": "demais",
+    "familia": "HCFTEE0148",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2048",
+    "periodo_nome": "2048",
+    "externa": false,
+    "valor": 858480090.72,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 Educa+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2048",
+    "periodo_nome": "2048",
+    "externa": false,
+    "valor": 16065026.85,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2049",
+    "periodo_nome": "2049",
+    "externa": false,
+    "valor": 3026898507.52,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2050",
+    "periodo_nome": "2050",
+    "externa": true,
+    "valor": 17562809390.22,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2050",
+    "periodo_nome": "2050",
+    "externa": false,
+    "valor": 237791081752.18,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B Principal",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2050",
+    "periodo_nome": "2050",
+    "externa": false,
+    "valor": 4222921862.22,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2054",
+    "periodo_nome": "2054",
+    "externa": true,
+    "valor": 10028297565.23,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2054",
+    "periodo_nome": "2054",
+    "externa": false,
+    "valor": 1843308003.86,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2055",
+    "periodo_nome": "2055",
+    "externa": false,
+    "valor": 165737574996.36,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "Global",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2056",
+    "periodo_nome": "2056",
+    "externa": true,
+    "valor": 18200706804.0,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2059",
+    "periodo_nome": "2059",
+    "externa": false,
+    "valor": 1307222886.91,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2060",
+    "periodo_nome": "2060",
+    "externa": false,
+    "valor": 104409968618.69,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2064",
+    "periodo_nome": "2064",
+    "externa": false,
+    "valor": 1268647081.11,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2069",
+    "periodo_nome": "2069",
+    "externa": false,
+    "valor": 593599327.78,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2074",
+    "periodo_nome": "2074",
+    "externa": false,
+    "valor": 432353873.37,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2079",
+    "periodo_nome": "2079",
+    "externa": false,
+    "valor": 400986675.37,
+    "titulos": 1
+   },
+   {
+    "indexador": "precos",
+    "familia": "NTN-B1 RendA+",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2084",
+    "periodo_nome": "2084",
+    "externa": false,
+    "valor": 6706997814.21,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "JBICBZ-P14",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2103",
+    "periodo_nome": "2103",
+    "externa": true,
+    "valor": 12331055.59,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID1811/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2107",
+    "periodo_nome": "2107",
+    "externa": true,
+    "valor": 1303481.43,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID1864/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2107",
+    "periodo_nome": "2107",
+    "externa": true,
+    "valor": 6842611.05,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID1841/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 5666543.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2229/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 4571522.71,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2248/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 200935007.74,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD7545-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 81455049.57,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD7632-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 219142901.16,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD7782-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 10240318.71,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "PROSUB1BRNAV",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 1056840822.15,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "SOCGENPROJ-H",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2109",
+    "periodo_nome": "2109",
+    "externa": true,
+    "valor": 848457192.93,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD7901-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2110",
+    "periodo_nome": "2110",
+    "externa": true,
+    "valor": 107280692.71,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD7841-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2111",
+    "periodo_nome": "2111",
+    "externa": true,
+    "valor": 578422329.93,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD8074-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2111",
+    "periodo_nome": "2111",
+    "externa": true,
+    "valor": 51926742.7,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2192/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2112",
+    "periodo_nome": "2112",
+    "externa": true,
+    "valor": 8512726.54,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2580/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2112",
+    "periodo_nome": "2112",
+    "externa": true,
+    "valor": 12193872.95,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD8095-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2112",
+    "periodo_nome": "2112",
+    "externa": true,
+    "valor": 177170636.54,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2791/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2113",
+    "periodo_nome": "2113",
+    "externa": true,
+    "valor": 19724562.25,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID2919/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2113",
+    "periodo_nome": "2113",
+    "externa": true,
+    "valor": 35726663.01,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID3142/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2114",
+    "periodo_nome": "2114",
+    "externa": true,
+    "valor": 28230784.58,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "FIDA436-SDR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2114",
+    "periodo_nome": "2114",
+    "externa": true,
+    "valor": 6226282.1,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "FIDA437",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2114",
+    "periodo_nome": "2114",
+    "externa": true,
+    "valor": 28792010.66,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "SEK-FX2-SEK",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2115",
+    "periodo_nome": "2115",
+    "externa": true,
+    "valor": 13419667458.38,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "SEK-FX2-USD",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2115",
+    "periodo_nome": "2115",
+    "externa": true,
+    "valor": 859682860.58,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID3391/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2117",
+    "periodo_nome": "2117",
+    "externa": true,
+    "valor": 667704061.53,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRDTF019211",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2117",
+    "periodo_nome": "2117",
+    "externa": true,
+    "valor": 24023890.23,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD8812-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2118",
+    "periodo_nome": "2118",
+    "externa": true,
+    "valor": 1071792744.76,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD8813-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2118",
+    "periodo_nome": "2118",
+    "externa": true,
+    "valor": 18984875.84,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID4723/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2119",
+    "periodo_nome": "2119",
+    "externa": true,
+    "valor": 761925962.24,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID4732/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2119",
+    "periodo_nome": "2119",
+    "externa": true,
+    "valor": 18747906.82,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "AFD CBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2120",
+    "periodo_nome": "2120",
+    "externa": true,
+    "valor": 1184448770.29,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID5092/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2120",
+    "periodo_nome": "2120",
+    "externa": true,
+    "valor": 5167565064.51,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "CAF011395",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2120",
+    "periodo_nome": "2120",
+    "externa": true,
+    "valor": 1834618051.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NDB-20BR02",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2120",
+    "periodo_nome": "2120",
+    "externa": true,
+    "valor": 5094650742.2,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BID5130/OCBR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2121",
+    "periodo_nome": "2121",
+    "externa": true,
+    "valor": 1060013346.59,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD9074-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2121",
+    "periodo_nome": "2121",
+    "externa": true,
+    "valor": 30954476.35,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD9172-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2121",
+    "periodo_nome": "2121",
+    "externa": true,
+    "valor": 4818575388.11,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "KfW30089",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2122",
+    "periodo_nome": "2122",
+    "externa": true,
+    "valor": 2124374398.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "NDB-20BR03",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2123",
+    "periodo_nome": "2123",
+    "externa": true,
+    "valor": 5309625147.09,
+    "titulos": 1
+   },
+   {
+    "indexador": "cambio",
+    "familia": "BIRD9619-BR",
+    "faixa": "mais_de_5_anos",
+    "periodo": "2124",
+    "periodo_nome": "2124",
+    "externa": true,
+    "valor": 1590053700.26,
+    "titulos": 1
+   }
+  ],
+  "nota": "Cada célula soma os títulos e contratos em mercado com o mesmo índice, a mesma família (nome sem o código de vencimento), a mesma faixa de vencimento e o mesmo período (mês na primeira faixa, ano nas outras). A soma das células é a DPF em poder do público do CSV.",
+  "fonte": "Tesouro, Estoque da DPF título a título (CSV), posição de 08/2026, reais",
+  "exercicio": 2026,
+  "fechado": false
+ },
+ "conta_do_ano": {
+  "disponivel": true,
+  "fonte": "Tesouro, Fatores de Variação da DPF (Anexo 2.9), meses 1 a 8 de 2026, R$ milhões",
+  "exercicio": 2026,
+  "fechado": false,
+  "meses": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "estoque_anterior": 8635093226553.33,
+  "emissoes": 1362859272179.27,
+  "resgates": -1400158155748.45,
+  "juros_apropriados": 694940065389.7583,
+  "juros_dpmfi": 700787864627.75,
+  "juros_dpfe": -5847799237.991649,
+  "operacoes_bc": 0.0,
+  "estoque_fim": 9292734408373.898,
+  "variacao": 657641181820.5684,
+  "fecha": true,
+  "nota": "Como o Tesouro abre a variação da DPF em poder do público (Anexo 2.9): estoque no fim do ano anterior, mais o que vendeu (emissões), menos o que pagou (resgates: principal e juros pagos em dinheiro), mais os juros que a dívida gerou sem passar pelo caixa (apropriados), mais as operações do mercado com o Banco Central. A conta tem que fechar com o estoque do fim do período (conferência crítica dpf_fatores_identidade)."
+ },
+ "estoque_mensal": [
+  {
+   "mes": 1,
+   "dpf_publico": 8641126255990.191,
+   "dpmfi": 8330533734462.312,
+   "dpfe": 310592521527.88,
+   "dpmfi_bc": 2854833477646.1504
+  },
+  {
+   "mes": 2,
+   "dpf_publico": 8840746460811.848,
+   "dpmfi": 8511099777458.248,
+   "dpfe": 329646683353.6,
+   "dpmfi_bc": 2867797413338.71
+  },
+  {
+   "mes": 3,
+   "dpf_publico": 8633441170321.189,
+   "dpmfi": 8301798518218.32,
+   "dpfe": 331642652102.87,
+   "dpmfi_bc": 2893223808916.14
+  },
+  {
+   "mes": 4,
+   "dpf_publico": 8798259629292.748,
+   "dpmfi": 8462375771630.328,
+   "dpfe": 335883857662.42,
+   "dpmfi_bc": 2916483571970.82
+  },
+  {
+   "mes": 5,
+   "dpf_publico": 9032655517045.85,
+   "dpmfi": 8692163318708.841,
+   "dpfe": 340492198337.01,
+   "dpmfi_bc": 2934159216814.57
+  },
+  {
+   "mes": 6,
+   "dpf_publico": 9268392367515.39,
+   "dpmfi": 8920678049667.271,
+   "dpfe": 347714317848.11993,
+   "dpmfi_bc": 2971015742404.33
+  },
+  {
+   "mes": 7,
+   "dpf_publico": 9288780271377.799,
+   "dpmfi": 8948716765086.469,
+   "dpfe": 340063506291.33,
+   "dpmfi_bc": 2979604898678.91
+  },
+  {
+   "mes": 8,
+   "dpf_publico": 9292734408373.896,
+   "dpmfi": 8944478209356.248,
+   "dpfe": 348256199017.64996,
+   "dpmfi_bc": 2929821820885.3496
+  }
+ ],
+ "fontes": {
+  "estoque_xlsx": {
+   "dataset": "estoque_dpf",
+   "arquivo": "estoque-da-divida-publica-federal.xlsx",
+   "recurso_nome": "Estoque da Dívida Pública Federal",
+   "recurso_data": "2026-10-29T19:54:48.369316",
+   "snapshot_id": "20261110T023722168536Z",
+   "sha256_canonical": "5e68e2e061fb936408370e27473fd0ba03cae0f887f1189fe6fd6d94b11281d0",
+   "fetched_at": "2026-11-10T02:37:22+00:00",
+   "linhas": 7573,
+   "unidade_arquivo": "bilhoes"
+  },
+  "fatores_xlsx": {
+   "dataset": "fatores_variacao",
+   "arquivo": "fatores-de-variacao-da-divida-publica-federal.xlsx",
+   "recurso_nome": "Fatores de Variação da Dívida Pública Federal",
+   "recurso_data": "2026-10-29T19:55:35.882405",
+   "snapshot_id": "20261110T023731067659Z",
+   "sha256_canonical": "6a83d9147ce6797ec8eaf42f2df5136fc4c335603944966360c4aa90a152a9fb",
+   "fetched_at": "2026-11-10T02:37:31+00:00",
+   "linhas": 7596,
+   "unidade_arquivo": "milhoes"
+  },
+  "estoque_csv": {
+   "dataset": "estoque_dpf",
+   "arquivo": "estoquedpf.csv",
+   "recurso_nome": "Estoque da Dívida Pública Federal",
+   "recurso_data": "2026-10-16T10:31:03.427848",
+   "snapshot_id": "20261110T023729361911Z",
+   "sha256_canonical": "d342fde3a835832625744a200e8677fb6519ae01d86bc4664e548f8bf8779a5a",
+   "fetched_at": "2026-11-10T02:37:29+00:00",
+   "linhas": 165432,
+   "unidade_arquivo": "reais"
+  },
+  "execucao_csv": {
+   "dataset": "execucao_natureza",
+   "arquivo": "execucao-orcamentaria-e-financeira-da-dpf-por-nd--2009-2026.csv",
+   "recurso_nome": "Execução Orçamentária e Financeira da Dívida Pública Federal por Natureza da Despesa",
+   "recurso_data": "2026-08-10T19:47:22.349691",
+   "snapshot_id": "20261110T023734400737Z",
+   "sha256_canonical": "31e5cdbf5461ac4e6a03a99f9e7eb8ad2dcda50417a0d6ac67f1783e817a8d5e",
+   "fetched_at": "2026-11-10T02:37:34+00:00",
+   "linhas": 458,
+   "unidade_arquivo": "reais"
+  },
+  "tesouro_direto_csv": {
+   "dataset": "tesouro_direto_estoque",
+   "arquivo": "estoquetesourodireto.csv",
+   "recurso_nome": "Estoque do Tesouro Direto",
+   "recurso_data": "2026-10-16T10:33:06.767101",
+   "snapshot_id": "20261110T023736379258Z",
+   "sha256_canonical": "a70b2a7f4645fc99d49e548fa62f109133c64cadc382949f9df0b59360f3969e",
+   "fetched_at": "2026-11-10T02:37:36+00:00",
+   "linhas": 9134,
+   "unidade_arquivo": "reais"
+  },
+  "bcb": {
+   "series": 34,
+   "pontos": 8455,
+   "lido_em": "2026-11-10T02:39:13+00:00"
+  },
+  "indisponiveis": {},
+  "recibo": {
+   "disponivel": true,
+   "periodo": 4,
+   "fechado": false,
+   "publicavel": true,
+   "motivo": null
+  },
+  "cofog": {
+   "disponivel": false,
+   "arquivo": null,
+   "snapshot_id": null,
+   "motivo": "COFOG 2026 não está no staging (anos disponíveis: 2010 a 2024). O Tesouro publica o COFOG com cerca de um ano de defasagem; se o CKAN já tem o ano, rode `recibo fetch cofog` e `recibo transform cofog`."
+  },
+  "populacao": {
+   "disponivel": true,
+   "valor": 214211951,
+   "regua": "projecao",
+   "revisao": "2024",
+   "data_referencia": "2026-07-01",
+   "motivo": null,
+   "fonte": {
+    "regua": "projecao",
+    "arquivo": "projecoes_2024_tab3_grupos_etarios_especificos.xlsx",
+    "revisao": "2024",
+    "snapshot_id": "20261110T043229602702Z",
+    "sha256_canonical": "a759c134c9cf0d36f9a633cc9700356f0230ed9be07c47b0b3ab2ee725076b20",
+    "fetched_at": "2026-11-10T04:32:29+00:00",
+    "data_referencia": "2026-07-01"
+   },
+   "estimativa": {
+    "valor": 214211951,
+    "tabela": "6579",
+    "variavel": "9324",
+    "snapshot_id": "20261110T043230561890Z",
+    "data_referencia": "2026-07-01"
+   },
+   "censo": {
+    "ano": 2022,
+    "valor": 203080756,
+    "data_referencia": "2022-08-01",
+    "tabela": "4709",
+    "projecao_no_mesmo_ano": 210862983,
+    "nota": "o Censo conta pessoas numa data; a projeção corrige a cobertura do Censo e por isso é maior: per capita pelo Censo sairia maior na mesma proporção"
+   }
+  },
+  "ultimo_mes_por_fonte": {
+   "estoque_xlsx": 9,
+   "fatores_xlsx": 9,
+   "estoque_csv": 8,
+   "tesouro_direto_csv": 8,
+   "bcb": 9
+  }
+ },
+ "reconciliacoes": [
+  {
+   "id": "dpf_fatores_identidade",
+   "ok": true,
+   "critica": true,
+   "esperado": 9292734408373.908,
+   "obtido": 9292734408373.898,
+   "diff": -0.009765625,
+   "descricao": "Estoque anterior + emissões + resgates + juros apropriados + operações com o BC = estoque no fim do ano (planilha de fatores do Tesouro, R$ milhões). É a conta do próprio Tesouro de por que a dívida variou.\n",
+   "detalhe": "meses 1 a 8; variação nominal da planilha 657,641,181,820.57",
+   "calculada": true
+  },
+  {
+   "id": "titulos_rreo_vs_emissoes_dpf",
+   "ok": false,
+   "critica": false,
+   "esperado": 1627718135857.51,
+   "obtido": 1362859272179.27,
+   "diff": -264858863678.24,
+   "descricao": "Títulos vendidos no ano pelo RREO (receitas de operações de crédito mais refinanciamento, Anexo 01) contra as emissões da DPF em poder do público (fatores de variação do Tesouro, Anexo 2.9). Medem coisas parecidas, não iguais: o RREO registra a receita orçamentária de todo título emitido (inclusive os emitidos direto para a carteira do Banco Central, como a cobertura do resultado negativo do BC) e os fatores só as emissões em mercado. Em 2025: R$ 2,46 tri contra R$ 1,90 tri. A diferença está em investigação (página Perguntas abertas); a conferência é informativa e a tolerância é só para registrar o tamanho dela, não para aprovar.\n",
+   "detalhe": "receitas de operações de crédito (467,781,360,906.80) + refinanciamento (1,159,936,774,950.71) do Anexo 01 contra emissões da DPF em poder do público (Anexo 2.9); em investigação: ver Perguntas abertas",
+   "calculada": true
+  },
+  {
+   "id": "dpf_estoque_xlsx_vs_csv",
+   "ok": true,
+   "critica": true,
+   "esperado": 9292734408373.896,
+   "obtido": 9292734408373.691,
+   "diff": -0.205078125,
+   "descricao": "DPF em poder do público no fim do ano: a planilha do Tesouro (R$ bilhões) e o CSV título a título (reais, carteira Mercado) são o mesmo número.\n",
+   "detalhe": "posição de 08/2026",
+   "calculada": true
+  },
+  {
+   "id": "dpf_estoque_xlsx_vs_fatores",
+   "ok": true,
+   "critica": true,
+   "esperado": 9292734408373.896,
+   "obtido": 9292734408373.898,
+   "diff": 0.001953125,
+   "descricao": "Estoque no fim do ano igual nas duas planilhas do Tesouro (estoque 2.1 em bilhões, fatores 2.9 em milhões).\n",
+   "detalhe": "estoque 2.1 (bilhões) contra fatores 2.9 (milhões)",
+   "calculada": true
+  },
+  {
+   "id": "carteira_bc_tesouro_vs_bcb",
+   "ok": true,
+   "critica": false,
+   "esperado": 2929821820885.35,
+   "obtido": 2929821820000.0,
+   "diff": -885.35009765625,
+   "descricao": "Títulos do Tesouro na carteira do Banco Central: o CSV do Tesouro (reais) e a série 4152 do BC (R$ milhões, duas casas) no fim do ano.\n",
+   "detalhe": "CSV do Tesouro (carteira Banco Central) contra SGS 4152",
+   "calculada": true
+  },
+  {
+   "id": "dpmfi_mercado_tesouro_vs_bcb",
+   "ok": true,
+   "critica": false,
+   "esperado": 8944478209356.248,
+   "obtido": 8944505290000.0,
+   "diff": 27080643.751953125,
+   "descricao": "Dívida mobiliária interna em mercado: Tesouro (DPMFi) contra a série 4154 do BC. Em 2023 e 2024 o BC traz R$ 26 a 29 milhões a mais em 7 trilhões (0,0004%).\n",
+   "detalhe": "DPMFi da planilha do Tesouro contra SGS 4154",
+   "calculada": true
+  },
+  {
+   "id": "juros_anexo01_vs_execucao_dpf",
+   "ok": false,
+   "critica": false,
+   "esperado": 415811371479.51,
+   "obtido": 253095843484.70004,
+   "diff": 0.0,
+   "descricao": "Juros pagos no ano: a linha de juros do recibo (Anexo 01, liquidado) contra a execução da DPF por natureza (grupo 2, juros e encargos, inclusive a cobertura do BC). Em 2023 iguais a R$ 10 mil; em 2024, R$ 55 milhões de diferença (72 milhões são o cacau, ação 00QM, que não é DPF).\n",
+   "detalhe": "não comparável: a execução da DPF do Tesouro tem dados até o mês 06/2026 (arquivo publicado em 2026-08-10); o RREO do 4º bimestre vai até o mês 08: sem meses iguais para comparar até o Tesouro atualizar o arquivo",
+   "calculada": false
+  },
+  {
+   "id": "principal_anexo01_vs_execucao_dpf",
+   "ok": false,
+   "critica": false,
+   "esperado": 1415303774021.61,
+   "obtido": 863540488924.72,
+   "diff": 0.0,
+   "descricao": "Amortização mais refinanciamento do Anexo 01 contra o principal pago na execução da DPF (grupo 6).\n",
+   "detalhe": "não comparável: a execução da DPF do Tesouro tem dados até o mês 06/2026 (arquivo publicado em 2026-08-10); o RREO do 4º bimestre vai até o mês 08: sem meses iguais para comparar até o Tesouro atualizar o arquivo",
+   "calculada": false
+  },
+  {
+   "id": "cobertura_bc_execucao_vs_recibo",
+   "ok": false,
+   "critica": false,
+   "esperado": 0.0,
+   "obtido": 0.0,
+   "diff": 0.0,
+   "descricao": "O que o recibo mede como serviço da dívida fora das subfunções 843/844 (juros + amortização - 843/844) contra as linhas \"Política Monetária\" da execução da DPF (cobertura do resultado negativo do BC, ação 0669), contadas uma vez. A diferença conhecida é o cacau (00QM): 72 milhões em 2024. Em 2023 os dois lados são zero (o recibo dá -2,26 reais, arredondamento do RREO); o piso de tolerância é o das identidades sobre juros + amortização.\n",
+   "detalhe": "não comparável: a execução da DPF do Tesouro tem dados até o mês 06/2026 (arquivo publicado em 2026-08-10); o RREO do 4º bimestre vai até o mês 08: sem meses iguais para comparar até o Tesouro atualizar o arquivo",
+   "calculada": false
+  },
+  {
+   "id": "indexador_selic_tesouro_vs_bcb",
+   "ok": true,
+   "critica": false,
+   "esperado": 54.7449099862931,
+   "obtido": 54.74,
+   "diff": -0.004909986293100133,
+   "descricao": "Fatia da dívida mobiliária interna em mercado atrelada à Selic: LFT sobre DPMFi no CSV do Tesouro contra a série 4177 do BC (participação por indexador, posição em carteira). Pontos percentuais.\n",
+   "detalhe": "LFT / DPMFi (CSV do Tesouro) contra SGS 4177, em pontos percentuais",
+   "calculada": true
+  },
+  {
+   "id": "indexador_prefixado_tesouro_vs_bcb",
+   "ok": true,
+   "critica": false,
+   "esperado": 21.044915801438982,
+   "obtido": 21.04,
+   "diff": -0.0049158014389831806,
+   "descricao": "Fatia prefixada: LTN mais NTN-F sobre DPMFi contra a série 4178 do BC. Pontos percentuais.\n",
+   "detalhe": "(LTN + NTN-F) / DPMFi contra SGS 4178, em pontos percentuais",
+   "calculada": true
+  },
+  {
+   "id": "populacao_projecao_vs_estimativa",
+   "ok": true,
+   "critica": false,
+   "esperado": 214211951.0,
+   "obtido": 214211951.0,
+   "diff": 0.0,
+   "descricao": "Nos anos em que o IBGE publica a estimativa oficial (tabela 6579, usada pelo TCU), ela tem que ser igual à projeção revisão 2024, de onde sai. Se divergir, o per capita não sai (fica indisponível, com o motivo) e o recibo e o mart da dívida continuam publicáveis: nenhum centavo deles depende da população.\n",
+   "detalhe": "projeção revisão 2024 contra estimativa oficial (SIDRA 6579) em 2026; tolerância 0",
+   "calculada": true
+  }
+ ],
+ "avisos": [
+  "estoque_xlsx vai até o mês 9; o mart usa o mês 8, o último presente em todas as fontes",
+  "fatores_xlsx vai até o mês 9; o mart usa o mês 8, o último presente em todas as fontes",
+  "bcb vai até o mês 9; o mart usa o mês 8, o último presente em todas as fontes",
+  "execução da DPF 2026: a execução da DPF do Tesouro tem dados até o mês 06/2026 (arquivo publicado em 2026-08-10); o RREO do 4º bimestre vai até o mês 08: sem meses iguais para comparar até o Tesouro atualizar o arquivo"
+ ],
+ "glossario": [
+  {
+   "termo": "DPF, DPMFi e DPFe",
+   "texto": "DPF é a Dívida Pública Federal: tudo o que o Tesouro deve, em títulos e contratos. DPMFi é a parte interna em títulos (a maior); DPFe é a parte externa, em dólar, euro e contratos com organismos internacionais.\n"
+  },
+  {
+   "termo": "em poder do público e carteira do Banco Central",
+   "texto": "O Tesouro também tem títulos na mão do Banco Central, que os usa para controlar a quantidade de dinheiro na economia. \"Em poder do público\" (ou \"em mercado\") é a dívida fora do BC; é a que o Tesouro chama de DPF.\n"
+  },
+  {
+   "termo": "juros apropriados",
+   "texto": "Os juros que o estoque gerou no mês, pagos ou não. A dívida cresce por eles mesmo sem nenhum pagamento. Na externa, inclui a variação do câmbio.\n"
+  },
+  {
+   "termo": "juros nominais pelo BC (NFSP)",
+   "texto": "NFSP são as \"necessidades de financiamento do setor público\", a conta do Banco Central que mede o déficit pelo que a dívida precisou crescer. Os juros nominais dessa conta são líquidos: juros devidos menos juros que o governo recebeu (do caixa aplicado, de quem lhe deve). Por isso são menores que os brutos do Anexo 06.\n"
+  },
+  {
+   "termo": "dívida líquida e dívida bruta",
+   "texto": "Bruta é o que o governo deve. Líquida é o que deve menos o que tem a receber e o que tem em caixa. O BC publica as duas; a bruta do governo geral (União, estados e municípios, em % do PIB) é a mais citada.\n"
+  },
+  {
+   "termo": "dívida consolidada (RREO)",
+   "texto": "A medida da Lei de Responsabilidade Fiscal, no Anexo 06 do RREO: consolidada (bruta) e consolidada líquida (descontados caixa e haveres). A variação da líquida é o que o RREO chama de resultado nominal \"abaixo da linha\".\n"
+  },
+  {
+   "termo": "prazo médio e vincendo em 12 meses",
+   "texto": "Prazo médio é quanto tempo, em média, falta para a dívida vencer. \"Vincendo em 12 meses\" é a fatia que vence no próximo ano e precisa ser paga ou rolada (trocada por dívida nova). Quanto maior, mais o Tesouro depende do humor do mercado nos próximos meses. Aqui a fatia conta só o principal dos títulos e contratos que vencem no período; o Tesouro, no Relatório Mensal da Dívida, conta também os juros (cupons) que caem nesses meses, trazidos a valor presente, e por isso publica um número maior. O prazo médio mostrado é o do Banco Central (série 10618, dívida mobiliária interna em mercado); o do Tesouro, para a DPF inteira, está só no Relatório Mensal (PDF).\n"
+  },
+  {
+   "termo": "indexador",
+   "texto": "A que cada título está preso: à Selic (LFT, sobe quando o juro sobe), prefixado (LTN e NTN-F, juro combinado na emissão; também o Global BRL, título externo emitido em reais), a um índice de preços (NTN-B, inflação mais juro) ou ao câmbio (dívida externa em dólar, euro e outras moedas). Aqui a classificação é pelo nome do título; o Tesouro classifica cada papel pelo indexador do contrato, por isso as fatias do Relatório Mensal diferem em até 0,1 ponto percentual.\n"
+  }
+ ]
+}

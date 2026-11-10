@@ -1,0 +1,78 @@
+{% from "_bandeira.html" import bandeira %}<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}{{ site.titulo }}{% endblock %}</title>
+<meta name="description" content="{% block descricao %}{{ site.titulo }}: {{ site.slogan }}. De cada R$ 1,00 de imposto, quantos centavos foram para onde, com a fonte de cada número.{% endblock %}">
+{% set url_base = (site.url ~ ('' if site.url.endswith('/') else '/')) if site.url else '' %}
+{% if url_base and caminho is defined %}<link rel="canonical" href="{{ url_base }}{{ caminho }}">
+<meta property="og:url" content="{{ url_base }}{{ caminho }}">{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.titulo }}">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="{{ self.titulo() }}">
+<meta property="og:description" content="{{ self.descricao() }}">
+{% if url_base %}<meta property="og:image" content="{{ url_base }}static/social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ site.titulo }}: {{ site.slogan }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ url_base }}static/social.png">{% endif %}
+<meta name="twitter:title" content="{{ self.titulo() }}">
+<meta name="twitter:description" content="{{ self.descricao() }}">
+<link rel="stylesheet" href="{{ raiz }}static/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2032%27%3E%3Cpath%20d%3D%27M8%2012H56M8%2020H56%27%20stroke%3D%27%230B6B3A%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20opacity%3D%27.8%27%2F%3E%3Cpath%20d%3D%27M10.00%2C16.00%20L11.83%2C18.98%20L13.67%2C21.75%20L15.50%2C24.13%20L17.33%2C25.96%20L19.17%2C27.11%20L21.00%2C27.50%20L22.83%2C27.11%20L24.67%2C25.96%20L26.50%2C24.13%20L28.33%2C21.75%20L30.17%2C18.98%20L32.00%2C16.00%20L33.83%2C13.02%20L35.67%2C10.25%20L37.50%2C7.87%20L39.33%2C6.04%20L41.17%2C4.89%20L43.00%2C4.50%20L44.83%2C4.89%20L46.67%2C6.04%20L48.50%2C7.87%20L50.33%2C10.25%20L52.17%2C13.02%20L54.00%2C16.00%27%20stroke%3D%27%230B6B3A%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20fill%3D%27none%27%2F%3E%3C%2Fsvg%3E">
+{% block head %}{% endblock %}
+</head>
+<body data-raiz="{{ raiz }}">
+<header class="cab">
+  <div class="cab-area">
+    <svg class="flamula" viewBox="0 0 110 72" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+      <path d="M 30 80 L 114 -8" stroke="#009739" stroke-width="6" fill="none"/>
+      <path d="M 43 80 L 127 -8" stroke="#FEDD00" stroke-width="6" fill="none"/>
+      <path d="M 56 80 L 140 -8" stroke="#012169" stroke-width="6" fill="none"/>
+    </svg>
+    <div class="wrap cab-wrap">
+      <a class="marca" href="{{ raiz }}" aria-label="{{ site.titulo }}, página inicial">
+        <svg width="60" height="32" viewBox="0 0 64 32" fill="none" role="img" aria-label="Marca do {{ site.titulo }}: uma onda que é um cifrão deitado, cortada por duas linhas de gráfico">
+          <path d="M8 12 H56" stroke="#0B6B3A" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
+          <path d="M8 20 H56" stroke="#0B6B3A" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
+          <path d="M10.00,16.00 L11.00,17.64 L12.00,19.24 L13.00,20.78 L14.00,22.22 L15.00,23.53 L16.00,24.69 L17.00,25.67 L18.00,26.46 L19.00,27.03 L20.00,27.38 L21.00,27.50 L22.00,27.38 L23.00,27.03 L24.00,26.46 L25.00,25.67 L26.00,24.69 L27.00,23.53 L28.00,22.22 L29.00,20.78 L30.00,19.24 L31.00,17.64 L32.00,16.00 L33.00,14.36 L34.00,12.76 L35.00,11.22 L36.00,9.78 L37.00,8.47 L38.00,7.31 L39.00,6.33 L40.00,5.54 L41.00,4.97 L42.00,4.62 L43.00,4.50 L44.00,4.62 L45.00,4.97 L46.00,5.54 L47.00,6.33 L48.00,7.31 L49.00,8.47 L50.00,9.78 L51.00,11.22 L52.00,12.76 L53.00,14.36 L54.00,16.00" stroke="#0B6B3A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <span class="marca-nome"><b>{{ site.titulo }}</b><span>{{ site.slogan }}</span></span>
+      </a>
+      <nav aria-label="Seções do site">
+        <ul class="menu">
+          {% for item in site.menu %}
+          <li><a href="{{ raiz }}{{ item.caminho }}"{% if (item.caminho == '' and pagina == 'ano') or (item.caminho != '' and pagina == item.caminho.strip('/')) %} aria-current="page"{% endif %}>{{ item.rotulo }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="banda" aria-hidden="true"></div>
+</header>
+
+<main id="topo" class="wrap pagina">
+{% block conteudo %}{% endblock %}
+</main>
+
+<footer class="rodape">
+  {% if site.constituicao and site.constituicao.artigos %}{% set art = site.constituicao.artigos[0] %}
+  <div class="wrap rodape-citacao">
+    {{ bandeira(52, 'bandeira-rodape', 'bandeira-rodape', site.bandeira.rotulo if site.bandeira else 'Bandeira do Brasil') }}
+    <blockquote>
+      <p>“{{ art.texto }}”</p>
+      <cite>{{ art.fonte }}</cite>
+    </blockquote>
+  </div>
+  {% endif %}
+  <div class="wrap">
+    <span><strong style="color:#15201F">{{ site.titulo }}</strong> · projeto cívico · código e dados abertos ({{ site.licenca }}) · <a href="{{ raiz }}dados/">Baixar os dados</a> · <a href="{{ raiz }}metodologia/">Metodologia</a> · <a href="{{ site.url_github }}">GitHub</a></span>
+    <span>{% block rodape_direita %}Páginas geradas em {{ gerado_em }} pelo pipeline aberto (versão {{ versao }}).{% endblock %}</span>
+  </div>
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

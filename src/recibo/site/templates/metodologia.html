@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}Metodologia: como fazemos, passo a passo · {{ site.titulo }}{% endblock %}
+{% block descricao %}Como o {{ site.titulo }} transforma os relatórios oficiais em "de cada R$ 1,00, X centavos foram para Y": fontes, regras, conferências e como conferir sem programar.{% endblock %}
+{% block conteudo %}
+<article class="prosa">
+{{ site.md_metodologia|md|safe }}
+</article>
+
+<section id="conferir" aria-labelledby="h-conferir">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:760px;margin-bottom:16px">
+    <h2 id="h-conferir" class="h2">Confira você mesmo, sem programar</h2>
+    <p style="font-size:15px;line-height:1.5;color:#3A423F">Os números saem de relatórios públicos que qualquer pessoa abre no site do Tesouro. Três passos bastam para conferir o total de {{ m.ano }}.</p>
+  </div>
+  <div class="passos">
+    <div>
+      <p><strong>Abra o RREO da União</strong> no SICONFI, o sistema do Tesouro onde todos os governos publicam suas contas (Relatório Resumido da Execução Orçamentária, {{ m.ano }}, {{ m.periodo }}º bimestre). No Anexo 01, procure "Juros e Encargos da Dívida", na coluna de despesas liquidadas até o bimestre: <span class="num">{{ (m.linhas|selectattr('id', 'equalto', 'juros')|first).exato }}</span>. É a nossa linha de juros, ao centavo.</p>
+      <a href="https://siconfi.tesouro.gov.br/siconfi/pages/public/consulta_finbra/finbra_list.jsf" style="font-size:14px;font-weight:600">Ir ao SICONFI →</a>
+    </div>
+    <div>
+      <p><strong>No Anexo 06</strong> do mesmo relatório, procure "Despesa primária total", liquidadas. Some com os juros do passo 1: dá <span class="num">{{ m.total_exato }}</span>, o total do recibo. Cada linha do desenho é uma fatia desse número, e a ficha de cada uma diz de qual anexo e de qual linha ela veio.</p>
+      <a href="{{ raiz }}dados/" style="font-size:14px;font-weight:600">Ver as fontes e os lacres →</a>
+    </div>
+    <div>
+      <p><strong>Quer ir mais fundo?</strong> O código, os arquivos originais lacrados (com a impressão digital de cada um), as {{ m.conferencias.n }} conferências e os testes estão no GitHub. Rodar o pipeline no seu computador refaz cada número daqui.</p>
+      <a href="{{ site.url_github }}" style="font-size:14px;font-weight:600">Abrir o GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<section id="conferencias" class="conferencias" aria-labelledby="h-conf">
+  <h2 id="h-conf" class="h2" style="margin-bottom:8px">As {{ m.conferencias.n }} conferências de {{ m.ano }}</h2>
+  <p style="font-size:15px;color:#3A423F;margin-bottom:14px">Cada uma é uma conta que tem que fechar. "Crítica" trava a publicação se falhar; as outras são avisos, sempre explicados. Resultado em {{ m.ano }}: {{ m.conferencias.ok }} de {{ m.conferencias.n }} OK.</p>
+  <ul class="conf-lista">
+    {% for r in m.conferencias.lista %}
+    <li><span class="{{ 'ok' if r.ok else 'falha' }}">{{ 'OK' if r.ok else 'AVISO' }}</span><span><strong>{{ r.id }}</strong>{% if r.critica %} <span class="mini">(crítica)</span>{% endif %}<br><span class="mini">{{ r.descricao }}</span>{% if r.detalhe %}<br><span class="mini">Detalhe: {{ r.detalhe }}</span>{% endif %}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section id="fontes" aria-labelledby="h-fontes">
+  <h2 id="h-fontes" class="h2" style="margin-bottom:12px">As fontes</h2>
+  <table class="tabela">
+    <thead><tr><th>id</th><th>fonte</th><th>órgão</th><th>formato e cadência</th></tr></thead>
+    <tbody>
+      {% for f in fontes %}<tr><td>{{ f.id }}</td><td>{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td>{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section id="glossario" aria-labelledby="h-gloss">
+  <h2 id="h-gloss" class="h2" style="margin-bottom:12px">Glossário</h2>
+  <div class="glossario">
+    {% for g in glossario %}<div><b>{{ g.termo }}</b><p>{{ g.explica }}</p></div>{% endfor %}
+  </div>
+</section>
+{% endblock %}

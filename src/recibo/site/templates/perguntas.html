@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block titulo %}{{ p.titulo }} · {{ site.titulo }}{% endblock %}
+{% block descricao %}O que ainda não fecha no {{ site.titulo }}: diferenças entre relatórios oficiais e limitações dos dados abertos, cada uma com a pergunta enviada pela Lei de Acesso à Informação, o protocolo e a resposta.{% endblock %}
+{% block conteudo %}
+<article class="prosa">
+  <h1>{{ p.titulo }}</h1>
+  <p>{{ p.intro }}</p>
+  <p class="mini">{{ p.n_abertas }} aberta(s) · {{ p.n_enviadas }} enviada(s) · {{ p.n_respondidas }} respondida(s). Os números citados são do último ano fechado ({{ p.ano }}), lidos dos mesmos arquivos do site. Clique numa pergunta para abrir.</p>
+</article>
+
+<div class="perguntas">
+  {% for q in p.perguntas %}
+  <details class="pergunta" id="{{ q.id }}">
+    <summary>
+      <span class="status status-{{ q.status }}">{{ {'aberta': 'Aberta', 'enviada': 'Enviada', 'respondida': 'Respondida'}.get(q.status, q.status) }}</span>
+      <span class="pergunta-titulo">
+        <span class="h3">{{ q.titulo }}</span>
+        <span class="mini">{{ q.orgao }}{% if q.protocolo %} · protocolo {{ q.protocolo }}{% endif %}{% if q.enviada_em %} · enviada em {{ q.enviada_em }}{% endif %}{% if q.respondida_em %} · respondida em {{ q.respondida_em }}{% endif %}</span>
+      </span>
+      <span class="seta" aria-hidden="true">▾</span>
+    </summary>
+    <div class="pergunta-corpo">
+      <div>
+        <h3 class="eyebrow">O problema</h3>
+        <p>{{ q.contexto }}</p>
+        {% if q.o_que_sabemos %}<h3 class="eyebrow">O que já medimos</h3><p>{{ q.o_que_sabemos }}</p>{% endif %}
+        {% if q.afeta %}<h3 class="eyebrow">O que muda no site com a resposta</h3><p>{{ q.afeta }}</p>{% endif %}
+      </div>
+      <div>
+        <h3 class="eyebrow">A pergunta{% if q.status == 'aberta' %}, pronta para enviar{% else %} enviada{% endif %}</h3>
+        <p class="mini">Para: {{ q.orgao }}</p>
+        <blockquote class="pedido">{{ q.pergunta }}</blockquote>
+        {% if q.protocolo or q.enviada_em or q.respondida_em %}
+        <dl class="dl">
+          {% if q.protocolo %}<dt>Protocolo</dt><dd class="num">{{ q.protocolo }}</dd>{% endif %}
+          {% if q.enviada_em %}<dt>Enviada em</dt><dd>{{ q.enviada_em }}</dd>{% endif %}
+          {% if q.respondida_em %}<dt>Respondida em</dt><dd>{{ q.respondida_em }}</dd>{% endif %}
+        </dl>
+        {% endif %}
+        {% if q.resposta %}<h3 class="eyebrow">A resposta</h3><p>{{ q.resposta }}</p>{% elif q.status == 'enviada' %}<p class="mini">Aguardando a resposta (prazo legal: 20 dias, prorrogáveis por mais 10).</p>{% endif %}
+        {% if q.mudou %}<h3 class="eyebrow">O que mudou no site</h3><p>{{ q.mudou }}</p>{% endif %}
+      </div>
+    </div>
+  </details>
+  {% endfor %}
+</div>
+
+<section class="card" aria-labelledby="h-duvida">
+  <h2 id="h-duvida" class="h3" style="margin-bottom:8px">{{ p.tem_duvida.titulo }}</h2>
+  <p style="font-size:15px;line-height:1.55;color:#3A423F">{{ p.tem_duvida.texto }}</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn cheio" href="{{ site.url_issues }}">Enviar pelo GitHub →</a>
+    <a class="btn" href="mailto:{{ site.email_contato }}">Enviar por e-mail</a>
+  </div>
+  <p class="mini" style="margin-top:10px">As limitações que não dependem de pergunta a ninguém (o que o site ainda não separa e o que vem depois) estão na <a href="{{ raiz }}metodologia/#limitacoes">metodologia</a>.</p>
+</section>
+{% endblock %}

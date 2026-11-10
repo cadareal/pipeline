@@ -257,15 +257,47 @@ fontes:
     usos: [drill previdência por regime]
 
   - id: S14
-    nome: IBGE, população (SIDRA tabela 6579 e estimativas)
+    nome: IBGE, população (projeção revisão 2024 no ftp.ibge e estimativas no SIDRA)
     orgao: IBGE
-    base_url: https://apisidra.ibge.gov.br/values/t/6579
-    formato: json
-    cadencia: anual
+    base_url: https://ftp.ibge.gov.br/Projecao_da_Populacao/Projecao_da_Populacao_2024/
+    formato: xlsx (projeção) + json (SIDRA)
+    cadencia: anual (estimativas em agosto; a projeção é revista a cada censo)
     chave: nenhuma
-    camada: api
-    status: planejado
-    usos: [per capita]
+    camada: arquivo + api
+    status: ativo
+    timeout_http_s: 180
+    # De fora do Brasil o IBGE barra o catálogo (servicodados) e o site (www), mas serve o ftp e o apisidra (10/nov/2026,
+    # Buenos Aires). IPv4 forçado: a rota IPv6 até o IBGE fica pendurada. Sem catálogo, o lacre por hash é o que decide
+    # se há snapshot novo. Se o IBGE não responder, o raw já lacrado continua valendo (população muda uma vez por ano).
+    forcar_ipv4: true
+    usos: [per capita no recibo (memos) e no mart da dívida (grupo por habitante)]
+    # Régua do per capita: Projeções da População, revisão 2024 (população em 1º de julho de cada ano, 2000 a 2070,
+    # Brasil, regiões e UFs; tab3 = grupos etários específicos, com POP_T, POP_H, POP_M, 0-14, 15-64, 60+, 65+...).
+    # É a série de onde saem as estimativas oficiais de 2024 em diante (212.583.750, 213.421.037, 214.211.951) e a
+    # única com 2022 e 2023 na mesma régua; corrige a cobertura do Censo 2022 (210.862.983 em 2022 contra 203.080.756
+    # contados). Layout da planilha em linhas.yaml (bloco `populacao`).
+    projecao:
+      url: https://ftp.ibge.gov.br/Projecao_da_Populacao/Projecao_da_Populacao_2024/projecoes_2024_tab3_grupos_etarios_especificos.xlsx
+      revisao: "2024"
+      regua: projecao
+      data_referencia: "07-01"           # 1º de julho (mês-dia), como o IBGE define a população do ano
+    # Tabelas do SIDRA (apisidra.ibge.gov.br/values/t/{tabela}/n1/all/v/{variavel}/p/all): só Brasil (n1), todos os anos.
+    sidra:
+      - id: estimativas
+        tabela: 6579
+        variavel: 9324
+        url: https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/all
+        regua: estimativa
+        data_referencia: "07-01"
+        o_que: "Estimativas da população residente em 1º de julho, publicadas para o TCU (FPM); não tem 2007, 2010, 2022 e 2023. Conferência da projeção nos anos em que existe"
+      - id: censo_2022
+        tabela: 4709
+        variavel: 93
+        url: https://apisidra.ibge.gov.br/values/t/4709/n1/all/v/93/p/all
+        regua: censo
+        data_referencia: "08-01"
+        opcional: true                   # se a tabela não vier como esperado, fica sem a nota do Censo; nada mais depende dela
+        o_que: "Censo Demográfico 2022: população residente contada em 1º de agosto de 2022 (203.080.756), sem a correção de cobertura"
 
   - id: S15
     nome: DadosJusBr, contracheques de Judiciário e MP

@@ -1,11 +1,12 @@
-# Planilha-mãe como código (v0.6.3: RREO + SIOP no recibo, total pela conta oficial do Tesouro, receitas e memos; o
-# bloco `cofog` no fim é um produto separado e não altera nenhum número do recibo).
+# Planilha-mãe como código (v0.8.0: RREO + SIOP no recibo, total pela conta oficial do Tesouro, receitas e memos; os
+# blocos `cofog` e `divida` no fim são produtos separados e não alteram nenhum número do recibo; `populacao` é a
+# régua do per capita, que só entra em memos).
 # Cada entrada gera, ao mesmo tempo: o SQL que calcula o número, a ficha técnica publicada e as reconciliações.
 # Mudou aqui, mudou nos três. Nenhum valor é digitado neste arquivo.
 # Calibrado em 2026-11-08/09 contra o RREO da União (2023/6º, 2024/6º, 2025/6º e 2026/4º bimestre) e o SIOP
 # (2023 a 2026). Os valores citados nos comentários são observações dessas rodadas, não entradas.
 
-versao: "0.6.3"   # números do recibo iguais aos da 0.5.1; a 0.6.3 só acrescenta o bloco `cofog` (mart separado)
+versao: "0.10.0"   # números do recibo iguais aos da 0.5.1; 0.6.3 acrescentou o bloco `cofog`, 0.7.2 o bloco `divida` (marts separados), 0.8.0 o bloco `populacao` (per capita, só memos), 0.9.0 os níveis por linha no export (site), 0.9.1 o bloco `fontes_de_recursos`, 0.10.0 `estoque_detalhe`, `conta_do_ano` e `estoque_mensal` na dívida
 
 regra_rateio: >
   O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção do que o governo gastou no período. "Gastou"
@@ -189,7 +190,7 @@ anexo06:
       contas:
         primario_acima: RREO6ResultadoPrimarioEstadosMunicipios    # "RESULTADO PRIMÁRIO - Acima da Linha (IX)": é esse o cod_conta no RREO da União
         ajuste_metodologico: RREO6AjusteMetodologicoDoResultadoPrimarioAcimaDaLinha   # existe a partir de 2025
-        primario_abaixo: ResultadoPrimarioAbaixoDaLinha            # (XXVII), a conta do Banco Central
+        primario_abaixo: ResultadoPrimarioAbaixoDaLinha            # (XXVII), pela variação da dívida consolidada líquida do RREO (não é a conta do BC)
         nominal_acima: ResultadoNominalAcimaDaLinha                # (XII) = IX + (X - XI)
         nominal_abaixo: ResultadoNominalAbaixoDaLinha              # (XVII)
         nominal_ajustado: ResultadoNominalAjustado                 # (XXVI)
@@ -485,8 +486,10 @@ memos:
       dois números: "acima da linha" (linha IX: a conta de receitas e despesas mais um "ajuste metodológico" que,
       segundo a nota 1 do próprio anexo, é a diferença para o número do boletim mensal do Tesouro, o Relatório do
       Tesouro Nacional, que segue o Manual de Estatísticas de Finanças Públicas; o anexo não abre os itens) e "abaixo
-      da linha" (linha XXVII: a conta do Banco Central, pela variação da dívida). Os dois saem aqui, com a conta aberta.
-      Em 2024 e 2025 o abaixo da linha é igual ao centavo à conta de caixa antes do ajuste.
+      da linha" (linha XXVII: pela variação da dívida consolidada líquida do próprio RREO, com ajustes). Os dois saem
+      aqui, com a conta aberta. Em 2024 e 2025 o abaixo da linha é igual ao centavo à conta de caixa antes do ajuste.
+      Atenção: não é a conta do Banco Central (NFSP); essa é outra régua e sai no mart da dívida (em 2024, o BC
+      apurou déficit primário de R$ 45,4 bi para o Governo Central, contra R$ 47,96 bi aqui).
     unidade: reais
     status: implementado
   - id: juros_nominais
@@ -502,8 +505,8 @@ memos:
     nome: Resultado nominal (déficit com os juros)
     definicao: >
       Resultado primário mais os juros líquidos: o déficit completo. É o quanto a dívida precisou crescer para
-      fechar a conta do período. Acima da linha (XII) pelo Tesouro; abaixo da linha (XVII) e ajustado (XXVI) pelo
-      Banco Central.
+      fechar a conta do período. Acima da linha (XII) pelo Tesouro; abaixo da linha (XVII, a variação da dívida
+      consolidada líquida do RREO) e ajustado (XXVI). A conta do Banco Central (NFSP) é outra régua: mart da dívida.
     unidade: reais
     status: implementado
   - id: divida
@@ -530,10 +533,24 @@ memos:
       orçamento (ficam no balanço patrimonial, BGU): fonte a definir na torneira da dívida.
     unidade: reais
     status: implementado
+  - id: por_habitante
+    nome: Gasto e tributos por habitante
+    definicao: >
+      O total do recibo, os tributos e cada uma das linhas divididos pela população do Brasil no ano (IBGE, projeção
+      revisão 2024, população em 1º de julho; fonte S14). É o mesmo dinheiro das linhas, só que por pessoa: "de cada
+      brasileiro, R$ X saíram em tributos federais e R$ Y foram para o INSS". Nenhum centavo do recibo muda. Só sai
+      quando a projeção e a estimativa oficial do IBGE, nos anos em que as duas existem, são o mesmo número.
+    unidade: reais_por_habitante
+    status: implementado
   - id: imposto_futuro
     nome: Dívida nova por habitante
-    definicao: Variação da dívida líquida no período (memo divida) dividida pela população (S14, IBGE).
-    status: fase_1_1
+    definicao: >
+      Variação da dívida consolidada líquida no período (memo divida, Anexo 06 do RREO) dividida pela população do
+      ano (IBGE, S14): quanto cada brasileiro passou a dever a mais, pela régua da Lei de Responsabilidade Fiscal. É
+      imposto futuro: dívida se paga com tributo depois. O mart da dívida traz a mesma conta com as outras réguas
+      (DPF do Tesouro, dívida líquida pelo Banco Central).
+    unidade: reais_por_habitante
+    status: implementado
 
 reconciliacoes:
   - id: hierarquia
@@ -665,6 +682,18 @@ reconciliacoes:
       (+99%, dois terços empréstimo); investigue com `recibo diff` e `recibo inspect siop`.
     critica: false
     limite_relativo: 0.15
+  - id: fontes_total_vs_anexo01
+    descricao: >
+      A despesa por fonte de recursos do SIOP (todos os grupos de natureza, com o refinanciamento) soma o total do
+      Anexo 01 do RREO com o refinanciamento: nenhuma fonte fica de fora do carimbo. Informativa: se não fechar, a visão
+      do caixa sai sem o detalhe por fonte e o recibo não muda.
+    critica: false
+  - id: niveis_fecham
+    descricao: >
+      Os níveis de dentro de cada linha (subfunções do RREO, funções do resíduo, elementos do SIOP), com os ajustes
+      nomeados, somam o valor da linha. É o que o site abre quando a pessoa clica numa faixa; a conta tem que fechar
+      linha a linha. Informativa: uma linha que não feche sai no site sem abertura, com o motivo, e o recibo não muda.
+    critica: false
 
   # Conferências cruzadas com o SIOP (S8): fonte independente do RREO, sobre o mesmo universo (orçamentos fiscal e
   # da seguridade, sem intraorçamentárias, sem refinanciamento quando se compara com o Anexo 02). Só em ano fechado.
@@ -753,6 +782,39 @@ siop:
   subfuncoes_servico_divida: ["841", "842", "843", "844"]
   subfuncao_outros_encargos: "846"
   acoes_listadas: 40                        # quantas ações entram na lista do "Fora do R$ 1,00" (export e hover)
+  niveis_acoes_maximo: 0                    # ações por subfunção e órgãos por elemento nos níveis do export (0 = todas: o site mostra tudo)
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Fontes de recursos (S8, SIOP): com que dinheiro cada despesa foi paga, pelo carimbo da fonte na lei orçamentária.
+# É o que a visão "Tudo o que passou pelo caixa" usa no lugar do rateio: título tem carimbo (fontes 443 e 444 só pagam
+# o que a lei autoriza), então dá para dizer quanto do dinheiro de título pagou principal, juros e o resto, e com que
+# dinheiro o gasto de verdade foi pago. O primeiro dígito do código diz quando o dinheiro entrou (1 e 2: no ano; 3 e 6:
+# em anos anteriores, o "colchão"). Só no ano fechado, como todo cruzamento com o SIOP. Observado em 2025: 1443 e 3443
+# (refinanciamento) somam R$ 1,42 tri, igual à rolagem do RREO; 1444, 3444 e 7444 (títulos novos) somam R$ 0,60 tri.
+# ---------------------------------------------------------------------------------------------------------------------
+fontes_de_recursos:
+  agregacao: fonte_gnd_subfuncao
+  origem_por_digito: {"1": corrente, "2": corrente, "3": anteriores, "6": anteriores}   # demais dígitos: outros
+  grupos:                                    # a ordem importa: o primeiro regex que casar com o nome da fonte vence
+    - id: titulos_novos
+      nome: Títulos novos (dívida nova)
+      regex: "Recursos Oriundos de T[íi]tulos do Tesouro"      # "Demais Aplicações Autorizadas para Recursos Oriundos de Títulos do Tesouro Nacional, Excetuado o Refinanciamento..."
+    - id: titulos_refinanciamento
+      nome: Títulos vendidos para a rolagem
+      regex: "^Refinanciamento da D[ií]vida P[úu]blica Federal"
+    - id: receitas_para_divida
+      nome: Receitas carimbadas para pagar dívida
+      regex: "^(Pagamento da D[ií]vida P[úu]blica Mobili[áa]ria Federal|Amortiza[çc][ãa]o da D[ií]vida P[úu]blica Federal)"
+    - id: receita
+      nome: Receita (tributos, contribuições e demais fontes)
+      resto: true
+  destinos:                                  # por grupo de natureza da despesa (GND) e pela marca de refinanciamento
+    rolagem: "Principal de títulos velhos (rolagem)"
+    principal: "Principal pago com dinheiro do caixa"
+    juros: "Juros da dívida"
+    primaria: "Despesa primária (gasto, sem os juros)"
+    inversoes: "Empréstimos, aplicações e participações"
+  gnd: {"1": "Pessoal e encargos sociais", "2": "Juros e encargos da dívida", "3": "Outras despesas correntes", "4": "Investimentos", "5": "Inversões financeiras", "6": "Amortização da dívida"}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # COFOG (S7): produto separado do recibo, `recibo mart cofog --exercicio AAAA`. É a despesa do Governo Central medida
@@ -804,3 +866,290 @@ cofog:
         A partir do arquivo de 2024 o Tesouro publica em R$ milhões com duas casas: cada linha só é precisa até R$ 10 mil.
         Somas de milhares de linhas carregam esse arredondamento; por isso a ponte tem tolerância em por cento, não em
         centavos.
+
+# ---------------------------------------------------------------------------------------------------------------------
+# DÍVIDA (S1 Tesouro + S16 BCB + Anexos 01/06 do recibo): produto separado, `recibo mart divida --exercicio AAAA`.
+# Quatro medidas, cada uma com várias réguas nomeadas e nunca misturadas: juros do ano, dívida nova no ano, estoque,
+# risco de rolagem. Layout de cada arquivo do Tesouro fixado aqui por rótulo e unidade, depois da primeira leitura real
+# (9/nov/2026). Nada daqui entra no R$ 1,00 do recibo.
+populacao:                                  # S14, IBGE: a régua do per capita (recibo e mart da dívida)
+  regua_per_capita: projecao                # projeção revisão 2024, população em 1º de julho; única régua com 2022 e 2023
+  local: Brasil
+  projecao_xlsx:                            # layout da planilha tab3 (grupos etários específicos), visto em 10/nov/2026
+    planilha: "3) POP_GRUPO ETÁRIO ESPECÍFICO"
+    cabecalho_coluna1: ANO                  # a linha de cabeçalho é a primeira cuja coluna 1 é exatamente isto (linha 7)
+    colunas:
+      ano: ANO
+      cod: "CÓD."
+      sigla: SIGLA
+      local: LOCAL
+      populacao: POP_T
+      homens: POP_H
+      mulheres: POP_M
+      idosos_65_mais: "65+_T"
+  # guarda de escala para o Brasil: fora disto é unidade ou coluna errada, não gente
+  brasil_minimo: 150000000
+  brasil_maximo: 300000000
+  reconciliacoes:
+    - id: populacao_projecao_vs_estimativa
+      descricao: >
+        Nos anos em que o IBGE publica a estimativa oficial (tabela 6579, usada pelo TCU), ela tem que ser igual à
+        projeção revisão 2024, de onde sai. Se divergir, o per capita não sai (fica indisponível, com o motivo) e o
+        recibo e o mart da dívida continuam publicáveis: nenhum centavo deles depende da população.
+      critica: false
+      tolerancia_absoluta: 0
+  glossario:
+    - termo: população do ano
+      texto: >
+        O IBGE define a população de um ano como a de 1º de julho, o meio do ano. A projeção revisão 2024 dá um número
+        por ano de 2000 a 2070 numa régua só; as estimativas oficiais (as que o TCU usa para dividir o Fundo de
+        Participação dos Municípios) saem dela de 2024 em diante. O Censo 2022 contou 203,1 milhões; a projeção
+        corrige a cobertura do Censo e dá 210,9 milhões para o mesmo ano, por isso os dois não se misturam.
+    - termo: por habitante
+      texto: >
+        O valor dividido pela população do ano. É um jeito de ler o tamanho: R$ 352 bilhões de juros viram R$ 1.656
+        por pessoa em 2024. Não é o que cada pessoa pagou (quem paga mais imposto paga mais), é a média.
+
+divida:
+  tolerancia_mes_referencia: dezembro       # ano fechado = dezembro presente em todas as fontes; senão "em andamento (até mês M)"
+  estoque_xlsx:                             # Anexo 2.1 - Estoque da DPF: posição de fim de mês, R$ bilhões
+    dataset: estoque_dpf
+    arquivo_regex: "\\.xlsx$"
+    planilha: "2.1"
+    unidade: bilhoes
+    linhas:
+      dpf_publico: "DPF EM PODER DO PÚBLICO"
+      dpmfi: "DPMFi"
+      dpfe: "DPFe"
+      dpmfi_bc: "DPMFi EM PODER DO BANCO CENTRAL"
+  fatores_xlsx:                             # Anexo 2.9 - Fatores de variação da DPF: fluxos do mês, R$ milhões
+    dataset: fatores_variacao
+    arquivo_regex: "\\.xlsx$"
+    planilha: "2.9"
+    unidade: milhoes
+    linhas:
+      estoque_anterior: "Estoque anterior"
+      estoque_fim: "Estoque mês em análise"
+      variacao: "Variação Nominal"
+      emissoes: "I.1.1 - Emissões"
+      resgates: "I.1.2 - Resgates"
+      juros: "I.2 - Juros Apropriados"
+      juros_dpmfi: "- Juros Apropriados da DPMFi"
+      juros_dpfe: "- Juros Apropriados da DPFe"
+      operacoes_bc: "II - Operações do mercado com o Banco Central"
+      total: "Total dos Fatores (I + II)"
+  estoque_csv:                              # título a título, mês a mês, em reais (desde 2017)
+    dataset: estoque_dpf
+    arquivo_regex: "\\.csv$"
+    unidade: reais
+    colunas:
+      mes: "Mes do Estoque"
+      classe: "Classe da Carteira"
+      tipo: "Tipo de Divida"
+      valor: "Valor do Estoque"
+      vencimento: "Vencimento do Titulo/Contrato"
+      titulo: "Titulo/Contrato"
+    valores:
+      mercado: "Mercado"
+      banco_central: "Banco Central"
+      interna: "Dívida Interna"
+      externa: "Dívida Externa"
+    # indexador pelo começo do nome do título. Os regex são testados primeiro, na ordem; o que sobrar da dívida externa
+    # é câmbio (externa: true); o resto vai para "demais". "Global BRL" é título externo emitido em reais, prefixado
+    # (o Tesouro o conta assim no Relatório Mensal). O Tesouro classifica pelo indexador contratual de cada papel (TDA
+    # pela TR entra como flutuante, securitizadas pelo IGP-DI como preços, algumas em dólar como câmbio), que o nome não
+    # revela: por isso a composição do RMD difere daqui em até 0,1 ponto percentual (dez/2024: 46,29 / 21,99 / 26,96 /
+    # 4,76 contra 46,18 / 21,99 / 26,84 / 4,73 aqui, mais 0,25 de "demais").
+    indexadores:
+      selic: {regex: "^LFT", nome: "Selic (taxa flutuante)"}
+      prefixado: {regex: "^(LTN|NTN-F|Global BRL)", nome: "Prefixado"}
+      precos: {regex: "^(NTN-B|NTN-C)", nome: "Índice de preços (IPCA, IGP-M)"}
+      cambio: {regex: "^(NTN-D|NTN-A|NTN-I|Global|Euro|A-Bond)", externa: true, nome: "Câmbio"}
+      demais: {nome: "Demais (TDA, securitizada, CVS...)"}
+    vincendo_meses: 12                      # "principal que vence em N meses": só o valor do estoque dos títulos e contratos
+                                            # com vencimento final no período. O Tesouro publica no RMD um "percentual vincendo
+                                            # em 12 meses" maior, porque divide pelo estoque o fluxo de principal E juros dos 12
+                                            # meses seguintes, trazido a valor presente (dez/2024: 17,87% lá, 15,67% aqui).
+    # "Quando vence" (visão "A dívida" do site, v0.10.0): cada título ou contrato em mercado cai numa faixa pelo número de
+    # meses entre o mês de referência e o vencimento final (até 12 meses = vence no mesmo mês do ano seguinte, como o
+    # `vincendo_meses`). Dentro da primeira faixa o detalhe é mês a mês; nas outras, ano a ano. Vencimento já passado
+    # ou no próprio mês entra na primeira faixa como "já vencido ou à vista". Sem data no arquivo: faixa própria.
+    faixas_vencimento:
+      - {id: ate_12m, nome: "Vence em até 12 meses", ate_meses: 12}
+      - {id: de_1_a_2_anos, nome: "Vence de 1 a 2 anos", ate_meses: 24}
+      - {id: de_2_a_5_anos, nome: "Vence de 2 a 5 anos", ate_meses: 60}
+      - {id: mais_de_5_anos, nome: "Vence em mais de 5 anos", ate_meses: null}
+    sem_vencimento: {id: sem_data, nome: "Sem data de vencimento no arquivo"}
+  execucao_csv:                             # execução orçamentária e financeira da DPF por natureza, por ano e mês, em reais
+    dataset: execucao_natureza
+    arquivo_regex: "\\.csv$"
+    unidade: reais
+    colunas:
+      exercicio: "Exercício"
+      movimentacao: "Movimentação Financeira"
+      tipo: "Tipo de Dívida"
+      modalidade: "Modalidade da Dívida"
+      carteira: "Carteira"
+      natureza: "Natureza Despesa Detalhada Nome"
+      meses: [janeiro, fevereiro, março, abril, maio, junho, julho, agosto, setembro, outubro, novembro, dezembro]
+    valores:
+      juros: "Juros e Encargos"
+      principal: "Principal"
+      politica_monetaria: "Política Monetária"   # cobertura do resultado negativo do BC (ação 0669), fora da DPF: vale
+                                                  # em "Tipo de Dívida" ou em "Modalidade da Dívida"
+      cobertura_bc_regex: "^COBERTURA DO RESULTADO NEGATIVO"   # ou pelo nome da natureza (32902601 / 46902601)
+    # Linhas repetidas no arquivo do Tesouro: em 2025 a cobertura do BC aparece duas vezes, com os mesmos valores em todas
+    # as colunas menos "Tipo de Dívida" (uma vez como "Interna", outra como "Política Monetária"). O Anexo 01 e o SIOP
+    # trazem o valor uma vez só (12,78 bi de juros e 111,25 bi de principal). Linhas iguais em tudo menos nestas colunas
+    # são contadas uma vez, e o mart avisa quantas e quanto. Em 2024 e 2023 não há repetição.
+    duplicatas_ignorando: ["Tipo de Dívida"]
+  tesouro_direto_csv:                       # estoque do Tesouro Direto, título a título, mês a mês, em reais
+    dataset: tesouro_direto_estoque
+    arquivo_regex: "\\.csv$"
+    unidade: reais
+    colunas:
+      mes: "Mes Estoque"
+      tipo: "Tipo Titulo"
+      valor: "Valor Estoque"
+  bcb:                                      # séries do SGS (sources.yaml, S16) por papel no mart
+    juros_gf: 4607
+    juros_bc: 4608
+    juros_gc: 4606
+    juros_consolidado: 4616
+    primario_gf: 4640
+    primario_gc: 4639
+    nominal_gf: 4574
+    nominal_gc: 4573
+    dlsp_gf: 4469
+    dlsp_gc: 4468
+    dlsp_consolidado: 4478
+    dlsp_gf_pib: 4504
+    dlsp_gc_pib: 4503
+    dlsp_consolidado_pib: 4513
+    dlgg_pib: 4536
+    dbgg_pib: 13762
+    mobiliaria_emitida: 4151
+    mobiliaria_mercado: 4154
+    mobiliaria_bc: 4152
+    indexador_selic: 4177
+    indexador_prefixado: 4178
+    indexador_cambio: 4173
+    prazo_medio: 10618
+  reconciliacoes:
+    - id: dpf_fatores_identidade
+      descricao: >
+        Estoque anterior + emissões + resgates + juros apropriados + operações com o BC = estoque no fim do ano
+        (planilha de fatores do Tesouro, R$ milhões). É a conta do próprio Tesouro de por que a dívida variou.
+      critica: true
+      tolerancia_relativa: 0.000001
+    - id: fatores_coluna_anual_vs_soma_meses
+      descricao: >
+        Nos juros apropriados, a coluna anual que o Tesouro publica na planilha de fatores é igual à soma dos doze
+        meses (só em ano fechado).
+      critica: false
+      tolerancia_relativa: 0.000000001
+    - id: dpf_estoque_xlsx_vs_csv
+      descricao: >
+        DPF em poder do público no fim do ano: a planilha do Tesouro (R$ bilhões) e o CSV título a título (reais,
+        carteira Mercado) são o mesmo número.
+      critica: true
+      tolerancia_relativa: 0.000001
+    - id: dpf_estoque_xlsx_vs_fatores
+      descricao: >
+        Estoque no fim do ano igual nas duas planilhas do Tesouro (estoque 2.1 em bilhões, fatores 2.9 em milhões).
+      critica: true
+      tolerancia_relativa: 0.000001
+    - id: carteira_bc_tesouro_vs_bcb
+      descricao: >
+        Títulos do Tesouro na carteira do Banco Central: o CSV do Tesouro (reais) e a série 4152 do BC (R$ milhões,
+        duas casas) no fim do ano.
+      critica: false
+      tolerancia_relativa: 0.000001
+    - id: dpmfi_mercado_tesouro_vs_bcb
+      descricao: >
+        Dívida mobiliária interna em mercado: Tesouro (DPMFi) contra a série 4154 do BC. Em 2023 e 2024 o BC traz
+        R$ 26 a 29 milhões a mais em 7 trilhões (0,0004%).
+      critica: false
+      tolerancia_relativa: 0.0001
+    - id: juros_anexo01_vs_execucao_dpf
+      descricao: >
+        Juros pagos no ano: a linha de juros do recibo (Anexo 01, liquidado) contra a execução da DPF por natureza
+        (grupo 2, juros e encargos, inclusive a cobertura do BC). Em 2023 iguais a R$ 10 mil; em 2024, R$ 55 milhões de
+        diferença (72 milhões são o cacau, ação 00QM, que não é DPF).
+      critica: false
+      tolerancia_relativa: 0.001
+    - id: principal_anexo01_vs_execucao_dpf
+      descricao: >
+        Amortização mais refinanciamento do Anexo 01 contra o principal pago na execução da DPF (grupo 6).
+      critica: false
+      tolerancia_relativa: 0.001
+    - id: cobertura_bc_execucao_vs_recibo
+      descricao: >
+        O que o recibo mede como serviço da dívida fora das subfunções 843/844 (juros + amortização - 843/844) contra
+        as linhas "Política Monetária" da execução da DPF (cobertura do resultado negativo do BC, ação 0669), contadas
+        uma vez. A diferença conhecida é o cacau (00QM): 72 milhões em 2024. Em 2023 os dois lados são zero (o recibo
+        dá -2,26 reais, arredondamento do RREO); o piso de tolerância é o das identidades sobre juros + amortização.
+      critica: false
+      tolerancia_relativa: 0.01
+    - id: titulos_rreo_vs_emissoes_dpf
+      descricao: >
+        Títulos vendidos no ano pelo RREO (receitas de operações de crédito mais refinanciamento, Anexo 01) contra as
+        emissões da DPF em poder do público (fatores de variação do Tesouro, Anexo 2.9). Medem coisas parecidas, não
+        iguais: o RREO registra a receita orçamentária de todo título emitido (inclusive os emitidos direto para a
+        carteira do Banco Central, como a cobertura do resultado negativo do BC) e os fatores só as emissões em mercado.
+        Em 2025: R$ 2,46 tri contra R$ 1,90 tri. A diferença está em investigação (página Perguntas abertas); a
+        conferência é informativa e a tolerância é só para registrar o tamanho dela, não para aprovar.
+      critica: false
+      tolerancia_relativa: 0.0001
+    - id: indexador_selic_tesouro_vs_bcb
+      descricao: >
+        Fatia da dívida mobiliária interna em mercado atrelada à Selic: LFT sobre DPMFi no CSV do Tesouro contra a
+        série 4177 do BC (participação por indexador, posição em carteira). Pontos percentuais.
+      critica: false
+      tolerancia_absoluta: 0.05
+    - id: indexador_prefixado_tesouro_vs_bcb
+      descricao: >
+        Fatia prefixada: LTN mais NTN-F sobre DPMFi contra a série 4178 do BC. Pontos percentuais.
+      critica: false
+      tolerancia_absoluta: 0.05
+  glossario:
+    - termo: DPF, DPMFi e DPFe
+      texto: >
+        DPF é a Dívida Pública Federal: tudo o que o Tesouro deve, em títulos e contratos. DPMFi é a parte interna em
+        títulos (a maior); DPFe é a parte externa, em dólar, euro e contratos com organismos internacionais.
+    - termo: em poder do público e carteira do Banco Central
+      texto: >
+        O Tesouro também tem títulos na mão do Banco Central, que os usa para controlar a quantidade de dinheiro na
+        economia. "Em poder do público" (ou "em mercado") é a dívida fora do BC; é a que o Tesouro chama de DPF.
+    - termo: juros apropriados
+      texto: >
+        Os juros que o estoque gerou no mês, pagos ou não. A dívida cresce por eles mesmo sem nenhum pagamento. Na
+        externa, inclui a variação do câmbio.
+    - termo: juros nominais pelo BC (NFSP)
+      texto: >
+        NFSP são as "necessidades de financiamento do setor público", a conta do Banco Central que mede o déficit pelo
+        que a dívida precisou crescer. Os juros nominais dessa conta são líquidos: juros devidos menos juros que o
+        governo recebeu (do caixa aplicado, de quem lhe deve). Por isso são menores que os brutos do Anexo 06.
+    - termo: dívida líquida e dívida bruta
+      texto: >
+        Bruta é o que o governo deve. Líquida é o que deve menos o que tem a receber e o que tem em caixa. O BC publica
+        as duas; a bruta do governo geral (União, estados e municípios, em % do PIB) é a mais citada.
+    - termo: dívida consolidada (RREO)
+      texto: >
+        A medida da Lei de Responsabilidade Fiscal, no Anexo 06 do RREO: consolidada (bruta) e consolidada líquida
+        (descontados caixa e haveres). A variação da líquida é o que o RREO chama de resultado nominal "abaixo da linha".
+    - termo: prazo médio e vincendo em 12 meses
+      texto: >
+        Prazo médio é quanto tempo, em média, falta para a dívida vencer. "Vincendo em 12 meses" é a fatia que vence no
+        próximo ano e precisa ser paga ou rolada (trocada por dívida nova). Quanto maior, mais o Tesouro depende do
+        humor do mercado nos próximos meses. Aqui a fatia conta só o principal dos títulos e contratos que vencem no
+        período; o Tesouro, no Relatório Mensal da Dívida, conta também os juros (cupons) que caem nesses meses, trazidos
+        a valor presente, e por isso publica um número maior. O prazo médio mostrado é o do Banco Central (série 10618,
+        dívida mobiliária interna em mercado); o do Tesouro, para a DPF inteira, está só no Relatório Mensal (PDF).
+    - termo: indexador
+      texto: >
+        A que cada título está preso: à Selic (LFT, sobe quando o juro sobe), prefixado (LTN e NTN-F, juro combinado na
+        emissão; também o Global BRL, título externo emitido em reais), a um índice de preços (NTN-B, inflação mais juro)
+        ou ao câmbio (dívida externa em dólar, euro e outras moedas). Aqui a classificação é pelo nome do título; o
+        Tesouro classifica cada papel pelo indexador do contrato, por isso as fatias do Relatório Mensal diferem em até
+        0,1 ponto percentual.

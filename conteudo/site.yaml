@@ -1,0 +1,520 @@
+# Textos do site (cadareal). Tudo o que é frase, nome amigável e explicação para leigo mora aqui; os números vêm dos
+# exports (data/export/*.json) e nunca são digitados. Edite à vontade: `uv run recibo site` regenera as páginas.
+# Regra de escrita: toda palavra técnica tem a explicação ao lado, na primeira vez; sem travessão; sem opinião sobre
+# se o gasto é bom ou ruim.
+
+titulo: Cada Real
+slogan: o dinheiro público, real por real
+url_github: https://github.com/cadareal/pipeline
+url_issues: https://github.com/cadareal/pipeline/issues
+email_contato: "[E-MAIL DO PROJETO]"
+quem_fez: Caue Bertolino
+licenca: MIT
+# Domínio do site no GitHub Pages. Com `dominio`, o gerador escreve docs/CNAME a cada rodada (o `--limpar` apaga a pasta
+# inteira, e sem o CNAME o GitHub Pages esquece o domínio). `url` entra nos links absolutos: canonical, Open Graph (a
+# prévia do link no WhatsApp e nas redes), sitemap.xml e robots.txt. Enquanto o domínio não existir, pode ficar vazio.
+dominio: cadareal.org
+url: https://cadareal.org/
+
+# A bandeira é desenhada pelo próprio site (templates/_bandeira.html, geometria da Lei 5.700/1971), sem imagem de fora.
+bandeira:
+  rotulo: Bandeira do Brasil
+  legenda: Um projeto cívico brasileiro, independente e sem partido.
+
+# Os artigos da Constituição que resumem a filosofia do projeto. Entram em Quem somos (no lugar do marcador
+# [CONSTITUICAO] do quem-somos.md) como citações, cada um com uma frase em linguagem comum; o primeiro também vai no
+# rodapé de todas as páginas, ao lado da bandeira. Texto conferido com a Constituição de 1988 (art. 70 na redação da
+# Emenda Constitucional 19, de 1998).
+constituicao:
+  titulo: O que a Constituição diz
+  intro: "Três artigos da Constituição de 1988 resumem a filosofia do projeto: de quem é o poder, quem presta contas e quem pode cobrar."
+  artigos:
+    - rotulo: De quem é o poder
+      texto: Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos desta Constituição.
+      fonte: Constituição Federal, art. 1º, parágrafo único
+      glosa: "O ponto de partida. O poder, e o dinheiro que o sustenta, são do povo. Perguntar para onde foi cada real é exercer esse poder."
+    - rotulo: Quem presta contas
+      texto: Prestará contas qualquer pessoa física ou jurídica, pública ou privada, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos ou pelos quais a União responda, ou que, em nome desta, assuma obrigações de natureza pecuniária.
+      fonte: Constituição Federal, art. 70, parágrafo único
+      glosa: "O dever de quem gasta. Quem mexe em dinheiro público presta contas. Os relatórios que este site lê existem por causa disso; o site só os traduz para quem não é do ramo."
+    - rotulo: Quem pode cobrar
+      texto: Qualquer cidadão, partido político, associação ou sindicato é parte legítima para, na forma da lei, denunciar irregularidades ou ilegalidades perante o Tribunal de Contas da União.
+      fonte: Constituição Federal, art. 74, § 2º
+      glosa: "O direito de quem paga. Qualquer cidadão pode levar uma irregularidade ao Tribunal de Contas da União (TCU), o órgão que fiscaliza as contas da União. Este site não denuncia nem julga: mostra os números, com a fonte de cada um, para que cada pessoa tire as próprias conclusões."
+
+menu:
+  - rotulo: Início
+    caminho: ""
+  - rotulo: Metodologia
+    caminho: metodologia/
+  - rotulo: Quem somos
+    caminho: quem-somos/
+  - rotulo: Perguntas abertas
+    caminho: perguntas-abertas/
+  - rotulo: Dados
+    caminho: dados/
+
+esferas:
+  - rotulo: União
+    ativa: true
+  - rotulo: Estados
+    ativa: false
+    nota: em breve
+  - rotulo: Municípios
+    ativa: false
+    nota: em breve
+
+frases:
+  servico: Um serviço de cidadãos para cidadãos · números oficiais · código aberto
+  titulo_ano_fechado: O que a União fez com cada real de imposto em {ano}.
+  titulo_ano_aberto: O que a União está fazendo com cada real de imposto em {ano}, até o {periodo}º bimestre.
+  recibo: >
+    Chamamos de recibo a lista do que a União fez com o dinheiro no ano: como o cupom do mercado, só que do país
+    inteiro. Tudo abaixo sai de relatórios oficiais que qualquer pessoa pode abrir, e cada número diz de onde veio.
+  como_ler: >
+    Passe o mouse numa faixa para ver os números dela; clique para entrar: a faixa vira o R$ 1,00 inteiro e mostra o
+    que tem dentro, nível a nível. A trilha acima do desenho traz de volta.
+  selo_fechado: Ano fechado · {n} conferências, todas OK
+  selo_aberto: Até o {periodo}º bimestre · {n} conferências, todas OK
+  selo_problema: "{n} conferências, {falhas} com aviso"
+  rateio: >
+    O dinheiro não tem carimbo: um real de imposto não vai para a saúde e outro para a aposentadoria. Então o site usa
+    a regra do rateio: cada real que entrou é dividido na mesma proporção do que foi gasto. É por isso que, dentro de
+    uma faixa, o outro lado do desenho repete as mesmas proporções do todo.
+
+visoes:
+  caixa:
+    rotulo: Tudo o que passou pelo caixa
+    titulo: Tudo o que entrou e saiu do caixa da União em {ano}
+    explica: >
+      A visão completa. De um lado, o que entrou: a receita e os títulos que o Tesouro vendeu (títulos são promessas
+      de devolver o dinheiro com juros; quem compra são bancos, fundos, previdência privada, pessoas e estrangeiros).
+      Do outro, o que saiu: o gasto de verdade, a dívida antiga que foi paga, os empréstimos que o Tesouro fez. A
+      rolagem aparece dos dois lados com a mesma largura: é título novo pagando título velho, dinheiro que passa e
+      não fica. Clique em "O gasto de verdade" para entrar no R$ 1,00.
+    legenda_esq: o que entrou no caixa (receita realizada)
+    legenda_dir: o que saiu do caixa (despesa liquidada) e, tracejado, o que ficou
+    legenda_ficou: "O que ficou: nem receita nem despesa, a diferença entre as duas"
+    centro: tudo o que passou pelo caixa em {ano}
+    nota_diferenca: >
+      Entradas e saídas não fecham ao centavo porque a receita é contada quando entra no caixa e a despesa quando é
+      liquidada (reconhecida como devida), e porque parte do que entrou vai para o caixa ou paga contas de anos
+      anteriores. A diferença aparece como uma faixa com nome, não some.
+  gasto:
+    rotulo: O gasto de verdade
+    titulo: De onde veio e para onde foi cada R$ 1,00 gasto em {ano}
+    explica: >
+      O R$ 1,00 é tudo o que a União gastou de verdade: a despesa primária (aposentadorias, benefícios, salários,
+      saúde, educação, repasses, obras, custeio) mais os juros da dívida pagos em dinheiro. O que é só troca de
+      dinheiro por dinheiro (rolagem, pagamento de principal, empréstimos) fica fora, e está na visão "Tudo o que
+      passou pelo caixa".
+    legenda_esq: R$ bilhões · % · centavos de cada real
+    legenda_dir: centavos de cada real · % · R$ bilhões
+    centro: tudo o que a União gastou em {ano} = R$ 1,00
+  divida:
+    rotulo: A dívida
+    titulo: Quanto a União devia em {data}, do que essa dívida é feita e quando vence
+    explica: >
+      Dívida pública é dinheiro que o governo pegou emprestado e ainda não devolveu, quase todo vendendo títulos
+      (promessas de pagar com juros) a bancos, fundos, previdência privada, pessoas e estrangeiros. Como é a União que
+      deve, somos todos nós que devemos: a dívida se paga com tributo, hoje ou depois. O número do meio é a dívida da
+      União fora do Banco Central em {data} (a "DPF em poder do público", a medida do próprio Tesouro). À esquerda, do
+      que ela é feita: o índice que corrige cada título, que é o que decide quanto os juros sobem quando a Selic, a
+      inflação ou o dólar sobem. À direita, quando vence. Clique numa faixa para abrir: dentro de um prazo você vê
+      mês a mês; dentro de um índice, os tipos de título.
+    legenda_esq: do que a dívida é feita, pelo índice que corrige cada título (CSV do Tesouro, título a título)
+    legenda_dir: quando vence, pelo vencimento final de cada título ou contrato
+    centro: a dívida da União fora do Banco Central em {data} = R$ 1,00
+    titulo_esq: Do que é feita
+    titulo_dir: Quando vence
+    hab_nota: a dívida da União dividida pela população, a parte média de cada habitante
+    outro:
+      modo: cruzamento
+      rotulo: título a título
+      esq: do que é feita a dívida que vence nesse prazo (o índice de cada título, no CSV do Tesouro)
+      dir: quando vence a dívida corrigida por esse índice (o vencimento final de cada título, no CSV do Tesouro)
+      estado: "O outro lado não é rateio: é o cruzamento título a título do CSV do Tesouro, porque cada título tem um índice e um vencimento."
+      ficha_esq: Quando vence
+      ficha_dir: Do que é feita
+      termina: o cruzamento título a título
+    # o que entra na tira de palavras e na seção da dívida (abaixo do desenho); {ano} e {data} são preenchidos
+    tira:
+      comecou: Começou {ano} devendo
+      vendeu: Vendeu títulos (emissões)
+      pagou: Pagou (principal e juros, em dinheiro)
+      juros: Juros que viraram dívida sem passar pelo caixa (apropriados)
+      bc: Operações do mercado com o Banco Central
+      terminou: Terminou {data_curta} devendo
+      por_habitante: Dividido pela população
+      cresceu: A dívida cresceu
+      caiu: A dívida caiu
+      nota_conta: >
+        É a conta do próprio Tesouro: a dívida no fim do ano anterior, mais o que ele vendeu, menos o que pagou (principal
+        e juros em dinheiro), mais os juros que a dívida gerou sem ninguém pagar ainda (apropriados: entram no saldo e
+        serão pagos depois), mais as operações do mercado com o Banco Central. Tem que fechar com a dívida no fim do
+        período; é uma conferência crítica.
+      nota_publico: >
+        "Em poder do público" quer dizer fora do Banco Central. Os títulos do Tesouro que estão com o BC (ele os usa para
+        controlar a quantidade de dinheiro na economia) ficam fora desse número e aparecem à parte, abaixo.
+      nota_vencimento: >
+        "Vence em até 12 meses" conta só o principal dos títulos e contratos cujo vencimento final cai nos 12 meses
+        seguintes. O Tesouro publica, no Relatório Mensal da Dívida, um "percentual vincendo em 12 meses" maior, porque
+        conta também os juros (cupons) que caem nesses meses. Os dois números são verdadeiros; medem coisas diferentes.
+    indexadores:
+      selic:
+        explica: Títulos cuja correção acompanha a Selic, a taxa básica de juros que o Banco Central fixa. Quando a Selic sobe, o custo desta parte sobe junto, no mês seguinte.
+      prefixado:
+        explica: Títulos com juros combinados na venda, que não mudam depois. O governo já sabe quanto vai pagar; quem comprou corre o risco de a inflação comer o ganho.
+      precos:
+        explica: Títulos corrigidos pela inflação (IPCA ou IGP-M) mais uma taxa fixa. Quando a inflação sobe, esta parte da dívida sobe junto.
+      cambio:
+        explica: Títulos e contratos em dólar, euro ou outra moeda (a dívida externa) e os poucos títulos internos atrelados ao dólar. Quando o real perde valor, esta parte cresce em reais sem o governo ter pedido um centavo a mais.
+      demais:
+        explica: O que não casa com nenhuma regra pelo nome do título (títulos da dívida agrária, dívidas securitizadas e afins). Pequeno, mas nomeado.
+    familias:
+      LFT: Tesouro Selic (LFT)
+      LTN: Tesouro Prefixado (LTN)
+      NTN-F: Tesouro Prefixado com juros semestrais (NTN-F)
+      NTN-B: Tesouro IPCA+ (NTN-B)
+      NTN-B Principal: Tesouro IPCA+ sem cupom (NTN-B Principal)
+      NTN-C: NTN-C (corrigida pelo IGP-M)
+      NTN-A: NTN-A (dívida externa reestruturada, em dólar)
+      NTN-D: NTN-D (atrelada ao dólar)
+      NTN-I: NTN-I (financiamento de exportações, em dólar)
+      Global: Global (títulos em dólar vendidos no exterior)
+      Global BRL: Global BRL (títulos em reais vendidos no exterior)
+      Euro: Euro (títulos em euro vendidos no exterior)
+      A-Bond: A-Bond (título em dólar de 2005)
+      TDA: Títulos da Dívida Agrária (TDA)
+      CVS: CVS (dívida do antigo Fundo de Compensação de Variações Salariais)
+    faixas:
+      ate_12m: "Principal que precisa ser pago ou rolado no próximo ano. Dentro, mês a mês: é o calendário de vencimentos."
+      de_1_a_2_anos: "Vence entre um e dois anos depois da data de referência. Dentro, ano a ano."
+      de_2_a_5_anos: "Vence entre dois e cinco anos depois da data de referência. Dentro, ano a ano."
+      mais_de_5_anos: "Vence depois de cinco anos: a parte mais longa da dívida, em boa parte corrigida pela inflação. Dentro, ano a ano."
+      sem_data: "Títulos ou contratos cujo arquivo do Tesouro não traz a data de vencimento. Ficam nomeados, não somem."
+    # as réguas de juros, uma por pergunta; a chave é o id da medida no export da dívida
+    perguntas_juros:
+      juros_pagos:
+        pergunta: Quanto saiu do caixa em juros?
+        explica: O que o governo pagou de juros em dinheiro no ano, pelo relatório do orçamento (RREO). É a linha "Juros da dívida" do R$ 1,00.
+      juros_execucao_dpf:
+        pergunta: O Tesouro conta o mesmo?
+        explica: A mesma pergunta respondida pela planilha de execução da dívida do Tesouro. Tem que dar quase o mesmo número; a diferença são juros fora da Dívida Pública Federal.
+      juros_apropriados_dpf:
+        pergunta: Quanto a dívida cresceu por juros, pagos ou não?
+        explica: Os juros que a dívida gerou no ano, incluindo os que ainda não foram pagos e já entraram no saldo. É maior que os pagos porque parte dos títulos só paga juros no vencimento.
+      juros_bcb_gf:
+        pergunta: Qual é o número do Banco Central para o Governo Federal?
+        explica: A conta do Banco Central (juros devidos menos juros recebidos pelo Governo Federal). Líquida, por isso menor que a bruta.
+      juros_bcb_gc:
+        pergunta: E contando o próprio Banco Central?
+        explica: A mesma conta incluindo o BC (por exemplo, o custo das operações de câmbio). É o número que mais aparece no noticiário como "juros da dívida".
+      juros_rreo_brutos:
+        pergunta: Quanto o relatório do orçamento reconhece como custo do ano?
+        explica: Juros, encargos e correção que a dívida gerou no ano pela regra de competência (o custo do ano, pago ou não), sem descontar o que o governo recebeu.
+      juros_rreo_liquidos:
+        pergunta: E descontando o que o governo recebeu de juros?
+        explica: Os brutos menos os juros que o governo recebeu de quem lhe deve e do caixa aplicado.
+      juros_cofog:
+        pergunta: Qual é o número na comparação internacional?
+        explica: O que a base COFOG (o padrão internacional de classificação do gasto) usa como juros, informado pelo BC ao Tesouro.
+    # outras medidas do estoque, com nome para leigo; a chave é o id da medida
+    medidas_estoque:
+      carteira_bc:
+        nome: Títulos do Tesouro que estão com o Banco Central
+        explica: Fora da conta do meio. O BC usa esses títulos para controlar a quantidade de dinheiro na economia.
+      dc_rreo:
+        nome: Dívida consolidada (régua da Lei de Responsabilidade Fiscal)
+        explica: A dívida bruta na régua da lei que limita o endividamento dos governos, pelo relatório do orçamento.
+      dcl_rreo:
+        nome: Dívida consolidada líquida (descontando caixa e haveres)
+        explica: A mesma régua descontando o que o governo tem em caixa e a receber. É a medida do "imposto futuro" do recibo.
+      dlsp_gf:
+        nome: Dívida líquida do Governo Federal (Banco Central)
+        explica: O que o Governo Federal deve menos o que tem a receber e em caixa, pela conta do BC.
+      dbgg_pib:
+        nome: Dívida bruta do governo geral, em % do PIB (Banco Central)
+        explica: União, estados e municípios, sem descontar caixa, em proporção do tamanho da economia. O número mais citado no noticiário.
+      tesouro_direto:
+        nome: Tesouro Direto (pessoas físicas)
+        explica: A parte da dívida comprada diretamente por pessoas. É a única fatia de credores com fonte aberta; bancos, fundos, previdência e estrangeiros só aparecem no Relatório Mensal da Dívida, em PDF.
+    medidas_rolagem:
+      vincendo_12m:
+        nome: Fatia que vence em até 12 meses (só o principal)
+      prazo_medio_bcb:
+        nome: Prazo médio da dívida em títulos, pelo Banco Central
+
+# Nós do desenho que não são linhas do recibo (entradas, saídas da visão completa, origens da visão do gasto)
+nos:
+  receita:
+    nome: Receita
+    definicao: >
+      Tudo o que entrou no caixa da União sem ser venda de título: tributos, royalties e dividendos, serviços, o
+      rendimento do caixa, o resultado do Banco Central e empréstimos que voltaram.
+    nota: "Fonte: RREO, Anexo 01 (receitas realizadas até o bimestre), menos as operações de crédito."
+  titulos:
+    nome: Títulos vendidos (rolagem e dívida nova)
+    definicao: >
+      Dinheiro que entrou porque o Tesouro vendeu títulos: promessas de devolver com juros. A maior parte serve para
+      pagar títulos velhos que venceram (a rolagem); o resto é dívida nova. Clique para ver, pelo carimbo da fonte no
+      orçamento, o que esse dinheiro pagou no ano e quanto ficou guardado.
+    nota: "Fonte: RREO, Anexo 01 (operações de crédito e refinanciamento)."
+  rolagem_entrada:
+    nome: Para pagar títulos velhos (rolagem)
+    definicao: >
+      Títulos novos vendidos só para pagar títulos que venceram. Entra de um lado e sai do outro no mesmo ano, com a
+      mesma largura: não é gasto nem receita de verdade.
+    nota: "Fonte: RREO, Anexo 01, linha \"Operações de Crédito / Refinanciamento (IV)\"."
+  divida_nova:
+    nome: Além da rolagem (dívida nova)
+    definicao: Títulos vendidos além do necessário para rolar a dívida. É a dívida que cresceu de fato para cobrir o ano.
+    nota: "Fonte: RREO, Anexo 01, receitas de operações de crédito."
+  financeiras:
+    nome: Rendimento do caixa, resultado do BC e empréstimos devolvidos
+    definicao: >
+      Receitas que o Tesouro chama de financeiras: o que o caixa rendeu aplicado no Banco Central, o lucro do Banco
+      Central repassado ao Tesouro, e empréstimos que quem recebeu devolveu. Não contam como receita primária.
+    nota: "Fonte: RREO, Anexo 01 (contas de receita)."
+  remuneracao_caixa:
+    nome: Rendimento do caixa do Tesouro
+    definicao: O dinheiro parado no caixa do Tesouro fica aplicado no Banco Central e rende; esse rendimento entra aqui.
+  resultado_bc:
+    nome: Resultado do Banco Central repassado
+    definicao: Quando o Banco Central tem lucro no semestre, ele repassa ao Tesouro; quando tem prejuízo, o Tesouro cobre (isso aparece do lado do gasto, dentro dos juros).
+  amortizacoes_emprestimos:
+    nome: Empréstimos que voltaram
+    definicao: Dinheiro que o Tesouro tinha emprestado (a estados, bancos públicos, estudantes) e foi devolvido no ano.
+  outras_financeiras:
+    nome: Outras receitas financeiras
+    definicao: Partes de receitas patrimoniais e de serviços que o Tesouro classifica como financeiras, medidas por diferença entre os dois anexos.
+  tributos:
+    nome: Tributos
+    definicao: >
+      Impostos, taxas e contribuições: o dinheiro que a lei obriga pessoas e empresas a pagar. É a maior fonte, e a
+      única que é "imposto" no sentido comum da palavra.
+    nota: >
+      INSS, COFINS, CSLL e PIS são contribuições: têm destino carimbado na lei (previdência, seguridade), mas saem do
+      bolso do mesmo jeito. Fonte: RREO, Anexo 06 (receita tributária e de contribuições), igual ao centavo ao Anexo 01.
+  impostos:
+    nome: Impostos (renda, IPI, IOF, importação)
+    definicao: Imposto de Renda de pessoas e empresas, IPI, IOF, imposto de importação e ITR.
+    nota: O Anexo 01 não abre imposto por imposto; a Receita Federal publica essa abertura em outra base (fase futura).
+  contribuicoes_sociais:
+    nome: Contribuições sociais (INSS, COFINS, CSLL, PIS)
+    definicao: Contribuição dos trabalhadores e das empresas ao INSS, COFINS, CSLL e PIS/PASEP, que financiam previdência, saúde e assistência.
+    nota: "É mais que os impostos: quase metade de tudo o que entra."
+  contribuicoes_economicas:
+    nome: Contribuições econômicas (CIDE e outras)
+    definicao: CIDE sobre combustíveis e outras contribuições de intervenção no domínio econômico.
+  taxas:
+    nome: Taxas
+    definicao: Taxas cobradas por serviços públicos e pelo poder de polícia (fiscalização, passaportes, registros).
+  outras_primarias:
+    nome: Outras receitas
+    definicao: >
+      O que a União ganha sem cobrar imposto: royalties do petróleo, dividendos das estatais, concessões, serviços,
+      multas, venda de bens.
+    nota: >
+      Entram aqui só as receitas primárias. O que o governo recebe de juros e de empréstimos devolvidos é receita
+      financeira e fica fora, como fica fora do gasto a rolagem. Fonte: RREO, Anexo 06.
+  patrimonial:
+    nome: Royalties, dividendos e concessões
+    definicao: "Receita patrimonial: royalties e participações do petróleo, dividendos de Petrobras, Banco do Brasil, Caixa e outras estatais, outorgas de concessões."
+  demais_correntes:
+    nome: Serviços, multas e restituições
+    definicao: Serviços cobrados, multas, restituições e indenizações.
+  transferencias_correntes:
+    nome: Transferências recebidas
+    definicao: Transferências correntes recebidas de outros entes.
+  capital:
+    nome: Venda de bens e outras de capital
+    definicao: Venda de bens e outras receitas de capital que não são dívida.
+  divida_ou_caixa:
+    nome: Dívida nova ou caixa
+    definicao: >
+      O que faltou. Quando o gasto passa do que entrou de receita, o Tesouro vende títulos além da rolagem (pede
+      emprestado, e paga juros depois) ou usa o dinheiro que tinha em caixa.
+    nota: >
+      Calculado: total do gasto menos a receita primária do Anexo 06. É o déficit do ano visto pelo lado do gasto;
+      a conta oficial do déficit usa o pago, com restos a pagar, e está na metodologia.
+    proximo: Esta faixa não se divide. A visão "Tudo o que passou pelo caixa" mostra os títulos vendidos e o caixa.
+  gasto:
+    nome: O gasto de verdade
+    definicao: >
+      Tudo o que a União gastou de verdade no ano: a despesa primária liquidada mais os juros da dívida pagos em
+      dinheiro. É o R$ 1,00 do recibo. Clique para entrar nele.
+    nota: "Fonte: RREO, Anexo 06 (despesa primária liquidada) e Anexo 01 (juros e encargos da dívida)."
+  divida_paga:
+    nome: Dívida antiga paga
+    definicao: >
+      Títulos e contratos que venceram e foram pagos: a rolagem (paga com título novo) mais o principal pago com
+      dinheiro do caixa. Pagar uma dívida não é gasto: é devolver o que foi emprestado.
+    nota: "Fonte: RREO, Anexo 01 (amortização da dívida e amortização por refinanciamento). As partes por carteira vêm do CSV de execução da dívida do Tesouro."
+  rolagem_saida:
+    nome: Rolagem (pagos com título novo)
+    definicao: Títulos velhos pagos com o dinheiro de títulos novos. A mesma faixa que entrou do outro lado.
+  principal:
+    nome: Principal pago com dinheiro do caixa
+    definicao: Parte da dívida antiga paga com dinheiro do caixa, não com título novo.
+  emprestimos_feitos:
+    nome: Empréstimos e aplicações feitos
+    definicao: >
+      Dinheiro que saiu como empréstimo ou aplicação e deve voltar (financiamento estudantil, crédito via bancos
+      públicos, capital em empresas). O Tesouro não conta como gasto, e o site segue a conta do Tesouro.
+    nota: "Fonte: RREO, Anexo 02 menos Anexo 06 menos amortização e juros do Anexo 01 (a conta do Tesouro); a lista por ação vem do SIOP."
+  caixa_guardado:
+    nome: Ficou no caixa (e em contas de anos anteriores)
+    definicao: >
+      Não é lucro. É a diferença entre o dinheiro que entrou no ano e a despesa reconhecida no ano: o Tesouro levantou
+      mais (vendendo títulos) do que o ano consumiu. Esse dinheiro pagou contas de anos anteriores (restos a pagar, que
+      o relatório deste ano não conta) e engordou o caixa do Tesouro, o colchão que ele mantém para não depender do
+      mercado num mês ruim. Num ano em que o colchão é usado, a faixa troca de lado.
+    tracejado_motivo: >
+      É a diferença entre o que entrou e o que saiu, calculada por este site a partir do Anexo 01 do RREO; não é uma
+      linha lida de um relatório. Tracejado, aqui, quer dizer "número calculado".
+  caixa_usado:
+    nome: Veio do caixa de anos anteriores
+    definicao: >
+      Saiu mais do que entrou no ano: a diferença veio do dinheiro que o Tesouro já tinha em caixa (o colchão). Não é
+      prejuízo no sentido de empresa: é o uso de uma reserva montada antes, vendendo títulos adiantado.
+    tracejado_motivo: >
+      É a diferença entre o que saiu e o que entrou, calculada por este site a partir do Anexo 01 do RREO; não é uma
+      linha lida de um relatório. Tracejado, aqui, quer dizer "número calculado".
+  # A faixa que aparece dentro de "Títulos vendidos" (e das duas partes dele): o que entrou de título no ano e não foi
+  # pago no ano com título do ano, pelo carimbo da fonte. Os campos entre chaves são preenchidos com os números do ano:
+  # {ano} {entrou} {pago} {sobra} {anteriores} {saldo} {saldo_sinal}
+  reserva_liquidez:
+    nome: Reserva de liquidez (não usado no ano)
+    definicao: >
+      O Tesouro vende títulos adiantado, de propósito, e guarda o dinheiro: é a reserva de liquidez, o "colchão". A regra
+      dele é ter em caixa o bastante para pagar pelo menos três meses de vencimentos da dívida sem precisar vender
+      título nenhum; na prática carrega bem mais. Serve para não depender do mercado num mês ruim (numa crise, ele pode
+      suspender os leilões por meses e seguir pagando o que vence) e para cobrir o calendário: os títulos vencem em
+      datas concentradas (1º de janeiro, 1º de março, 1º de julho, 15 de maio, 15 de agosto), então o que é vendido no
+      fim do ano paga o que vence no começo do ano seguinte. Custa pouco carregar, porque o dinheiro parado na Conta
+      Única, no Banco Central, rende perto do custo médio dos títulos.
+    nota: >
+      A conta de {ano}: entraram {entrou} de títulos vendidos no ano; {pago} foram pagos no próprio ano com dinheiro de
+      título do ano (pelo carimbo da fonte no SIOP); sobraram {sobra}. No mesmo ano, o Tesouro usou {anteriores} de
+      títulos vendidos em anos anteriores. Saldo: a reserva {saldo_sinal} {saldo} em {ano}, por esta conta.
+    tracejado_motivo: >
+      É uma diferença calculada por este site entre dois relatórios: os títulos vendidos no ano pelo RREO menos o que foi
+      pago com dinheiro de título do ano pelo carimbo da fonte no SIOP. Não é uma linha lida de um relatório, e os dois
+      relatórios não medem exatamente a mesma coisa (veja Perguntas abertas).
+  receita_sobra:
+    nome: Ficou no caixa ou pagou contas de anos anteriores
+    definicao: >
+      Receita do ano que não pagou despesa do ano, pelo carimbo da fonte: pagou restos a pagar de anos anteriores (contas
+      reconhecidas antes e pagas agora, que o relatório deste ano não conta) ou ficou no caixa.
+
+# Linhas do recibo: nome amigável, explicação para leigo, o que não está nela e o que a página própria vai ter.
+# A definição técnica (filtro, anexo) vem de config/linhas.yaml e aparece na ficha.
+linhas:
+  previdencia_inss:
+    cor: "#1E3A8A"
+    curto: Previdência (INSS)
+    explica: Aposentadorias, pensões e auxílios pagos pelo INSS a quem contribuiu para o regime geral, o dos trabalhadores do setor privado.
+    nao_inclui: Aposentados e pensionistas do setor público têm linha própria. Conta o que o INSS pagou no ano (liquidado), não o que ficou para o ano seguinte.
+    pagina_futuro: quantos benefícios, por tipo (aposentadoria por idade, por tempo, pensão, auxílio) e por região; quanto entrou de contribuição contra quanto saiu.
+  inativos_pensionistas:
+    cor: "#A78BFA"
+    curto: Aposentados do setor público
+    explica: Aposentadorias e pensões de servidores civis e militares da União.
+    nao_inclui: Parte desse valor o relatório classifica em outras funções (defesa, transferências); o SIOP o traz de volta para esta linha, com a lista do que veio de onde.
+    pagina_futuro: "civis e militares separados, por órgão; quantos beneficiários; e, em fase futura, as maiores remunerações públicas (fonte: portais de transparência e DadosJusBr)."
+  assistencia:
+    cor: "#B45309"
+    curto: Assistência social
+    explica: Bolsa Família, Benefício de Prestação Continuada e demais programas de assistência.
+    nao_inclui: O abono salarial e o seguro-desemprego ficam em Trabalho.
+    pagina_futuro: Bolsa Família e BPC separados, famílias e pessoas atendidas, valor médio, por estado.
+  saude:
+    cor: "#F59E0B"
+    curto: Saúde
+    explica: "Gasto federal com saúde: SUS, hospitais federais, vigilância, repasses a estados e municípios para a saúde."
+    nao_inclui: Empréstimos a operadoras e outros valores que o Tesouro trata como financeiros ficam fora do R$ 1,00.
+    pagina_futuro: atenção básica, hospitais, vigilância, medicamentos; quanto é emenda parlamentar e de quem; repasses por estado e município.
+  educacao:
+    cor: "#5B21B6"
+    curto: Educação
+    explica: Universidades e institutos federais, complementação da União ao FUNDEB, merenda, livro didático, Pé-de-Meia.
+    nao_inclui: O financiamento estudantil (FIES) é empréstimo e fica fora do R$ 1,00.
+    pagina_futuro: ensino superior, básico, profissional e FUNDEB; quanto é salário, quanto é repasse, quanto é obra; as universidades uma a uma.
+  trabalho:
+    cor: "#64748B"
+    curto: Trabalho
+    explica: Abono salarial, seguro-desemprego e políticas de emprego.
+    nao_inclui: O que o FAT empresta ao BNDES é empréstimo, não gasto.
+    pagina_futuro: abono e seguro-desemprego separados, trabalhadores atendidos, o FAT e o que ele empresta ao BNDES.
+  defesa_seguranca:
+    cor: "#0F766E"
+    curto: Defesa e segurança
+    explica: Forças Armadas, Polícia Federal, Polícia Rodoviária Federal e segurança pública federal.
+    nao_inclui: As pensões militares saem daqui e vão para a linha de aposentados do setor público.
+    pagina_futuro: Marinha, Exército, Aeronáutica, Polícia Federal e PRF; pessoal, custeio e investimento; os maiores programas.
+  transferencias:
+    cor: "#2563EB"
+    curto: Transferências a estados e municípios
+    explica: Fundos de participação (FPE, FPM), compensações e outras transferências constitucionais e legais para estados e municípios.
+    nao_inclui: Repasses carimbados para saúde e educação ficam nas linhas de saúde e educação, não aqui.
+    pagina_futuro: quanto foi para cada estado e, depois, para cada município; FPE, FPM e as compensações, uma a uma.
+  juros:
+    cor: "#7C2D12"
+    curto: Juros da dívida
+    explica: Juros e encargos da dívida pública pagos em dinheiro no ano. Dinheiro que saiu e não volta; por isso está dentro do R$ 1,00.
+    nao_inclui: A rolagem e o pagamento de principal são troca de dinheiro por dinheiro e ficam fora do R$ 1,00. Os juros que a dívida gerou sem serem pagos estão na visão da dívida.
+    pagina_futuro: as cinco réguas de juros do ano, a dívida que gerou cada parte, as carteiras (mercado, Banco Central, externa) e o que vence nos próximos 12 meses.
+  maquina_demais:
+    cor: "#CBD5E1"
+    curto: Encargos especiais e demais funções
+    explica: "O resto: Judiciário, Legislativo, administração, agricultura, ciência, transporte, precatórios e demais funções, mais encargos especiais que não são dívida nem transferência."
+    nao_inclui: O que o Tesouro trata como financeiro (empréstimos e aplicações) sai daqui e fica fora do R$ 1,00; o que a lei chama de empréstimo e o Tesouro conta como gasto fica, nomeado.
+    pagina_futuro: "função por função, órgão por órgão: quanto custa cada Poder, as maiores ações, precatórios e o que mais cresceu."
+
+proximo_nivel:
+  subfuncoes: "Próximo nível: as subfunções do RREO (as caixinhas em que o próprio governo divide cada função) e, dentro delas, as ações do SIOP, o sistema do orçamento federal."
+  acoes_sem_siop: "As ações do SIOP (o detalhe de cada programa) entram quando o ano fecha; no ano em andamento o SIOP não é comparável ao RREO."
+  fim: "Fim do que está publicado neste nível."
+
+glossario:
+  - termo: recibo
+    explica: A lista do que a União fez com o dinheiro no ano, como o cupom do mercado, só que do país inteiro. As dez linhas somam R$ 1,00.
+  - termo: receita
+    explica: Tudo o que entrou no caixa. Receita primária é a que não vem de dívida nem de juros recebidos (tributos, royalties, dividendos, serviços); receita financeira é o resto (títulos vendidos, rendimento do caixa, empréstimos devolvidos).
+  - termo: despesa primária
+    explica: "O gasto em si, sem os juros e sem pagar dívida: aposentadorias, benefícios, salários, saúde, educação, repasses, obras, custeio."
+  - termo: liquidado
+    explica: O estágio em que o governo reconhece que deve pagar (o serviço foi prestado, o benefício é devido). É a medida do recibo. "Pago" é quando o dinheiro sai; a diferença vira restos a pagar.
+  - termo: restos a pagar
+    explica: Contas reconhecidas num ano e pagas no seguinte. O relatório do ano não as conta como despesa deste ano.
+  - termo: rolagem (refinanciamento)
+    explica: Vender título novo para pagar título velho que venceu. Entra e sai no mesmo ano; não é gasto.
+  - termo: principal e juros
+    explica: Principal é o valor emprestado; juros é o aluguel do dinheiro. Pagar principal devolve o que foi emprestado (fora do R$ 1,00); pagar juros é gasto (dentro).
+  - termo: rateio
+    explica: Como o dinheiro não tem carimbo, cada real que entrou é dividido na proporção do que foi gasto. É assim que se chega a "de cada R$ 1,00 de tributo, X centavos foram para Y".
+  - termo: RREO
+    explica: Relatório Resumido da Execução Orçamentária, que todo governo publica a cada dois meses no SICONFI, o sistema do Tesouro. É a fonte principal do site.
+  - termo: SIOP
+    explica: Sistema do orçamento federal, do Ministério do Planejamento. Abre o gasto por ação (programa), órgão e tipo de despesa. Usado para conferir o RREO e para os níveis mais finos.
+  - termo: função e subfunção
+    explica: As caixinhas em que o governo classifica o gasto por finalidade. Função é a grande (Saúde, Educação, Previdência); subfunção é a menor (Atenção Básica, Ensino Superior).
+  - termo: ponte
+    explica: "A conta que liga dois totais diferentes do mesmo dinheiro: parte de um, soma e subtrai o que cada um conta de um jeito, e chega no outro. O que sobra sem explicação é dito, em porcentagem."
+  - termo: lacre (hash)
+    explica: Uma impressão digital do arquivo original baixado da fonte, calculada por programa. Se um número do site for contestado, o arquivo lacrado prova de onde ele veio.
+  - termo: conferência (reconciliação)
+    explica: Uma conta que tem que fechar antes de publicar, como "as dez linhas somam o total ao centavo". Se uma conferência crítica falha, a página não sai.
+  - termo: por habitante
+    explica: O valor dividido pela população do Brasil no meio do ano (IBGE). Não é o que cada pessoa pagou nem recebeu; é só um jeito de ver o tamanho.
+  - termo: dívida pública (DPF em poder do público)
+    explica: Dinheiro que a União pegou emprestado e ainda não devolveu, quase todo em títulos. "Em poder do público" quer dizer fora do Banco Central. É a medida de estoque do próprio Tesouro.
+  - termo: índice (indexador)
+    explica: A regra que corrige cada título. Selic (a taxa básica), prefixado (juros combinados na venda), inflação (IPCA ou IGP-M mais uma taxa), câmbio (dólar, euro). É o que decide quanto a dívida cresce quando cada um desses sobe.
+  - termo: vencimento
+    explica: A data em que o governo tem que devolver o principal de um título ou contrato. No site, "quando vence" conta só o principal pelo vencimento final de cada título.
+  - termo: juros apropriados
+    explica: Os juros que a dívida gerou num período, pagos ou não. Os não pagos entram no saldo da dívida e serão pagos depois. Por isso a dívida cresce mesmo num mês sem pagamento.
+  - termo: emissões e resgates
+    explica: Emissão é vender um título (a dívida cresce); resgate é pagá-lo no vencimento ou antes (a dívida diminui). Na conta do Tesouro, os resgates incluem os juros pagos em dinheiro.

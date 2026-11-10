@@ -5,11 +5,11 @@ cabeçalho). É o que se cola de volta para fixar em config o layout de cada arq
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import polars as pl
 
+from .grade import RX_ANO, RX_MES, linha_cabecalho  # noqa: F401 - reexportado para os testes
 from .transform.divida import INDICE_FILE
 
 MAX_DISTINTOS = 25
@@ -95,19 +95,8 @@ def _tabela_csv(df: pl.DataFrame, rows: int, filtros: list[str] | None = None) -
     return out
 
 
-_RX_MES = re.compile(r"^[A-Za-z]{3}/\d{2}$")
-_RX_ANO = re.compile(r"^\d{4}$")
-
-
-def linha_cabecalho(d: pl.DataFrame) -> int | None:
-    """A linha da planilha com mais células no padrão Mmm/aa ou aaaa (o cabeçalho de meses dos anexos do Tesouro)."""
-    melhor, n_melhor = None, 0
-    for i in d["linha"].unique().to_list():
-        textos = d.filter(pl.col("linha") == i)["valor_texto"].to_list()
-        n = sum(1 for t in textos if _RX_MES.match(t.strip()) or _RX_ANO.match(t.strip()))
-        if n > n_melhor:
-            melhor, n_melhor = int(i), n
-    return melhor if n_melhor >= 6 else None
+_RX_MES = RX_MES
+_RX_ANO = RX_ANO
 
 
 def _grade_ano(d: pl.DataFrame, planilha: str, ano: int) -> list[str]:

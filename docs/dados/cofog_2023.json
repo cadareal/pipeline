@@ -1,0 +1,1004 @@
+{
+ "produto": "cofog",
+ "versao_spec": "0.6.3",
+ "gerado_em": "2026-11-10T02:05:44+00:00",
+ "exercicio": 2023,
+ "publicavel": true,
+ "selo": "ponte com o recibo 2023 fecha em -0.66% (tolerância 2%)",
+ "o_que_e": "Despesa do Governo Central pela régua internacional (GFSM 2014, funções COFOG), como o Tesouro publica. Produto separado do recibo: não entra no R$ 1,00.",
+ "total": 3529839634994.8105,
+ "total_definicao": "despesa liquidada + restos a pagar não processados pagos, juros por competência (Banco Central), transferências por caixa, venda de bens negativa, com os ajustes metodológicos do Tesouro",
+ "unidade": {
+  "fonte": "reais",
+  "fator": 1.0,
+  "resolucao_reais": 0.01,
+  "nota": "valores em reais, como no arquivo do Tesouro (centavos)"
+ },
+ "fonte": {
+  "id": "S7",
+  "nome": "COFOG, despesa do Governo Central por função (GFSM 2014)",
+  "orgao": "Tesouro Nacional (CESEF)",
+  "dataset_id": "22d13d17-bf69-4a1a-add2-25cc1e25f2d7",
+  "arquivo": "dados-abertos-cofog-gc-2023.csv",
+  "recurso_data": "2025-03-10T09:31:33.158711",
+  "raw_key": "2023",
+  "snapshot_id": "20261110T003419917521Z",
+  "fetched_at": "2026-11-10T00:34:19+00:00",
+  "sha256_canonical": "b35d984b13acae54577680053a6495c3a33ca32efd33c9667e45750883d9c7a4",
+  "linhas_arquivo": 77178
+ },
+ "divisoes": [
+  {
+   "codigo": "01",
+   "nivel": "divisao",
+   "nome": "Serviços públicos gerais",
+   "valor": 1453400413536.19,
+   "linhas": 9740,
+   "share": 0.4117468677973884,
+   "centavos": 41,
+   "divisao": "01"
+  },
+  {
+   "codigo": "02",
+   "nivel": "divisao",
+   "nome": "Defesa",
+   "valor": 52326341481.009995,
+   "linhas": 7121,
+   "share": 0.014823999640733516,
+   "centavos": 2,
+   "divisao": "02"
+  },
+  {
+   "codigo": "03",
+   "nivel": "divisao",
+   "nome": "Ordem pública e segurança",
+   "valor": 64584074044.59,
+   "linhas": 9274,
+   "share": 0.01829660288368453,
+   "centavos": 2,
+   "divisao": "03"
+  },
+  {
+   "codigo": "04",
+   "nivel": "divisao",
+   "nome": "Assuntos econômicos",
+   "valor": 77104699356.66,
+   "linhas": 13494,
+   "share": 0.021843683376503692,
+   "centavos": 2,
+   "divisao": "04"
+  },
+  {
+   "codigo": "05",
+   "nivel": "divisao",
+   "nome": "Proteção ambiental",
+   "valor": 2974253749.76,
+   "linhas": 1671,
+   "share": 0.0008426030803986858,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "06",
+   "nivel": "divisao",
+   "nome": "Habitação e serviços comunitários",
+   "valor": 6638047847.400001,
+   "linhas": 1494,
+   "share": 0.0018805522442409085,
+   "centavos": 0,
+   "divisao": "06"
+  },
+  {
+   "codigo": "07",
+   "nivel": "divisao",
+   "nome": "Saúde",
+   "valor": 207744298728.37006,
+   "linhas": 7628,
+   "share": 0.05885374980460705,
+   "centavos": 6,
+   "divisao": "07"
+  },
+  {
+   "codigo": "08",
+   "nivel": "divisao",
+   "nome": "Recreação, cultura e religião",
+   "valor": 9022662558.560003,
+   "linhas": 2356,
+   "share": 0.0025561111811169485,
+   "centavos": 0,
+   "divisao": "08"
+  },
+  {
+   "codigo": "09",
+   "nivel": "divisao",
+   "nome": "Educação",
+   "valor": 214688951610.87997,
+   "linhas": 17054,
+   "share": 0.060821162945323325,
+   "centavos": 6,
+   "divisao": "09"
+  },
+  {
+   "codigo": "10",
+   "nivel": "divisao",
+   "nome": "Proteção social",
+   "valor": 1441355892081.39,
+   "linhas": 7346,
+   "share": 0.40833466704600274,
+   "centavos": 41,
+   "divisao": "10"
+  }
+ ],
+ "grupos": [
+  {
+   "codigo": "011",
+   "nivel": "grupo",
+   "nome": "Órgãos executivos e legislativos, assuntos financeiros e fiscais, relações exteriores",
+   "valor": 93869848785.33,
+   "linhas": 3251,
+   "share": 0.026593233260430543,
+   "centavos": 3,
+   "divisao": "01"
+  },
+  {
+   "codigo": "013",
+   "nivel": "grupo",
+   "nome": "Serviços gerais",
+   "valor": 5078374840.21,
+   "linhas": 1714,
+   "share": 0.0014386984581007648,
+   "centavos": 0,
+   "divisao": "01"
+  },
+  {
+   "codigo": "014",
+   "nivel": "grupo",
+   "nome": "Pesquisa básica",
+   "valor": 2937703796.18,
+   "linhas": 380,
+   "share": 0.0008322485155007102,
+   "centavos": 0,
+   "divisao": "01"
+  },
+  {
+   "codigo": "015",
+   "nivel": "grupo",
+   "nome": "P&D em serviços públicos gerais",
+   "valor": 31426382.839999996,
+   "linhas": 10,
+   "share": 8.90306248715636e-06,
+   "centavos": 0,
+   "divisao": "01"
+  },
+  {
+   "codigo": "016",
+   "nivel": "grupo",
+   "nome": "Serviços públicos gerais não classificados",
+   "valor": 9234115160.49,
+   "linhas": 3841,
+   "share": 0.0026160154894695592,
+   "centavos": 0,
+   "divisao": "01"
+  },
+  {
+   "codigo": "017",
+   "nivel": "grupo",
+   "nome": "Transações da dívida pública",
+   "valor": 856763907722.39,
+   "linhas": 1,
+   "share": 0.24272034888736513,
+   "centavos": 24,
+   "divisao": "01"
+  },
+  {
+   "codigo": "018",
+   "nivel": "grupo",
+   "nome": "Transferências de caráter geral entre níveis de governo",
+   "valor": 485485036848.75,
+   "linhas": 543,
+   "share": 0.13753742012403455,
+   "centavos": 14,
+   "divisao": "01"
+  },
+  {
+   "codigo": "021",
+   "nivel": "grupo",
+   "nome": "Defesa militar",
+   "valor": 49670292303.71,
+   "linhas": 5711,
+   "share": 0.014071543594014583,
+   "centavos": 2,
+   "divisao": "02"
+  },
+  {
+   "codigo": "022",
+   "nivel": "grupo",
+   "nome": "Defesa civil",
+   "valor": 1356016068.58,
+   "linhas": 280,
+   "share": 0.0003841579813248353,
+   "centavos": 0,
+   "divisao": "02"
+  },
+  {
+   "codigo": "023",
+   "nivel": "grupo",
+   "nome": "Ajuda militar externa",
+   "valor": 53094034.29,
+   "linhas": 168,
+   "share": 1.5041486237399013e-05,
+   "centavos": 0,
+   "divisao": "02"
+  },
+  {
+   "codigo": "024",
+   "nivel": "grupo",
+   "nome": "P&D em defesa",
+   "valor": 1150593874.56,
+   "linhas": 614,
+   "share": 0.0003259620814365102,
+   "centavos": 0,
+   "divisao": "02"
+  },
+  {
+   "codigo": "025",
+   "nivel": "grupo",
+   "nome": "Defesa não classificada",
+   "valor": 96345199.87,
+   "linhas": 348,
+   "share": 2.729449772018939e-05,
+   "centavos": 0,
+   "divisao": "02"
+  },
+  {
+   "codigo": "031",
+   "nivel": "grupo",
+   "nome": "Serviços de polícia",
+   "valor": 15519348084.35,
+   "linhas": 1003,
+   "share": 0.004396615622560093,
+   "centavos": 1,
+   "divisao": "03"
+  },
+  {
+   "codigo": "032",
+   "nivel": "grupo",
+   "nome": "Serviços de proteção contra incêndios",
+   "valor": 1363609977.72,
+   "linhas": 42,
+   "share": 0.0003863093281069141,
+   "centavos": 0,
+   "divisao": "03"
+  },
+  {
+   "codigo": "033",
+   "nivel": "grupo",
+   "nome": "Tribunais de justiça",
+   "valor": 45293368382.78,
+   "linhas": 7419,
+   "share": 0.012831565472193636,
+   "centavos": 1,
+   "divisao": "03"
+  },
+  {
+   "codigo": "034",
+   "nivel": "grupo",
+   "nome": "Prisões",
+   "valor": 491403360.78000003,
+   "linhas": 313,
+   "share": 0.00013921407531045598,
+   "centavos": 0,
+   "divisao": "03"
+  },
+  {
+   "codigo": "035",
+   "nivel": "grupo",
+   "nome": "P&D em ordem pública e segurança",
+   "valor": 91907054.89999999,
+   "linhas": 10,
+   "share": 2.603717573706011e-05,
+   "centavos": 0,
+   "divisao": "03"
+  },
+  {
+   "codigo": "036",
+   "nivel": "grupo",
+   "nome": "Ordem pública e segurança não classificadas",
+   "valor": 1824437184.06,
+   "linhas": 487,
+   "share": 0.0005168612097763705,
+   "centavos": 0,
+   "divisao": "03"
+  },
+  {
+   "codigo": "041",
+   "nivel": "grupo",
+   "nome": "Assuntos econômicos, comerciais e trabalhistas gerais",
+   "valor": 8182677184.89,
+   "linhas": 2116,
+   "share": 0.0023181441739638774,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "042",
+   "nivel": "grupo",
+   "nome": "Agricultura, silvicultura, pesca e caça",
+   "valor": 31055520112.27,
+   "linhas": 3129,
+   "share": 0.008797997451324912,
+   "centavos": 1,
+   "divisao": "04"
+  },
+  {
+   "codigo": "043",
+   "nivel": "grupo",
+   "nome": "Combustíveis e energia",
+   "valor": 5790982730.82,
+   "linhas": 1070,
+   "share": 0.0016405795530789074,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "044",
+   "nivel": "grupo",
+   "nome": "Mineração, indústria e construção",
+   "valor": 824862873.18,
+   "linhas": 884,
+   "share": 0.00023368281805278461,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "045",
+   "nivel": "grupo",
+   "nome": "Transportes",
+   "valor": 15829116129.990002,
+   "linhas": 3188,
+   "share": 0.004484372596720891,
+   "centavos": 1,
+   "divisao": "04"
+  },
+  {
+   "codigo": "046",
+   "nivel": "grupo",
+   "nome": "Comunicações",
+   "valor": 1016064813.02,
+   "linhas": 518,
+   "share": 0.0002878501343082952,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "047",
+   "nivel": "grupo",
+   "nome": "Outras indústrias",
+   "valor": 1028740587.63,
+   "linhas": 541,
+   "share": 0.00029144116844036526,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "048",
+   "nivel": "grupo",
+   "nome": "P&D em assuntos econômicos",
+   "valor": 9644622728.27,
+   "linhas": 1665,
+   "share": 0.00273231186840707,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "049",
+   "nivel": "grupo",
+   "nome": "Assuntos econômicos não classificados",
+   "valor": 3732112196.59,
+   "linhas": 383,
+   "share": 0.001057303612206589,
+   "centavos": 0,
+   "divisao": "04"
+  },
+  {
+   "codigo": "051",
+   "nivel": "grupo",
+   "nome": "Gestão de resíduos",
+   "valor": 7598577.22,
+   "linhas": 31,
+   "share": 2.152669244423386e-06,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "052",
+   "nivel": "grupo",
+   "nome": "Gestão de águas residuais",
+   "valor": 678854024.2,
+   "linhas": 384,
+   "share": 0.00019231865874864257,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "053",
+   "nivel": "grupo",
+   "nome": "Redução da poluição",
+   "valor": 35930857.32,
+   "linhas": 125,
+   "share": 1.0179175553410891e-05,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "054",
+   "nivel": "grupo",
+   "nome": "Proteção da biodiversidade e da paisagem",
+   "valor": 1743603303.75,
+   "linhas": 793,
+   "share": 0.0004939610532059095,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "055",
+   "nivel": "grupo",
+   "nome": "P&D em proteção ambiental",
+   "valor": 335956362.9,
+   "linhas": 130,
+   "share": 9.517609796471502e-05,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "056",
+   "nivel": "grupo",
+   "nome": "Proteção ambiental não classificada",
+   "valor": 172310624.37,
+   "linhas": 208,
+   "share": 4.881542568158435e-05,
+   "centavos": 0,
+   "divisao": "05"
+  },
+  {
+   "codigo": "061",
+   "nivel": "grupo",
+   "nome": "Desenvolvimento habitacional",
+   "valor": 922518187.47,
+   "linhas": 190,
+   "share": 0.00026134846986366176,
+   "centavos": 0,
+   "divisao": "06"
+  },
+  {
+   "codigo": "062",
+   "nivel": "grupo",
+   "nome": "Desenvolvimento comunitário",
+   "valor": 3060725668.55,
+   "linhas": 367,
+   "share": 0.0008671004875705919,
+   "centavos": 0,
+   "divisao": "06"
+  },
+  {
+   "codigo": "063",
+   "nivel": "grupo",
+   "nome": "Abastecimento de água",
+   "valor": 2569420809.0,
+   "linhas": 920,
+   "share": 0.0007279143175590122,
+   "centavos": 0,
+   "divisao": "06"
+  },
+  {
+   "codigo": "065",
+   "nivel": "grupo",
+   "nome": "P&D em habitação e serviços comunitários",
+   "valor": 85383182.38,
+   "linhas": 17,
+   "share": 2.4188969247642754e-05,
+   "centavos": 0,
+   "divisao": "06"
+  },
+  {
+   "codigo": "071",
+   "nivel": "grupo",
+   "nome": "Produtos, aparelhos e equipamentos médicos",
+   "valor": 30828511423.510002,
+   "linhas": 623,
+   "share": 0.00873368611930024,
+   "centavos": 1,
+   "divisao": "07"
+  },
+  {
+   "codigo": "072",
+   "nivel": "grupo",
+   "nome": "Serviços ambulatoriais",
+   "valor": 48317409311.02,
+   "linhas": 394,
+   "share": 0.013688273209921909,
+   "centavos": 2,
+   "divisao": "07"
+  },
+  {
+   "codigo": "073",
+   "nivel": "grupo",
+   "nome": "Serviços hospitalares",
+   "valor": 108264715163.14,
+   "linhas": 4262,
+   "share": 0.030671284352355336,
+   "centavos": 3,
+   "divisao": "07"
+  },
+  {
+   "codigo": "074",
+   "nivel": "grupo",
+   "nome": "Serviços de saúde pública",
+   "valor": 7862491512.3,
+   "linhas": 897,
+   "share": 0.0022274358966201478,
+   "centavos": 0,
+   "divisao": "07"
+  },
+  {
+   "codigo": "075",
+   "nivel": "grupo",
+   "nome": "P&D em saúde",
+   "valor": 4095629908.27,
+   "linhas": 797,
+   "share": 0.0011602878124167308,
+   "centavos": 0,
+   "divisao": "07"
+  },
+  {
+   "codigo": "076",
+   "nivel": "grupo",
+   "nome": "Saúde não classificada",
+   "valor": 8375541410.13,
+   "linhas": 655,
+   "share": 0.0023727824139926725,
+   "centavos": 0,
+   "divisao": "07"
+  },
+  {
+   "codigo": "081",
+   "nivel": "grupo",
+   "nome": "Serviços recreativos e esportivos",
+   "valor": 910147857.77,
+   "linhas": 329,
+   "share": 0.0002578439679657963,
+   "centavos": 0,
+   "divisao": "08"
+  },
+  {
+   "codigo": "082",
+   "nivel": "grupo",
+   "nome": "Serviços culturais",
+   "valor": 7407851029.41,
+   "linhas": 1759,
+   "share": 0.002098636707449428,
+   "centavos": 0,
+   "divisao": "08"
+  },
+  {
+   "codigo": "083",
+   "nivel": "grupo",
+   "nome": "Serviços de radiodifusão e publicação",
+   "valor": 630275761.04,
+   "linhas": 258,
+   "share": 0.0001785564859070224,
+   "centavos": 0,
+   "divisao": "08"
+  },
+  {
+   "codigo": "085",
+   "nivel": "grupo",
+   "nome": "P&D em recreação, cultura e religião",
+   "valor": 74387910.34,
+   "linhas": 10,
+   "share": 2.1074019794700776e-05,
+   "centavos": 0,
+   "divisao": "08"
+  },
+  {
+   "codigo": "091",
+   "nivel": "grupo",
+   "nome": "Educação pré-primária e primária",
+   "valor": 95115460363.41,
+   "linhas": 263,
+   "share": 0.02694611376121336,
+   "centavos": 3,
+   "divisao": "09"
+  },
+  {
+   "codigo": "092",
+   "nivel": "grupo",
+   "nome": "Educação secundária",
+   "valor": 45336301610.59,
+   "linhas": 352,
+   "share": 0.012843728412227614,
+   "centavos": 2,
+   "divisao": "09"
+  },
+  {
+   "codigo": "093",
+   "nivel": "grupo",
+   "nome": "Educação pós-secundária não superior",
+   "valor": 2913565368.45,
+   "linhas": 13,
+   "share": 0.0008254101233282466,
+   "centavos": 0,
+   "divisao": "09"
+  },
+  {
+   "codigo": "094",
+   "nivel": "grupo",
+   "nome": "Educação superior",
+   "valor": 48919654112.64,
+   "linhas": 14692,
+   "share": 0.01385888855336396,
+   "centavos": 2,
+   "divisao": "09"
+  },
+  {
+   "codigo": "095",
+   "nivel": "grupo",
+   "nome": "Educação não definida por nível",
+   "valor": 7353925084.360001,
+   "linhas": 273,
+   "share": 0.0020833595417347655,
+   "centavos": 0,
+   "divisao": "09"
+  },
+  {
+   "codigo": "096",
+   "nivel": "grupo",
+   "nome": "Serviços auxiliares à educação",
+   "valor": 6277946500.87,
+   "linhas": 131,
+   "share": 0.0017785358968238876,
+   "centavos": 0,
+   "divisao": "09"
+  },
+  {
+   "codigo": "097",
+   "nivel": "grupo",
+   "nome": "P&D em educação",
+   "valor": 1997880421.17,
+   "linhas": 445,
+   "share": 0.0005659975035021491,
+   "centavos": 0,
+   "divisao": "09"
+  },
+  {
+   "codigo": "098",
+   "nivel": "grupo",
+   "nome": "Educação não classificada",
+   "valor": 6774218149.389999,
+   "linhas": 885,
+   "share": 0.0019191291531293485,
+   "centavos": 0,
+   "divisao": "09"
+  },
+  {
+   "codigo": "101",
+   "nivel": "grupo",
+   "nome": "Doença e invalidez",
+   "valor": 182701757739.00998,
+   "linhas": 334,
+   "share": 0.05175922325980641,
+   "centavos": 5,
+   "divisao": "10"
+  },
+  {
+   "codigo": "102",
+   "nivel": "grupo",
+   "nome": "Velhice",
+   "valor": 712935310520.8201,
+   "linhas": 2717,
+   "share": 0.20197385270786336,
+   "centavos": 20,
+   "divisao": "10"
+  },
+  {
+   "codigo": "103",
+   "nivel": "grupo",
+   "nome": "Sobreviventes",
+   "valor": 251732527606.96,
+   "linhas": 1921,
+   "share": 0.07131557057473238,
+   "centavos": 7,
+   "divisao": "10"
+  },
+  {
+   "codigo": "104",
+   "nivel": "grupo",
+   "nome": "Família e filhos",
+   "valor": 170858998330.9,
+   "linhas": 248,
+   "share": 0.048404181492270874,
+   "centavos": 5,
+   "divisao": "10"
+  },
+  {
+   "codigo": "105",
+   "nivel": "grupo",
+   "nome": "Desemprego",
+   "valor": 73169385258.78,
+   "linhas": 55,
+   "share": 0.020728812871094515,
+   "centavos": 2,
+   "divisao": "10"
+  },
+  {
+   "codigo": "106",
+   "nivel": "grupo",
+   "nome": "Habitação",
+   "valor": 9318578038.09,
+   "linhas": 19,
+   "share": 0.002639943737303437,
+   "centavos": 0,
+   "divisao": "10"
+  },
+  {
+   "codigo": "107",
+   "nivel": "grupo",
+   "nome": "Exclusão social não classificada",
+   "valor": 9708616150.75,
+   "linhas": 1073,
+   "share": 0.0027504411402996423,
+   "centavos": 0,
+   "divisao": "10"
+  },
+  {
+   "codigo": "108",
+   "nivel": "grupo",
+   "nome": "P&D em proteção social",
+   "valor": 40858053.879999995,
+   "linhas": 25,
+   "share": 1.1575045357566241e-05,
+   "centavos": 0,
+   "divisao": "10"
+  },
+  {
+   "codigo": "109",
+   "nivel": "grupo",
+   "nome": "Proteção social não classificada",
+   "valor": 30889860382.2,
+   "linhas": 954,
+   "share": 0.008751066217274603,
+   "centavos": 1,
+   "divisao": "10"
+  }
+ ],
+ "ajustes": [
+  {
+   "texto": "JUROS",
+   "valor": 856763907722.39,
+   "linhas": 1,
+   "papel": "soma",
+   "item": "juros"
+  },
+  {
+   "texto": "DISTRIBUICAO PRECATORIOS",
+   "valor": 84983139599.76,
+   "linhas": 95,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "TRANSFERENCIA DO IRRF DE COMPETENCIA DO GOVERNO CENTRAL ARRECADADO PELOS ESTADOS",
+   "valor": 73257530564.38,
+   "linhas": 1,
+   "papel": "soma",
+   "item": "irrf"
+  },
+  {
+   "texto": "FUNDEB MUNICIPIOS",
+   "valor": 42036708767.41,
+   "linhas": 1,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "TRANSFERENCIA DO IRRF DE COMPETENCIA DO GOVERNO CENTRAL ARRECADADO PELOS MUNICIPIOS",
+   "valor": 39100546452.86,
+   "linhas": 1,
+   "papel": "soma",
+   "item": "irrf"
+  },
+  {
+   "texto": "FUNDEB ESTADOS",
+   "valor": 25836394510.69,
+   "linhas": 1,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "FUNDO CONSTITUCIONAL DO DISTRITO FEDERAL",
+   "valor": 21980213092.12,
+   "linhas": 15,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "EDUCACAO PROFISSIONAL, CIENTIFICA E TECNOLOGICA",
+   "valor": 18672764892.9,
+   "linhas": 65,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "PROGRAMA MINHA CASA MINHA VIDA",
+   "valor": 7949902585.0,
+   "linhas": 1,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "BOLSA CAPES",
+   "valor": 3330100597.65,
+   "linhas": 70,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "BOLSA CNPQ",
+   "valor": 1111883808.84,
+   "linhas": 33,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "FIES",
+   "valor": 5490982.05,
+   "linhas": 1,
+   "papel": "remaneja",
+   "item": null
+  },
+  {
+   "texto": "RECEITA DE ALIENACOES DE ATIVOS NAO FINANCEIROS",
+   "valor": -6234175941.309999,
+   "linhas": 29,
+   "papel": "soma",
+   "item": "alienacoes"
+  }
+ ],
+ "negativos": {
+  "valor": -6234175941.309999,
+  "linhas": 29
+ },
+ "ponte": {
+  "tolerancia_relativa": 0.02,
+  "remanejamentos": {
+   "valor": 205906598836.41998,
+   "linhas": 282,
+   "itens": [
+    "DISTRIBUICAO PRECATORIOS",
+    "FUNDEB MUNICIPIOS",
+    "FUNDEB ESTADOS",
+    "FUNDO CONSTITUCIONAL DO DISTRITO FEDERAL",
+    "EDUCACAO PROFISSIONAL, CIENTIFICA E TECNOLOGICA",
+    "PROGRAMA MINHA CASA MINHA VIDA",
+    "BOLSA CAPES",
+    "BOLSA CNPQ",
+    "FIES"
+   ]
+  },
+  "ajustes_que_somam": {
+   "juros": 856763907722.39,
+   "irrf": 112358077017.24,
+   "alienacoes": -6234175941.309999
+  },
+  "ajustes_esperados_ausentes": [],
+  "disponivel": true,
+  "recibo": {
+   "disponivel": true,
+   "exercicio": 2023,
+   "periodo": 6,
+   "total_recibo": 2733806696561.1797,
+   "juros_pagos": 240662198170.0,
+   "primaria_liquidada": 2493144498393.44,
+   "rpnp_pagos": 97265291363.67,
+   "publicavel": true
+  },
+  "itens": [
+   {
+    "id": "total_recibo",
+    "nome": "Total do recibo (despesa primária liquidada + juros pagos)",
+    "valor": 2733806696561.1797,
+    "fonte": "recibo"
+   },
+   {
+    "id": "juros_pagos",
+    "nome": "menos juros pagos em dinheiro (linha do recibo)",
+    "valor": -240662198170.0,
+    "fonte": "recibo"
+   },
+   {
+    "id": "rpnp_pagos",
+    "nome": "mais restos a pagar não processados pagos (contas de anos anteriores pagas no ano)",
+    "valor": 97265291363.67,
+    "fonte": "anexo06"
+   },
+   {
+    "id": "juros",
+    "nome": "mais Juros pelo Banco Central, por competência (o que a dívida gerou no ano, pago ou não), no lugar dos juros pagos em dinheiro",
+    "valor": 856763907722.39,
+    "fonte": "cofog"
+   },
+   {
+    "id": "irrf",
+    "nome": "mais Imposto de renda retido na fonte que estados e municípios descontam dos próprios servidores e ficam (não passa pelo orçamento da União; o manual do FMI manda contar como arrecadado e transferido)",
+    "valor": 112358077017.24,
+    "fonte": "cofog"
+   },
+   {
+    "id": "alienacoes",
+    "nome": "mais Venda de bens (o COFOG desconta do investimento; no orçamento é receita)",
+    "valor": -6234175941.309999,
+    "fonte": "cofog"
+   }
+  ],
+  "esperado": 3553297598553.17,
+  "obtido": 3529839634994.8105,
+  "diff": -23457963558.359375,
+  "diff_relativa": -0.006645617360572773,
+  "ok": true,
+  "nota": "Os outros ajustes do Tesouro remanejam despesas que já estão no orçamento para a função certa e não entram na soma."
+ },
+ "reconciliacoes": [
+  {
+   "id": "cofog_soma_divisoes",
+   "ok": true,
+   "critica": true,
+   "esperado": 3529839634994.8105,
+   "obtido": 3529839634994.81,
+   "diff": -0.00048828125,
+   "descricao": "As dez divisões somam o total do ano (todo código do arquivo está em uma divisão de 01 a 10).",
+   "detalhe": ""
+  },
+  {
+   "id": "cofog_centavos",
+   "ok": true,
+   "critica": true,
+   "esperado": 100,
+   "obtido": 100,
+   "diff": 0,
+   "descricao": "Os centavos das dez divisões somam R$ 1,00 (maior resto).",
+   "detalhe": ""
+  },
+  {
+   "id": "ponte_cofog",
+   "ok": true,
+   "critica": true,
+   "esperado": 3553297598553.17,
+   "obtido": 3529839634994.8105,
+   "diff": -23457963558.359375,
+   "descricao": "Total do recibo, menos juros pagos, mais restos não processados pagos, juros pelo Banco Central, IRRF retido e venda de bens = total do COFOG, dentro da tolerância.",
+   "detalhe": "diferença -23,457,963,558.36 (-0.66% do total do COFOG; tolerância 2%)"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "competência e caixa",
+   "texto": "Caixa é quando o dinheiro sai; competência é quando a obrigação nasce. O recibo conta os juros pagos em dinheiro no ano (caixa). O COFOG conta os juros que a dívida gerou no ano, pagos ou não (competência), com o número do Banco Central. Por isso os juros pesam cerca do dobro na régua do COFOG.\n"
+  },
+  {
+   "termo": "restos a pagar",
+   "texto": "Contas de anos anteriores pagas neste ano. O RREO do ano não as conta como despesa deste ano; o COFOG soma as não processadas pagas (as que ainda não tinham sido conferidas quando o ano virou).\n"
+  },
+  {
+   "termo": "IRRF retido por estados e municípios",
+   "texto": "O imposto de renda descontado do salário dos servidores estaduais e municipais fica com o estado ou município, por regra da Constituição; a União nunca recebe nem paga. O manual do FMI manda registrar como se a União tivesse arrecadado e transferido, para países com arranjos diferentes ficarem comparáveis.\n"
+  },
+  {
+   "termo": "venda de bens",
+   "texto": "No orçamento, vender um prédio é receita. No COFOG, a venda entra negativa na gaveta de investimento (compra menos venda), porque trocar um bem por dinheiro não muda o patrimônio do governo.\n"
+  },
+  {
+   "termo": "resolução",
+   "texto": "A partir do arquivo de 2024 o Tesouro publica em R$ milhões com duas casas: cada linha só é precisa até R$ 10 mil. Somas de milhares de linhas carregam esse arredondamento; por isso a ponte tem tolerância em por cento, não em centavos.\n"
+  }
+ ]
+}

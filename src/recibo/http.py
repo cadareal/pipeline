@@ -24,15 +24,17 @@ class Http:
         pause: float = 0.7,
         retries: int = 4,
         verify: bool | str = True,
+        ipv4: bool = False,
     ):
+        """`ipv4=True` força IPv4 (o IBGE, visto de fora do Brasil, deixa a rota IPv6 pendurada até o timeout)."""
         self.pause = pause
         self.retries = retries
-        self.client = httpx.Client(
-            headers={"User-Agent": user_agent, "Accept": "application/json, */*"},
-            timeout=timeout,
-            follow_redirects=True,
-            verify=verify,
-        )
+        kw: dict = {"headers": {"User-Agent": user_agent, "Accept": "application/json, */*"}, "timeout": timeout, "follow_redirects": True}
+        if ipv4:
+            kw["transport"] = httpx.HTTPTransport(verify=verify, local_address="0.0.0.0")
+        else:
+            kw["verify"] = verify
+        self.client = httpx.Client(**kw)
 
     def get(self, url: str, params: dict | None = None) -> httpx.Response:
         last: Exception | None = None

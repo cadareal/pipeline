@@ -1,0 +1,109 @@
+# Perguntas abertas: as pontas soltas do site. Cada item tem o contexto em linguagem comum, o que o site já mediu (os
+# números entre chaves são preenchidos pelo gerador a partir dos exports do último ano fechado: nada é digitado), a
+# pergunta pronta para ser enviada ao órgão responsável pela Lei de Acesso à Informação, e o status. Quando houver
+# protocolo e resposta, eles entram aqui e a página muda sozinha.
+#
+# O status sai dos campos: sem protocolo = aberta; com `protocolo` = enviada; com `resposta` = respondida. Para registrar
+# um envio, preencha `protocolo` e `enviada_em` (AAAA-MM-DD); quando a resposta chegar, `respondida_em`, `resposta` e
+# `mudou` (o que mudou no site por causa dela). `status:` explícito, se existir, vale mais que a derivação.
+titulo: Perguntas abertas
+intro: >
+  O site mostra o que fecha e o que não fecha. Esta página é a lista do que ainda não fecha: diferenças entre relatórios
+  oficiais que medimos mas ainda não sabemos explicar, e limitações dos dados abertos. Cada item traz a pergunta pronta
+  para o órgão responsável, pela Lei de Acesso à Informação (LAI, Lei 12.527/2011), que obriga resposta em 20 dias,
+  prorrogáveis por mais 10. As respostas entram aqui quando chegarem, e o que mudar no site fica registrado.
+tem_duvida:
+  titulo: Tem uma dúvida que não está aqui?
+  texto: >
+    Se você tem uma dúvida sobre a metodologia ou sobre os dados que esta página não responde, pode mandar a sua
+    própria pergunta ao órgão responsável, pela Lei de Acesso à Informação: no Fala.BR (falabr.cgu.gov.br), em "Acesso à
+    Informação", escolha o órgão (para o orçamento e a dívida da União, a Secretaria do Tesouro Nacional, do Ministério
+    da Fazenda). Não é preciso justificar o pedido, e a resposta é obrigatória em 20 dias, prorrogáveis por mais 10.
+    Depois nos envie a pergunta, o número do protocolo e a resposta, pelo e-mail ou pelo GitHub do projeto: ela entra
+    nesta página, com o crédito de quem perguntou, se a pessoa quiser.
+perguntas:
+  - id: titulos-rreo-vs-emissoes
+    titulo: Por que o RREO conta mais títulos vendidos do que o Tesouro conta de emissões?
+    orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
+    protocolo: ""            # número do pedido no Fala.BR, quando enviado
+    enviada_em: ""           # AAAA-MM-DD
+    respondida_em: ""        # AAAA-MM-DD
+    resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
+    mudou: ""                # o que mudou no site por causa da resposta
+    contexto: >
+      Na visão "Tudo o que passou pelo caixa", os títulos vendidos no ano vêm do RREO (Anexo 01: receitas de operações de
+      crédito mais refinanciamento). Na aba "A dívida", as emissões do ano vêm da planilha de fatores de variação do
+      Tesouro (Anexo 2.9 do Relatório Mensal da Dívida). Os dois deveriam contar a mesma coisa, títulos vendidos, e não
+      contam. Sabemos de pelo menos uma razão: o RREO registra como receita também os títulos emitidos direto para a
+      carteira do Banco Central (por exemplo, para cobrir o resultado negativo do BC), que não passam pelo mercado e por
+      isso não entram nas emissões da DPF em poder do público. Não sabemos se isso explica tudo.
+    o_que_sabemos: >
+      Em {ano}: títulos vendidos pelo RREO, {titulos_rreo}; emissões da DPF em poder do público pelo Tesouro, {emissoes};
+      diferença, {diferenca}. A conferência informativa "titulos_rreo_vs_emissoes_dpf" da aba da dívida registra os dois
+      números todo ano.
+    pergunta: >
+      Com base na Lei 12.527/2011, solicito à Secretaria do Tesouro Nacional a conciliação, para o exercício de {ano},
+      entre (a) as receitas realizadas de "Operações de Crédito" e "Operações de Crédito - Refinanciamento (IV)" do
+      Anexo 01 do RREO da União (Balanço Orçamentário, coluna "Até o bimestre", 6º bimestre) e (b) as "Emissões" da
+      Dívida Pública Federal em poder do público publicadas no Anexo 2.9 (Fatores de Variação da DPF) do Relatório
+      Mensal da Dívida, acumuladas de janeiro a dezembro. Peço que a resposta discrimine os componentes que explicam a
+      diferença entre os dois valores (por exemplo: emissões diretas para a carteira do Banco Central, operações de
+      troca, diferenças de regime de registro, deságio ou ágio, outras), com os valores de cada componente.
+    afeta: >
+      A faixa "Reserva de liquidez (não usado no ano)" dentro de "Títulos vendidos", na visão do caixa: ela é a diferença
+      entre o que entrou pelo RREO e o que foi pago no ano com título do ano pelo carimbo da fonte (SIOP). Se parte da
+      receita do RREO não é dinheiro que passou pelo mercado, essa faixa está superestimada e o texto dela vai mudar.
+  - id: vincendo-12-meses
+    titulo: Quanto da dívida vence em 12 meses, pelo Tesouro e por nós?
+    orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
+    protocolo: ""            # número do pedido no Fala.BR, quando enviado
+    enviada_em: ""           # AAAA-MM-DD
+    respondida_em: ""        # AAAA-MM-DD
+    resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
+    mudou: ""                # o que mudou no site por causa da resposta
+    contexto: >
+      O site conta, título a título, o principal cujo vencimento final cai nos 12 meses seguintes e divide pela dívida em
+      mercado. O Tesouro publica no Relatório Mensal da Dívida (em PDF) um "percentual vincendo em 12 meses" maior.
+      Entendemos que ele inclui também os juros (cupons) que caem nesses 12 meses, trazidos a valor presente, e que a
+      base do nosso número é diferente. Queremos a confirmação oficial do método, para escrever a diferença com certeza.
+    o_que_sabemos: >
+      Em {ano}, pela nossa conta (CSV do estoque da DPF, posição de dezembro): {vincendo_site} da DPF em poder do público
+      vencem em até 12 meses, {vincendo_valor}. O número do Relatório Mensal da Dívida para dezembro de 2024 é 17,87%
+      (lido no PDF; a nossa conta para 2024 dá 15,67%).
+    pergunta: >
+      Com base na Lei 12.527/2011, solicito à Secretaria do Tesouro Nacional a memória de cálculo do indicador
+      "Percentual vincendo em 12 meses" da Dívida Pública Federal publicado no Relatório Mensal da Dívida (posição de
+      dezembro de {ano}): quais fluxos entram no numerador (principal, juros, cupons), se são trazidos a valor presente e
+      a que taxa, qual é o denominador, e se existe a abertura desse indicador em arquivo aberto (CSV ou planilha) no
+      Tesouro Transparente ou em dados.gov.br. Caso exista, peço o endereço.
+    afeta: >
+      A faixa "Vence em até 12 meses" e o destaque "Vence até ..." da aba "A dívida". O número do site continua sendo o do
+      principal; a resposta define como a diferença para o indicador do Tesouro é explicada na página.
+  - id: indexador-por-titulo
+    titulo: Que títulos o Tesouro classifica por um índice que o nome não revela?
+    orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
+    protocolo: ""            # número do pedido no Fala.BR, quando enviado
+    enviada_em: ""           # AAAA-MM-DD
+    respondida_em: ""        # AAAA-MM-DD
+    resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
+    mudou: ""                # o que mudou no site por causa da resposta
+    contexto: >
+      "Do que a dívida é feita", na aba "A dívida", classifica cada título pelo começo do nome (LFT é Selic, LTN e NTN-F
+      são prefixados, NTN-B é inflação, e assim por diante). O Tesouro classifica pelo indexador do contrato de cada papel,
+      que às vezes o nome não mostra (títulos da dívida agrária corrigidos pela TR, dívidas securitizadas pelo IGP-DI,
+      papéis internos em dólar). Por isso a composição do Relatório Mensal difere da nossa em até 0,1 ponto percentual.
+      Queremos a lista oficial para classificar igual.
+    o_que_sabemos: >
+      Em {ano}, pela nossa regra: Selic {selic}, prefixado {prefixado}, índice de preços {precos}, câmbio {cambio},
+      demais {demais} da DPF em poder do público. As fatias de Selic e prefixado batem com as séries 4177 e 4178 do Banco
+      Central dentro de 0,05 ponto percentual (conferências "indexador_selic_tesouro_vs_bcb" e
+      "indexador_prefixado_tesouro_vs_bcb").
+    pergunta: >
+      Com base na Lei 12.527/2011, solicito à Secretaria do Tesouro Nacional a tabela de correspondência entre cada
+      título ou contrato do arquivo aberto "Estoque da Dívida Pública Federal" (estoquedpf.csv, Tesouro Transparente) e o
+      indexador pelo qual ele é classificado na composição por indexador do Relatório Mensal da Dívida (Selic, prefixado,
+      índice de preços, câmbio, TR e outros), na posição de dezembro de {ano}, de preferência como uma coluna adicional
+      do próprio arquivo aberto.
+    afeta: >
+      O lado esquerdo da aba "A dívida" (do que a dívida é feita) e a faixa "Demais". Com a lista oficial, a regra por nome
+      em config/linhas.yaml é substituída pela correspondência do Tesouro.
