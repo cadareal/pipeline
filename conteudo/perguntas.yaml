@@ -4,7 +4,8 @@
 # protocolo e resposta, eles entram aqui e a página muda sozinha.
 #
 # O status sai dos campos: sem protocolo = aberta; com `protocolo` = enviada; com `resposta` = respondida. Para registrar
-# um envio, preencha `protocolo` e `enviada_em` (AAAA-MM-DD); quando a resposta chegar, `respondida_em`, `resposta` e
+# um envio, preencha `protocolo`, `enviada_em` (AAAA-MM-DD) e `enviada_para` (o órgão que recebeu o pedido no Fala.BR,
+# que pode ser o ministério e não a secretaria que responde); quando a resposta chegar, `respondida_em`, `resposta` e
 # `mudou` (o que mudou no site por causa dela). `status:` explícito, se existir, vale mais que a derivação.
 titulo: Perguntas abertas
 intro: >
@@ -25,8 +26,9 @@ perguntas:
   - id: titulos-rreo-vs-emissoes
     titulo: Por que o RREO conta mais títulos vendidos do que o Tesouro conta de emissões?
     orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
-    protocolo: ""            # número do pedido no Fala.BR, quando enviado
-    enviada_em: ""           # AAAA-MM-DD
+    protocolo: "18800174011202612"
+    enviada_em: "2026-11-10"
+    enviada_para: Ministério da Fazenda
     respondida_em: ""        # AAAA-MM-DD
     resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
     mudou: ""                # o que mudou no site por causa da resposta
@@ -56,8 +58,9 @@ perguntas:
   - id: vincendo-12-meses
     titulo: Quanto da dívida vence em 12 meses, pelo Tesouro e por nós?
     orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
-    protocolo: ""            # número do pedido no Fala.BR, quando enviado
-    enviada_em: ""           # AAAA-MM-DD
+    protocolo: "18800174015202609"
+    enviada_em: "2026-11-10"
+    enviada_para: Ministério da Fazenda
     respondida_em: ""        # AAAA-MM-DD
     resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
     mudou: ""                # o que mudou no site por causa da resposta
@@ -82,8 +85,9 @@ perguntas:
   - id: indexador-por-titulo
     titulo: Que títulos o Tesouro classifica por um índice que o nome não revela?
     orgao: Secretaria do Tesouro Nacional (Ministério da Fazenda)
-    protocolo: ""            # número do pedido no Fala.BR, quando enviado
-    enviada_em: ""           # AAAA-MM-DD
+    protocolo: "18800174016202645"
+    enviada_em: "2026-11-10"
+    enviada_para: Ministério da Fazenda
     respondida_em: ""        # AAAA-MM-DD
     resposta: ""             # o que o órgão respondeu, em resumo fiel, com o link do pedido se houver
     mudou: ""                # o que mudou no site por causa da resposta

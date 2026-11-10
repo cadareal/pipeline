@@ -39,10 +39,10 @@
 
 <section id="fontes" aria-labelledby="h-fontes">
   <h2 id="h-fontes" class="h2" style="margin-bottom:12px">As fontes</h2>
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th>id</th><th>fonte</th><th>órgão</th><th>formato e cadência</th></tr></thead>
     <tbody>
-      {% for f in fontes %}<tr><td>{{ f.id }}</td><td>{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td>{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
+      {% for f in fontes %}<tr><td data-rotulo="id">{{ f.id }}</td><td data-rotulo="fonte">{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td data-rotulo="órgão">{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left" data-rotulo="formato e cadência">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
     </tbody>
   </table>
 </section>

@@ -68,11 +68,11 @@
 {% if historico|length > 1 %}
 <section aria-labelledby="h-hist">
   <h2 id="h-hist" class="h2" style="margin-bottom:12px">Ano a ano</h2>
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th>ano</th><th>valor</th><th>centavos de cada R$ 1,00</th>{% if m.populacao %}<th>por habitante</th>{% endif %}<th>variação</th></tr></thead>
     <tbody>
       {% for h in historico %}
-      <tr><td>{{ h.ano }}{% if not h.fechado %} (até o {{ h.periodo }}º bimestre){% endif %}</td><td class="num">{{ h.valor_txt }}</td><td class="num">{{ h.cent }}</td>{% if m.populacao %}<td class="num">{{ h.hab }}</td>{% endif %}<td class="num">{{ h.var }}</td></tr>
+      <tr><td data-rotulo="ano">{{ h.ano }}{% if not h.fechado %} (até o {{ h.periodo }}º bimestre){% endif %}</td><td class="num" data-rotulo="valor">{{ h.valor_txt }}</td><td class="num" data-rotulo="centavos de cada R$ 1,00">{{ h.cent }}</td>{% if m.populacao %}<td class="num" data-rotulo="por habitante">{{ h.hab }}</td>{% endif %}<td class="num" data-rotulo="variação">{{ h.var }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -93,8 +93,8 @@
   </dl>
   <details style="margin-top:12px"><summary class="mini" style="cursor:pointer">Consulta SQL que gerou o número</summary><pre style="white-space:pre-wrap;font-size:12px;background:#F1F0EA;padding:12px;border-radius:8px">{{ linha.ficha.sql }}</pre></details>
   <h3 class="h3" style="margin:16px 0 8px;font-size:16px">Lacres dos arquivos originais</h3>
-  <table class="lacres"><tbody>
-    {% for s in m.lacres %}<tr><td>{{ s.arquivo }}</td><td>{{ s.baixado_em }}</td><td class="num">{{ s.snapshot_id }}</td><td><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
+  <table class="lacres cartoes"><tbody>
+    {% for s in m.lacres %}<tr><td data-rotulo="arquivo">{{ s.arquivo }}</td><td data-rotulo="baixado em">{{ s.baixado_em }}</td><td class="num" data-rotulo="identificador">{{ s.snapshot_id }}</td><td data-rotulo="SHA-256"><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
   </tbody></table>
 </section>
 

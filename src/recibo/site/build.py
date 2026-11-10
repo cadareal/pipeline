@@ -38,9 +38,12 @@ class Relatorio:
     anos: list[int] = field(default_factory=list)
     pulados: list[tuple[int, str]] = field(default_factory=list)
     avisos: list[str] = field(default_factory=list)
+    cobertura: dict[int, str] = field(default_factory=dict)   # ano -> a linha "o que este ano tem e o que falta" (a mesma da página)
 
     def resumo(self) -> str:
         linhas = [f"site gerado em {self.saida} ({len(self.paginas)} páginas; anos: {', '.join(str(a) for a in self.anos) or 'nenhum'})"]
+        for ano in sorted(self.cobertura):
+            linhas.append(f"  {ano}: {self.cobertura[ano]}")
         for ano, motivo in self.pulados:
             linhas.append(f"  ano {ano} ficou de fora: {motivo}")
         for a in self.avisos:
@@ -155,6 +158,7 @@ def construir(export_dir: Path, out_dir: Path, conteudo_dir: Path, config_dir: P
             divida = None
         m = modelo_ano(e, divida, conteudo, linhas_cfg, anos)
         modelos[ano] = m
+        rel.cobertura[ano] = m["cobertura"]["texto"]
         if not m["conferencias"]["todas_ok"]:
             rel.avisos.append(f"{ano}: {m['conferencias']['falhas']} conferência(s) informativa(s) com aviso (nenhuma crítica)")
         ctx = {**base, "m": m, "dados_json": dados_do_desenho(m), "pagina": "ano"}

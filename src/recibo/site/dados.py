@@ -689,7 +689,9 @@ def _visao_caixa(exp: dict, pop: float | None, conteudo: dict, gasto_no: dict, d
             "ficha_esq": "O que esse dinheiro pagou no ano",
             "ficha_dir": "Com que dinheiro foi pago",
             "vazio": "sem detalhe por fonte neste período: " + (" ".join(str((exp.get("fontes_de_recursos") or {}).get("motivo") or "").split()) if not f else ""),
-            "vazio_estado": "O outro lado fica em branco porque o carimbo da fonte (SIOP) só é comparável no ano fechado; nada de aproximação.",
+            "vazio_nome": "Sem carimbo da fonte até o ano fechar",
+            "vazio_sub": "o SIOP só diz com que dinheiro cada despesa foi paga quando o ano fecha; aqui não entra aproximação",
+            "vazio_estado": "O outro lado é só um aviso, sem números, porque o carimbo da fonte (SIOP) só é comparável no ano fechado; nada de aproximação. No ano fechado, esse lado mostra com que dinheiro cada faixa foi paga.",
             "herdado_esq": "com que dinheiro foi pago o conjunto {nome}, pelo carimbo da fonte (SIOP): o carimbo não separa esta parte, por isso o lado está tracejado",
             "herdado_dir": "o que o conjunto {nome} pagou no ano, pelo carimbo da fonte (SIOP): o carimbo não separa esta parte, por isso o lado está tracejado",
             "herdado_estado": "O outro lado está tracejado porque o carimbo da fonte não separa esta parte: o SIOP diz com que fonte cada despesa foi paga, e os tributos, por exemplo, entram juntos na fonte “recursos livres”. O que se vê é o outro lado do conjunto {nome}, com as porcentagens dele.",
@@ -1066,6 +1068,47 @@ def _tres_frases(exp: dict, pop: float | None, gasto: dict, linhas_nos: list[dic
     return frases
 
 
+def cobertura_do_ano(exp: dict, divida: dict | None, caixa: dict | None, div_v: dict | None) -> dict:
+    """Uma linha, montada dos dados, dizendo o que este ano tem e o que ainda falta: RREO até que mês, se o SIOP entrou
+    (detalhe por ação e carimbo da fonte), até que mês a dívida vai. `completa` é True só no ano fechado com tudo."""
+    periodo = int(exp.get("periodo") or 6)
+    fechado = (exp.get("estado") or {}).get("selo") == "fechado" or periodo >= 6
+    mes_rreo = MESES_NOME[min(periodo * 2, 12) - 1]
+    siop = bool((exp.get("siop") or {}).get("usado_nas_linhas"))
+    fonte = bool(caixa and caixa.get("por_fonte"))
+    partes = [f"RREO de janeiro a {mes_rreo} ({periodo}º bimestre)"]
+    faltas = []
+    if siop and fonte:
+        partes.append("SIOP do ano inteiro (detalhe por ação e carimbo da fonte)")
+    else:
+        tem = [t for t, ok in (("detalhe por ação", siop), ("carimbo da fonte", fonte)) if ok]
+        falta = [t for t, ok in (("detalhe por ação", siop), ("carimbo da fonte", fonte)) if not ok]
+        if tem:
+            partes.append("SIOP: " + " e ".join(tem))
+        if falta:
+            faltas.append("sem " + " nem ".join(falta) + (", que só entram com o ano fechado" if not fechado else ""))
+    if div_v:
+        mes_div = int(div_v.get("mes") or 0)
+        exe = (divida or {}).get("execucao") or {}
+        ult = int(exe.get("ultimo_mes_com_dados") or 0) if exe.get("disponivel") else 0
+        txt = f"dívida até {MESES_NOME[mes_div - 1]}" if 1 <= mes_div <= 12 else "dívida"
+        if ult and mes_div and ult < mes_div:
+            txt += f" (juros e principal pagos até {MESES_NOME[ult - 1]})"
+        partes.append(txt)
+        if not div_v.get("fechado"):
+            faltas.append("a dívida é a posição do último mês publicado, não a de dezembro")
+    else:
+        faltas.append("sem a aba da dívida")
+    completa = fechado and siop and fonte and bool(div_v and div_v.get("fechado"))
+    texto = ("Ano fechado: " if fechado else "Ano em andamento: ") + "; ".join(partes) + "."
+    if faltas:
+        f_txt = "; ".join(faltas)
+        texto += " " + f_txt[0].upper() + f_txt[1:] + "."
+    if not fechado:
+        texto += " Os números mudam a cada bimestre."
+    return {"texto": texto, "completa": completa, "fechado": fechado, "rreo_ate": mes_rreo, "siop": siop, "carimbo": fonte, "divida_ate": MESES_NOME[int(div_v.get("mes")) - 1] if div_v and div_v.get("mes") else None}
+
+
 def modelo_ano(exp: dict, divida: dict | None, conteudo: dict, linhas_cfg: dict | None, anos: list[dict], limite_acoes: int | None = ACOES_NO_DESENHO) -> dict:
     ano, periodo = int(exp["exercicio"]), int(exp.get("periodo") or 6)
     fechado = (exp.get("estado") or {}).get("selo") == "fechado" or periodo >= 6
@@ -1127,6 +1170,7 @@ def modelo_ano(exp: dict, divida: dict | None, conteudo: dict, linhas_cfg: dict 
         "regra_rateio": " ".join(str(exp.get("regra_rateio") or "").split()),
         "siop_usado": bool((exp.get("siop") or {}).get("usado_nas_linhas")),
         "divida_disponivel": bool((divida or {}).get("execucao", {}).get("disponivel")),
+        "cobertura": cobertura_do_ano(exp, divida, caixa, div_v),
     }
 
 

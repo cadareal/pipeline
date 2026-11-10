@@ -5,7 +5,7 @@
 <details class="item{% if dentro %} item-dentro{% endif %}" id="item-{{ visao_id }}-{{ n.id }}">
   <summary>
     <span class="cor" style="background:{{ n.cor or '#A8ADAA' }}{% if n.tracejado %};background:#E6E4DD;border:1px dashed #5B625F{% endif %}" aria-hidden="true"></span>
-    <span style="display:flex;flex-direction:column;min-width:0"><span class="nome">{% if dentro %}↳ {% endif %}{{ n.nome }}</span><span class="barra"><span style="width:{{ ([(n.valor / total * 180) if total else 0, 100]|min)|round(1) }}%;background:{{ n.cor or '#A8ADAA' }}"></span></span></span>
+    <span class="nome-bloco"><span class="nome">{% if dentro %}↳ {% endif %}{{ n.nome }}</span><span class="barra"><span style="width:{{ ([(n.valor / total * 180) if total else 0, 100]|min)|round(1) }}%;background:{{ n.cor or '#A8ADAA' }}"></span></span></span>
     <span class="num cent">{{ cent|replace(' centavos','')|replace(' centavo','') }}</span>
     <span class="num valor">{{ n.txt }}</span>
     <span class="num hab">{{ n.hab if pop else '' }}</span>
@@ -55,6 +55,7 @@
       <a href="#conferencias" style="color:inherit;text-decoration:none">{{ m.selo }}</a>
     </span>
   </div>
+  <p class="cobertura {{ 'completa' if m.cobertura.completa else 'parcial' }}"><span class="cobertura-marca" aria-hidden="true"></span><span>{{ m.cobertura.texto }}</span></p>
 </section>
 
 <section class="visoes" aria-labelledby="h-visoes">
@@ -143,7 +144,8 @@
     <div class="trilha" id="trilha" aria-label="Onde você está no desenho"></div>
     <button class="btn" type="button" id="subir" hidden>← Subir um nível</button>
   </div>
-  <div class="sankey">
+  <p class="mini so-estreito modo-desenho" id="modo-desenho"><span id="modo-desenho-txt">Aqui o desenho está em lista. No computador ele é um diagrama de fluxo, com as fitas ligando cada origem a cada destino: a visão mais rica do site.</span> <button type="button" class="link" id="ver-diagrama">Ver o diagrama aqui</button> <span id="modo-desenho-dica">(rola para o lado e aceita zoom de pinça)</span></p>
+  <div class="sankey" id="sankey">
     <div class="cols">
       <div><div class="titulo-col" id="titulo-esq">De onde veio</div><div class="mini" id="legenda-esq"></div></div>
       <div class="centro"><b class="num" id="centro-txt"></b><span class="mini" id="centro-nome"></span></div>

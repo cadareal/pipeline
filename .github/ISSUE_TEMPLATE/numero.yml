@@ -1,0 +1,38 @@
+name: Número que não bate
+description: Um valor, uma porcentagem ou os centavos de uma faixa não batem com a fonte oficial, ou não fecham entre si.
+title: "[número] "
+labels: ["número"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado. Todo número do site tem uma ficha (valor exato, fonte, anexo, filtro e lacre do arquivo): quanto mais dessa ficha vier aqui, mais rápido a gente confere. Se a diferença for entre dois relatórios oficiais, pode ser uma das [perguntas abertas](https://cadareal.org/perguntas-abertas/).
+  - type: input
+    id: pagina
+    attributes:
+      label: Endereço da página
+      description: Cole o endereço completo (por exemplo, https://cadareal.org/2025/ ou https://cadareal.org/2025/linha/saude/).
+      placeholder: https://cadareal.org/2025/
+    validations:
+      required: true
+  - type: input
+    id: faixa
+    attributes:
+      label: Qual número
+      description: O nome da faixa ou da linha, a aba (caixa, gasto, dívida) e o ano.
+      placeholder: "Aba 'O gasto de verdade', linha Saúde, 2025: 8 centavos"
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que você esperava, e de onde veio
+      description: O valor que você acha certo e a fonte onde o viu (relatório, anexo, tabela, página, data).
+      placeholder: "RREO 6º bimestre de 2025, Anexo 06, linha X: R$ ..."
+    validations:
+      required: true
+  - type: textarea
+    id: detalhe
+    attributes:
+      label: Mais alguma coisa
+      description: Captura de tela, conta que você fez, link. Opcional.

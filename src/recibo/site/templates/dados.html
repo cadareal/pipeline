@@ -10,11 +10,11 @@
 
 <section aria-labelledby="h-arq">
   <h2 id="h-arq" class="h2" style="margin-bottom:12px">Arquivos por ano</h2>
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th>ano</th><th>recibo (tudo: linhas, níveis, memos, conferências)</th><th>linhas, em CSV</th><th>dívida</th><th>comparação internacional</th><th>gerado em</th></tr></thead>
     <tbody>
       {% for a in arquivos %}
-      <tr><td>{{ a.ano }}</td><td><a href="{{ raiz }}{{ a.recibo_json }}">recibo_{{ a.ano }}.json</a></td><td><a href="{{ raiz }}{{ a.recibo_csv }}">recibo_{{ a.ano }}.csv</a></td><td>{% if a.divida_json %}<a href="{{ raiz }}{{ a.divida_json }}">divida_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td>{% if a.cofog_json %}<a href="{{ raiz }}{{ a.cofog_json }}">cofog_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td class="num">{{ a.gerado_em }}</td></tr>
+      <tr><td data-rotulo="ano">{{ a.ano }}</td><td data-rotulo="recibo (tudo)"><a href="{{ raiz }}{{ a.recibo_json }}">recibo_{{ a.ano }}.json</a></td><td data-rotulo="linhas, em CSV"><a href="{{ raiz }}{{ a.recibo_csv }}">recibo_{{ a.ano }}.csv</a></td><td data-rotulo="dívida">{% if a.divida_json %}<a href="{{ raiz }}{{ a.divida_json }}">divida_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td data-rotulo="comparação internacional">{% if a.cofog_json %}<a href="{{ raiz }}{{ a.cofog_json }}">cofog_{{ a.ano }}.json</a>{% else %}<span class="mini">ainda não</span>{% endif %}</td><td class="num" data-rotulo="gerado em">{{ a.gerado_em }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -26,18 +26,18 @@
   <p style="font-size:15px;color:#3A423F;margin-bottom:12px">Para conferir um lacre: baixe o mesmo arquivo da fonte (ou use o guardado no repositório), calcule o SHA-256 (no Windows, <code>certutil -hashfile arquivo SHA256</code>; no Mac e no Linux, <code>shasum -a 256 arquivo</code>) e compare. O pipeline normaliza a resposta da API antes de calcular (ordena as linhas), por isso o hash é do arquivo canônico guardado em <code>data/raw</code>, que o repositório descreve.</p>
   {% for a in arquivos %}
   <details style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">{{ a.ano }}: {{ a.lacres|length }} arquivos lacrados</summary>
-  <table class="lacres" style="margin-top:8px"><thead><tr><th>arquivo</th><th>baixado em</th><th>identificador</th><th>SHA-256</th></tr></thead><tbody>
-    {% for s in a.lacres %}<tr><td>{{ s.arquivo }}</td><td>{{ s.baixado_em }}</td><td class="num">{{ s.snapshot_id }}</td><td><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
+  <table class="lacres cartoes" style="margin-top:8px"><thead><tr><th>arquivo</th><th>baixado em</th><th>identificador</th><th>SHA-256</th></tr></thead><tbody>
+    {% for s in a.lacres %}<tr><td data-rotulo="arquivo">{{ s.arquivo }}</td><td data-rotulo="baixado em">{{ s.baixado_em }}</td><td class="num" data-rotulo="identificador">{{ s.snapshot_id }}</td><td data-rotulo="SHA-256"><code>{{ s.sha256 }}</code></td></tr>{% endfor %}
   </tbody></table></details>
   {% endfor %}
 </section>
 
 <section aria-labelledby="h-fontes">
   <h2 id="h-fontes" class="h2" style="margin-bottom:12px">As fontes</h2>
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th>id</th><th>fonte</th><th>órgão</th><th>formato e cadência</th></tr></thead>
     <tbody>
-      {% for f in fontes %}<tr><td>{{ f.id }}</td><td>{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td>{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
+      {% for f in fontes %}<tr><td data-rotulo="id">{{ f.id }}</td><td data-rotulo="fonte">{{ f.nome }}{% if f.url %}<br><a class="mini" href="{{ f.url }}">{{ f.url }}</a>{% endif %}</td><td data-rotulo="órgão">{{ f.orgao }}</td><td class="mini" style="white-space:normal;text-align:left" data-rotulo="formato e cadência">{{ f.formato }}{% if f.cadencia %}; {{ f.cadencia }}{% endif %}</td></tr>{% endfor %}
     </tbody>
   </table>
 </section>

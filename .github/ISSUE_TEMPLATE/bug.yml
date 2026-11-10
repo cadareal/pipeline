@@ -1,0 +1,33 @@
+name: Bug no site
+description: Uma página que não abre, um botão que não funciona, um desenho que vaza da tela, um texto cortado.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: input
+    id: pagina
+    attributes:
+      label: Endereço da página
+      placeholder: https://cadareal.org/2025/
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: O que você fez e o que aconteceu
+      description: Passo a passo (em que faixa clicou, que aba estava aberta) e o que apareceu, ou não apareceu.
+      placeholder: "1. Abri a aba 'A dívida'. 2. Toquei em 'Selic'. 3. O desenho sumiu e só ficou o título."
+    validations:
+      required: true
+  - type: input
+    id: aparelho
+    attributes:
+      label: Aparelho e navegador
+      description: Celular ou computador, sistema e navegador (por exemplo, iPhone 14, Safari; Windows 11, Chrome).
+      placeholder: iPhone 14, Safari
+    validations:
+      required: true
+  - type: textarea
+    id: captura
+    attributes:
+      label: Captura de tela
+      description: Se puder, cole aqui uma imagem (arraste para o campo). Opcional.

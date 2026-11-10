@@ -34,20 +34,20 @@
 {% for parte in partes[1:] %}{{ parte|safe }}{% endfor %}
 </article>
 
-<section id="contato" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px 48px;border-top:1px solid #E6E4DD;padding-top:32px" aria-labelledby="h-contato">
+<section id="contato" class="contato" aria-labelledby="h-contato">
   <div style="display:flex;flex-direction:column;gap:10px">
     <h2 id="h-contato" class="h2">Entre em contato</h2>
     <p style="font-size:15px;line-height:1.55;color:#3A423F">Discorda de um número, de uma regra da metodologia ou de uma fonte? Achou um erro ou um bug no site? Quer ajudar? É assim que o projeto melhora.</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:14px">
-    <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 16px;font-size:15px;line-height:1.5">
-      <strong>Erro, bug ou discordância</strong><span>Um número que não bate, uma fonte lida errado, uma regra da metodologia de que você discorda, ou um bug: uma página que não abre, um botão que não funciona, um desenho que vaza da tela, um texto cortado. Abra uma <em>issue</em> no GitHub (um registro público do problema, que fica visível para todos junto com a resposta) ou escreva para <a href="mailto:{{ site.email_contato }}">{{ site.email_contato }}</a>. Para números: qual número, qual ano e, se puder, qual fonte você consultou. Para bugs: o endereço da página, o que você clicou e, se puder, uma captura de tela; o celular ou o navegador ajuda.</span>
+    <div class="contato-lista">
+      <strong>Erro, bug ou discordância</strong><span>Um número que não bate, uma fonte lida errado, uma regra da metodologia de que você discorda, ou um bug: uma página que não abre, um botão que não funciona, um desenho que vaza da tela, um texto cortado. Abra uma <em>issue</em> no GitHub (um registro público do problema, que fica visível para todos junto com a resposta; há um modelo para cada caso, que pede o que a gente precisa) ou escreva para <a href="mailto:{{ site.email_contato }}">{{ site.email_contato }}</a>. Para números: qual número, qual ano e, se puder, qual fonte você consultou. Para bugs: o endereço da página, o que você clicou e, se puder, uma captura de tela; o celular ou o navegador ajuda.</span>
       <strong>Quer ajudar</strong><span>Programação (Python), revisão da metodologia (economista), texto para leigos, design, e, mais à frente, os estados e os municípios. O repositório tem a lista do que falta.</span>
       <strong>Imprensa e uso</strong><span>Tudo aqui pode ser citado e reproduzido com a fonte "{{ site.titulo }}" e o link; os dados e o código são livres ({{ site.licenca }}).</span>
     </div>
     <p class="mini">Toda correção aceita entra no histórico da metodologia, com a data e, se a pessoa quiser, o nome de quem apontou.</p>
     <div style="display:flex;flex-wrap:wrap;gap:10px">
-      <a class="btn cheio" href="{{ site.url_issues }}">Abrir uma issue no GitHub →</a>
+      <a class="btn cheio" href="{{ site.url_issue_nova or site.url_issues }}">Abrir uma issue no GitHub →</a>
       <a class="btn" href="mailto:{{ site.email_contato }}">Escrever um e-mail</a>
     </div>
   </div>

@@ -417,7 +417,7 @@ def cmd_site(args) -> int:
     print(rel.resumo())
     if not rel.anos:
         return 3
-    print(f"\npara ver no navegador: python -m http.server -d {out} 8000  (depois abra http://localhost:8000/)")
+    print(f"\npara ver no navegador: uv run python -m http.server -d {out} 8000  (depois abra http://localhost:8000/)")
     return 0
 
 

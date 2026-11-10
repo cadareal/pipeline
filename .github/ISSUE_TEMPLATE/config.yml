@@ -1,0 +1,12 @@
+# Modelos de issue do Cada Real: um para cada tipo de coisa que a página "Quem somos" pede para reportar.
+blank_issues_enabled: true
+contact_links:
+  - name: Perguntas abertas (o que o site ainda não sabe responder)
+    url: https://cadareal.org/perguntas-abertas/
+    about: Antes de abrir uma dúvida sobre os dados, veja se ela já está lá, com o pedido feito ao Tesouro pela Lei de Acesso à Informação.
+  - name: Metodologia (como cada número é calculado)
+    url: https://cadareal.org/metodologia/
+    about: Cada regra, cada fonte e cada conferência, explicadas para quem nunca abriu um relatório de orçamento.
+  - name: E-mail
+    url: mailto:contato@cadareal.org
+    about: Se preferir não abrir uma issue pública, escreva para contato@cadareal.org.

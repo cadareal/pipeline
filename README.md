@@ -1,8 +1,28 @@
-# recibo
+# Cada Real
 
-Pipeline aberto de dados fiscais. Pergunta que responde: **de cada R$ 1,00 de imposto, quantos centavos foram para onde?**
+**O site: [cadareal.org](https://cadareal.org/).** De cada R$ 1,00 de tributo que a União arrecada, quantos centavos vão
+para onde? Este repositório é o programa que responde: baixa os relatórios oficiais, guarda cada um com um lacre, faz
+as contas por regras públicas, confere o resultado de dezenas de jeitos e gera o site. Nenhum número é digitado à mão.
 
-Fase 1: Recibo do Contribuinte (União). Fontes implementadas: SICONFI (RREO da União, S4), SIOP (execução do
+## Por quê
+
+O projeto nasceu de uma pergunta feita numa conversa entre amigos, que cabe no bolso de qualquer cidadão: "para onde
+foi o meu dinheiro?". Responder no detalhe é difícil porque a resposta está espalhada em relatórios de fontes
+diferentes, com jargão de economia e contabilidade e metodologias que não conversam entre si. Quem faz o projeto
+trabalha com dados e decidiu aplicar o ofício nas contas públicas e compartilhar o resultado. O Cada Real é cívico,
+independente e mantido com recursos próprios: sem partido, sem patrocinador, sem publicidade e sem opinião sobre se o
+gasto é bom ou ruim. Ele mostra o que foi encontrado, independentemente do que for encontrado, com a fonte, o lacre e a
+conferência de cada número. A base disso está na Constituição: todo o poder emana do povo (art. 1º), quem gere dinheiro
+público presta contas (art. 70) e qualquer cidadão pode cobrar (art. 74, § 2º).
+
+Achou um número que não bate, um bug ou discorda de uma regra? [Abra uma issue](https://github.com/cadareal/pipeline/issues/new/choose)
+(há um modelo para cada caso) ou escreva para contato@cadareal.org. As perguntas que o próprio site ainda não sabe
+responder estão em [cadareal.org/perguntas-abertas](https://cadareal.org/perguntas-abertas/), com os pedidos feitos ao
+Tesouro pela Lei de Acesso à Informação.
+
+## O que é
+
+Pipeline aberto de dados fiscais (pacote Python `recibo`). Fase 1: Recibo do Contribuinte (União). Fontes implementadas: SICONFI (RREO da União, S4), SIOP (execução do
 orçamento federal por classificador, S8) e COFOG (despesa do Governo Central na classificação internacional de
 funções, S7; produto separado do recibo, `mart cofog`, desde a v0.6.3), Dívida Pública Federal do Tesouro (S1) e séries do
 SGS do Banco Central (S16; raw, staging e inspect na v0.7.0, layout fixado em config na v0.7.1 e o `mart divida`, também
@@ -71,7 +91,7 @@ Pré-requisitos: Python 3.11+ e [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync --extra dev
-uv run pytest                      # 84 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida, séries do BC e população do IBGE sintéticos, e o site gerado a partir deles
+uv run pytest                      # 88 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida, séries do BC e população do IBGE sintéticos, e o site gerado a partir deles
 
 # 1) baixar RREO da União (anexos 01, 02, 04-RGPS, 04-RPPS, 06; bimestres 1 a 6)
 uv run recibo fetch siconfi --exercicios 2024 2025 2026
@@ -155,7 +175,7 @@ uv run recibo run --exercicios 2024 2025 2026
 uv run recibo mart recibo --exercicio 2023 && uv run recibo mart recibo --exercicio 2024 && uv run recibo mart recibo --exercicio 2025 && uv run recibo mart recibo --exercicio 2026
 uv run recibo mart divida --exercicio 2023 && uv run recibo mart divida --exercicio 2024 && uv run recibo mart divida --exercicio 2025 && uv run recibo mart divida --exercicio 2026
 uv run recibo site --limpar                                  # docs/ na raiz do repositório; --out para outra pasta; --exercicios 2025 para um ano só
-python -m http.server -d docs 8000                          # abra http://localhost:8000/ (Ctrl+C para parar)
+uv run python -m http.server -d docs 8000                   # abra http://localhost:8000/ (Ctrl+C para parar)
 
 # 13) publicar no GitHub Pages: commite docs/ e, no GitHub, Settings > Pages > "Deploy from a branch" > main, pasta /docs.
 #     Domínio próprio: `dominio` e `url` em conteudo/site.yaml (o gerador escreve docs/CNAME, robots.txt, sitemap.xml e
@@ -555,7 +575,7 @@ se valorizou.
 
 Tudo isso está em `config/linhas.yaml`, que gera o SQL, a ficha e os testes.
 
-### O que o site publica (v0.9.0 a v0.10.3)
+### O que o site publica (v0.9.0 a v0.11.1)
 
 - **Uma página por ano** (`docs/AAAA/`; a do ano fechado mais recente também é a `index.html`): a frase do ano, as
   palavras do desenho explicadas, o desenho de fluxo com duas visões, a ficha da faixa selecionada, três frases, a
@@ -652,6 +672,32 @@ Tudo isso está em `config/linhas.yaml`, que gera o SQL, a ficha e os testes.
   site. O rodapé da página convida quem tem outra dúvida a perguntar ao órgão pela LAI (Fala.BR) e mandar a resposta
   para entrar no site. "Quem somos" passa a pedir também bugs (página que não abre, botão que não funciona, desenho
   que vaza), com o que mandar junto.
+- **Celular, cobertura por ano, aviso no lugar do branco, marca azul e amarela (v0.11.0).** Em tela estreita (até
+  900 px: celular, tablet em pé) o desenho vira duas listas de barras, "De onde veio" em cima e "Para onde foi"
+  embaixo, cada faixa uma linha com o rótulo e uma barra proporcional à parte dela no lado; sem as fitas (a ligação é
+  o total, no alto), 1 unidade do SVG = 1 px, por isso o texto fica legível. A mesma máquina de estados (zoom, trilha,
+  ficha, "Ir para") roda nos dois arranjos; `fluxo.js` troca de arranjo no mesmo ponto de corte do CSS e redesenha ao
+  girar o aparelho. Sem mouse, o card não existe: tocar numa faixa entra nela (ou abre a ficha, que rola para a tela) e
+  os textos dizem "toque". Tabelas, lista linha por linha (nome numa linha, valor embaixo, centavos à direita), contato,
+  fontes e lacres cabem em 390 px sem rolagem lateral (conferido com Playwright, iPhone 14 e 768 px). Abaixo do título
+  de cada ano, uma linha de cobertura montada dos dados diz o que o ano tem e o que falta ("Ano fechado: RREO de
+  janeiro a dezembro (6º bimestre); SIOP do ano inteiro...; dívida até dezembro" ou "Ano em andamento: RREO de janeiro
+  a agosto (4º bimestre); dívida até julho. Sem detalhe por ação nem carimbo da fonte, que só entram com o ano fechado;
+  ... Os números mudam a cada bimestre."); o `recibo site` imprime a mesma linha por ano. No ano em andamento, ao entrar
+  numa faixa do caixa, o lado que ficava em branco (sem carimbo da fonte) ganha uma faixa de aviso cinza tracejada, sem
+  números e sem clique, "Sem carimbo da fonte até o ano fechar", com o motivo; o teste `test_ano_em_andamento_tratado_igual_em_todas_as_visoes`
+  deriva um 2026 em andamento do export fechado e confere que nenhum lado fica em branco sem aviso, em todas as visões.
+  As duas linhas do cifrão da marca passam a azul e amarelo da bandeira (cabeçalho, favicon e imagem de prévia de
+  link). A dica do fim do `recibo site` e o README usam `uv run python -m http.server` (no macOS não existe `python`).
+- **Celular, segunda passada; repositório pronto para receber gente (v0.11.1).** Em tela estreita, uma linha acima do
+  desenho diz que a lista é a versão de bolso e que no computador ele é um diagrama de fluxo, com o botão "Ver o diagrama
+  aqui" (o arranjo largo dentro da área que rola para o lado, com zoom de pinça; "Voltar à lista" desfaz). Tabelas de
+  três colunas ou mais (fontes, arquivos por ano, lacres, ano a ano da linha) viram cartões em telas até 600 px: uma
+  linha da tabela por bloco, cada célula numa linha própria precedida do nome da coluna (`data-rotulo` nos templates,
+  classe `cartoes`); nada quebra no meio da palavra nem rola para o lado. No repositório: este README começa pelo porquê
+  e pelo link do site, `LICENSE` (MIT) e três modelos de issue em `.github/ISSUE_TEMPLATE/` (número que não bate, bug no
+  site, discordância de metodologia), para onde o botão "Abrir uma issue" do site passa a apontar
+  (`url_issue_nova` em `site.yaml`).
 - **Formatação uma vez só.** `src/recibo/site/dados.py` transforma o export no modelo das páginas com todas as strings
   prontas ("R$ 990,2 bi", "31 centavos", "30,7%", "R$ 4.640 por habitante", em pt-BR); o HTML (Jinja2) e o `fluxo.js`
   só colocam as strings no lugar. Dentro de uma faixa, as porcentagens e os centavos são de cada R$ 1,00 daquela faixa

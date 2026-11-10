@@ -25,6 +25,16 @@
   var H = H_MIN, YC = Y0, ALT = Y0 + H_MIN + MARGEM_BAIXO;
 
   var state = { visao: dados.visao_inicial || (dados.visoes[0] && dados.visoes[0].id), caminho: [], sel: null, hover: null };
+  // tela estreita (celular, tablet em pé): o desenho vira duas listas de barras, uma embaixo da outra, sem as fitas;
+  // o mesmo ponto de corte do CSS (site.css, @media max-width:900px). Toque: sem mouse, os textos dizem "toque" e a
+  // ficha faz o papel do card.
+  var mqEstreito = window.matchMedia ? window.matchMedia('(max-width: 900px)') : null;
+  var mqToque = window.matchMedia ? window.matchMedia('(hover: none)') : null;
+  var diagramaForcado = false;   // em tela estreita, a pessoa pode pedir o diagrama largo mesmo assim (rola para o lado)
+  function estreito() { return !!(mqEstreito && mqEstreito.matches); }
+  function empilhado() { return estreito() && !diagramaForcado; }
+  function toque() { return !!(mqToque && mqToque.matches); }
+  function larguraArea() { var w = svg.parentNode ? svg.parentNode.clientWidth : 0; return Math.max(300, Math.round(w || (window.innerWidth - 48) || 360)); }
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function visao() { for (var i = 0; i < dados.visoes.length; i++) if (dados.visoes[i].id === state.visao) return dados.visoes[i]; return dados.visoes[0]; }
@@ -118,7 +128,8 @@
   function linhasRotulo(it, max) {
     var linhas = [];
     quebrar(it.no.nome, 14, 600, max, 2).forEach(function (t) { linhas.push({ t: t, fs: 14, peso: 600, cor: '#15201F', alt: 17, num: false }); });
-    quebrar(rotulo(it), 12, 400, max, 2, ' · ').forEach(function (t) { linhas.push({ t: t, fs: 12, peso: 400, cor: '#5B625F', alt: 15, num: true }); });
+    // números em até duas linhas, quebrando em " · "; na faixa de aviso é uma explicação curta, quebrada por palavras em até três
+    quebrar(rotulo(it), 12, 400, max, it.aviso ? 3 : 2, it.aviso ? null : ' · ').forEach(function (t) { linhas.push({ t: t, fs: 12, peso: 400, cor: '#5B625F', alt: 15, num: !it.aviso }); });
     var alt = 12 + 4;   // primeira linha de base a 12 px do topo do bloco; 4 px de descida no fim
     for (var i = 1; i < linhas.length; i++) alt += linhas[i].alt;
     return { linhas: linhas, alt: alt, passo: alt + 8 };
@@ -129,7 +140,8 @@
     var xm = (x1 + x2) / 2;
     return 'M' + x1 + ',' + y1 + ' C' + xm + ',' + y1 + ' ' + xm + ',' + y2 + ' ' + x2 + ',' + y2 + ' L' + x2 + ',' + (y2 + h) + ' C' + xm + ',' + (y2 + h) + ' ' + xm + ',' + (y1 + h) + ' ' + x1 + ',' + (y1 + h) + ' Z';
   }
-  function layout() {
+  // os itens do nível atual, iguais nos dois arranjos: o que fica de cada lado, o total e o modo do outro lado
+  function itensDoNivel() {
     var v = visao(), z = alvo();
     var esqItens, dirItens, total, ladoZoom = null, modoOutro = 'raiz';
     if (z) {
@@ -140,7 +152,7 @@
       var outros;
       if (cruza(v)) {
         // nestas visões o outro lado nunca é rateio: é o que o nó traz (carimbo da fonte no caixa, cruzamento título a título na dívida);
-        // se o nó não tem o seu, mas o conjunto de onde veio tem, mostra o do conjunto, tracejado e dito como tal; senão, nada
+        // se o nó não tem o seu, mas o conjunto de onde veio tem, mostra o do conjunto, tracejado e dito como tal; senão, um aviso
         outros = (z.no.outro_lado || []).filter(function (o) { return o.valor > 0; }).map(function (o) { return { no: o, pais: [z.no], lado: outroLado, carimbo: true }; });
         modoOutro = outros.length ? 'carimbo' : 'vazio';
         if (!outros.length && z.no.outro_lado_de) {
@@ -149,6 +161,11 @@
             outros = dono.no.outro_lado.filter(function (o) { return o.valor > 0; }).map(function (o) { return { no: o, pais: [dono.no], lado: outroLado, carimbo: true, herdado: true, dono: dono.no }; });
             modoOutro = outros.length ? 'herdado' : 'vazio';
           }
+        }
+        if (modoOutro === 'vazio') {
+          // ano em andamento: o carimbo da fonte ainda não existe. Em vez de um lado em branco, uma faixa de aviso, sem
+          // números e sem clique, dizendo por quê (os textos vêm da visão; o desenho não inventa número)
+          outros = [{ no: { id: '__aviso', nome: textoOutro(v, 'vazio_nome'), sub: textoOutro(v, 'vazio_sub'), valor: z.no.valor || 1, cor: '#E6E4DD', tracejado: true }, pais: [], lado: outroLado, aviso: true }];
         }
       } else {
         outros = (z.lado === 'esq' ? v.saidas : v.entradas).map(function (o) { return { no: o, pais: [], lado: outroLado, rateado: true }; });
@@ -161,6 +178,15 @@
       dirItens = v.saidas.map(function (o) { return { no: o, pais: [], lado: 'dir' }; });
       total = v.total;
     }
+    return { v: v, z: z, esqItens: esqItens, dirItens: dirItens, total: total, ladoZoom: ladoZoom, modoOutro: modoOutro };
+  }
+  function layout() {
+    var b = itensDoNivel();
+    return empilhado() ? layoutEmpilhado(b) : layoutLargo(b);
+  }
+  // arranjo largo: entradas à esquerda, barra central, saídas à direita, fitas entre elas
+  function layoutLargo(b) {
+    var esqItens = b.esqItens, dirItens = b.dirItens;
     // 1) rótulos de cada lado: quantas linhas e quanta altura cada um precisa
     esqItens.forEach(function (it) { it.rot = linhasRotulo(it, LARG_ESQ); });
     dirItens.forEach(function (it) { it.rot = linhasRotulo(it, LARG_DIR); });
@@ -213,10 +239,37 @@
       });
       return nos;
     }
-    return { v: v, z: z, total: total, esq: colocar(esqItens, GAP_ESQ, true), dir: colocar(dirItens, GAP_DIR, false), ladoZoom: ladoZoom, modoOutro: modoOutro };
+    return { v: b.v, z: b.z, total: b.total, esq: colocar(esqItens, GAP_ESQ, true), dir: colocar(dirItens, GAP_DIR, false), ladoZoom: b.ladoZoom, modoOutro: b.modoOutro, empilhado: false };
+  }
+  // arranjo empilhado (tela estreita): "De onde veio" em cima e "Para onde foi" embaixo, cada faixa uma linha com o
+  // rótulo e uma barra proporcional à parte dela no lado; sem fitas (a ligação é o total, no alto). 1 unidade = 1 px.
+  function layoutEmpilhado(b) {
+    var WM = larguraArea(), maxTxt = WM - 4, LARG_BARRA = WM - 4, MIN_W = 4;
+    var dono = b.esqItens.concat(b.dirItens).filter(function (it) { return it.herdado; }).map(function (it) { return it.dono; })[0] || null;
+    var leg = legendas(b.v, b.z, b.modoOutro, dono);
+    var y = 0, esq = [], dir = [], cabs = [];
+    function secao(itens, titulo, legenda, lista) {
+      var cab = { titulo: titulo, linhas: quebrar(legenda || '', 12, 400, maxTxt, 3), y: y };
+      cabs.push(cab);
+      y += 22 + cab.linhas.length * 15 + (cab.linhas.length ? 4 : 0) + 6;
+      var soma = itens.reduce(function (s, it) { return s + it.no.valor; }, 0) || 1;
+      itens.forEach(function (it) {
+        it.rot = linhasRotulo(it, maxTxt);
+        var topo = y, wReal = it.no.valor / soma * LARG_BARRA, w = Math.max(wReal, MIN_W), ybar = y + it.rot.alt + 5;
+        lista.push({ item: it, x: 2, y: ybar, w: w, h: 12, lt: topo, ly: topo + 12, lx: 2, cor: corDe(it), minima: w > wReal + 0.01, anchor: 'start', rotulo: rotulo(it) });
+        y = ybar + 12 + 14;
+      });
+    }
+    secao(b.esqItens, leg.tEsq, leg.esq, esq);
+    y += 12;
+    secao(b.dirItens, leg.tDir, leg.dir, dir);
+    var ALTM = y;
+    svg.setAttribute('viewBox', '0 0 ' + WM + ' ' + ALTM);
+    return { v: b.v, z: b.z, total: b.total, esq: esq, dir: dir, ladoZoom: b.ladoZoom, modoOutro: b.modoOutro, empilhado: true, cabs: cabs, WM: WM, ALT: ALTM };
   }
   function rotulo(it) {
     var n = it.no;
+    if (it.aviso) return n.sub || '';
     if (it.rateado) return [n.pct, n.cent, 'rateio'].filter(Boolean).join(' · ');
     if (it.carimbo) return [n.txt, n.pct_pai, n.cent_pai].filter(Boolean).join(' · ');
     if (it.inteira) return n.txt + ' · a faixa inteira = R$ 1,00';
@@ -234,7 +287,7 @@
     return e;
   }
   function liga(e, it) {
-    if (e._ligado) return;
+    if (e._ligado || (it && it.aviso)) return;
     e._ligado = true;
     e.addEventListener('click', function () { abrir(e._item); });
     e.addEventListener('mouseenter', function () { state.hover = e._item.no.id; pintar(); mostrarTip(e._item); });
@@ -249,34 +302,65 @@
     return camadas[nome];
   }
   var L;
+  function tspans(t1, x, linhas) {
+    while (t1.firstChild) t1.removeChild(t1.firstChild);
+    linhas.forEach(function (ln, k) {
+      var ts = document.createElementNS(NS, 'tspan');
+      ts.setAttribute('x', x); if (k) ts.setAttribute('dy', ln.alt);
+      ts.setAttribute('font-size', ln.fs); if (ln.peso !== 400) ts.setAttribute('font-weight', ln.peso); ts.setAttribute('fill', ln.cor); if (ln.num) ts.setAttribute('class', 'num');
+      ts.textContent = ln.t; t1.appendChild(ts);
+    });
+  }
+  function tracejar(e, it) {
+    if (it.no.tracejado || it.herdado) { e.setAttribute('stroke', '#5B625F'); e.setAttribute('stroke-dasharray', '6 4'); e.setAttribute('stroke-width', 1.5); }
+    else { e.removeAttribute('stroke'); e.removeAttribute('stroke-dasharray'); e.removeAttribute('stroke-width'); }
+  }
+  function acessivel(r, n) {
+    if (n.item.aviso) { r.removeAttribute('tabindex'); r.removeAttribute('role'); r.setAttribute('aria-label', n.item.no.nome + ': ' + n.rotulo); r.removeAttribute('class'); return; }
+    r.setAttribute('class', 'clique'); r.setAttribute('tabindex', '0'); r.setAttribute('role', 'button');
+    r.setAttribute('aria-label', n.item.no.nome + ': ' + n.rotulo + (podeEntrar(n.item.no) && !n.item.inteira ? '. Enter para entrar' : '. Enter para ver a ficha'));
+  }
   function desenhar() {
     L = layout();
     Object.keys(cache).forEach(function (k) { cache[k]._vivo = false; });
     var gFluxos = camada('fluxos'), gNos = camada('nos'), gCentro = camada('centro'), gTexto = camada('texto');
-    var centro = elemento('centro', 'rect', gCentro);
-    centro.setAttribute('x', X_C); centro.setAttribute('y', YC.toFixed(1)); centro.setAttribute('width', 32); centro.setAttribute('height', H.toFixed(1)); centro.setAttribute('fill', '#15201F'); centro.setAttribute('rx', 3);
-    var fundoSvg = elemento('fundo', 'rect', gCentro);
-    fundoSvg.setAttribute('x', 0); fundoSvg.setAttribute('y', 0); fundoSvg.setAttribute('width', W); fundoSvg.setAttribute('height', ALT); fundoSvg.setAttribute('fill', 'transparent'); fundoSvg.setAttribute('pointer-events', 'none');
-    [L.esq, L.dir].forEach(function (nos, li) {
-      nos.forEach(function (n) {
-        var id = (li ? 'd:' : 'e:') + n.item.no.id;
-        var p = elemento('f' + id, 'path', gFluxos); p.setAttribute('d', n.d); p.setAttribute('fill', n.cor); p.setAttribute('class', 'clique'); p._item = n.item; liga(p, n.item);
-        if (n.item.no.tracejado || n.item.herdado) { p.setAttribute('stroke', '#5B625F'); p.setAttribute('stroke-dasharray', '6 4'); p.setAttribute('stroke-width', 1.5); } else { p.removeAttribute('stroke'); p.removeAttribute('stroke-dasharray'); }
-        var r = elemento('r' + id, 'rect', gNos); r.setAttribute('x', n.x); r.setAttribute('y', n.y.toFixed(1)); r.setAttribute('width', n.w); r.setAttribute('height', Math.max(n.h, 0.5).toFixed(1)); r.setAttribute('fill', n.cor); r.setAttribute('rx', 2); r.setAttribute('class', 'clique'); r.setAttribute('tabindex', '0'); r.setAttribute('role', 'button');
-        r.setAttribute('aria-label', n.item.no.nome + ': ' + n.rotulo + (podeEntrar(n.item.no) && !n.item.inteira ? '. Enter para entrar' : '. Enter para ver a ficha')); r._item = n.item; liga(r, n.item);
-        var lg = elemento('l' + id, 'path', gTexto); lg.setAttribute('d', n.lig || 'M0,0'); lg.setAttribute('stroke', '#A8ADAA'); lg.setAttribute('stroke-width', 1); lg.setAttribute('fill', 'none');
-        // um <text> por rótulo, uma linha (tspan) por pedaço: nome em até duas linhas, números em até duas
-        var t1 = elemento('t' + id, 'text', gTexto); t1.setAttribute('x', n.lx); t1.setAttribute('y', n.ly); t1.setAttribute('text-anchor', n.anchor); t1.setAttribute('class', 'clique');
-        while (t1.firstChild) t1.removeChild(t1.firstChild);
-        n.item.rot.linhas.forEach(function (ln, k) {
-          var ts = document.createElementNS(NS, 'tspan');
-          ts.setAttribute('x', n.lx); if (k) ts.setAttribute('dy', ln.alt);
-          ts.setAttribute('font-size', ln.fs); if (ln.peso !== 400) ts.setAttribute('font-weight', ln.peso); ts.setAttribute('fill', ln.cor); if (ln.num) ts.setAttribute('class', 'num');
-          ts.textContent = ln.t; t1.appendChild(ts);
-        });
-        t1._item = n.item; liga(t1, n.item);
+    if (L.empilhado) {
+      // títulos e legendas de cada lado dentro do desenho (os do cabeçalho ficam escondidos pelo CSS nesta largura)
+      L.cabs.forEach(function (c, i) {
+        var t = elemento('mc' + i, 'text', gTexto); t.setAttribute('x', 2); t.setAttribute('y', c.y + 17); t.setAttribute('font-size', 18); t.setAttribute('font-weight', 700); t.setAttribute('fill', '#15201F'); t.textContent = c.titulo;
+        var l = elemento('ml' + i, 'text', gTexto); l.setAttribute('x', 2); l.setAttribute('y', c.y + 22 + 11); l.setAttribute('font-size', 12); l.setAttribute('fill', '#5B625F');
+        tspans(l, 2, c.linhas.map(function (ln) { return { t: ln, fs: 12, peso: 400, cor: '#5B625F', alt: 15, num: false }; }));
       });
-    });
+      [L.esq, L.dir].forEach(function (nos, li) {
+        nos.forEach(function (n) {
+          var id = (li ? 'd:' : 'e:') + n.item.no.id;
+          var trilho = elemento('mt' + id, 'rect', gFluxos); trilho.setAttribute('x', 2); trilho.setAttribute('y', n.y.toFixed(1)); trilho.setAttribute('width', L.WM - 4); trilho.setAttribute('height', n.h); trilho.setAttribute('fill', '#EDEBE4'); trilho.setAttribute('rx', 3); trilho.setAttribute('pointer-events', 'none');
+          var r = elemento('mb' + id, 'rect', gNos); r.setAttribute('x', n.x); r.setAttribute('y', n.y.toFixed(1)); r.setAttribute('width', n.w.toFixed(1)); r.setAttribute('height', n.h); r.setAttribute('fill', n.cor); r.setAttribute('rx', 3);
+          tracejar(r, n.item); acessivel(r, n); r._item = n.item; r._barra = true; liga(r, n.item);
+          var t1 = elemento('mx' + id, 'text', gTexto); t1.setAttribute('x', 2); t1.setAttribute('y', n.ly); t1.setAttribute('text-anchor', 'start'); if (!n.item.aviso) t1.setAttribute('class', 'clique'); else t1.removeAttribute('class');
+          tspans(t1, 2, n.item.rot.linhas); t1._item = n.item; liga(t1, n.item);
+        });
+      });
+    } else {
+      var centro = elemento('centro', 'rect', gCentro);
+      centro.setAttribute('x', X_C); centro.setAttribute('y', YC.toFixed(1)); centro.setAttribute('width', 32); centro.setAttribute('height', H.toFixed(1)); centro.setAttribute('fill', '#15201F'); centro.setAttribute('rx', 3);
+      var fundoSvg = elemento('fundo', 'rect', gCentro);
+      fundoSvg.setAttribute('x', 0); fundoSvg.setAttribute('y', 0); fundoSvg.setAttribute('width', W); fundoSvg.setAttribute('height', ALT); fundoSvg.setAttribute('fill', 'transparent'); fundoSvg.setAttribute('pointer-events', 'none');
+      [L.esq, L.dir].forEach(function (nos, li) {
+        nos.forEach(function (n) {
+          var id = (li ? 'd:' : 'e:') + n.item.no.id;
+          var p = elemento('f' + id, 'path', gFluxos); p.setAttribute('d', n.d); p.setAttribute('fill', n.cor); if (!n.item.aviso) p.setAttribute('class', 'clique'); else p.removeAttribute('class'); p._item = n.item; liga(p, n.item);
+          tracejar(p, n.item);
+          var r = elemento('r' + id, 'rect', gNos); r.setAttribute('x', n.x); r.setAttribute('y', n.y.toFixed(1)); r.setAttribute('width', n.w); r.setAttribute('height', Math.max(n.h, 0.5).toFixed(1)); r.setAttribute('fill', n.cor); r.setAttribute('rx', 2);
+          acessivel(r, n); r._item = n.item; liga(r, n.item);
+          var lg = elemento('l' + id, 'path', gTexto); lg.setAttribute('d', n.lig || 'M0,0'); lg.setAttribute('stroke', '#A8ADAA'); lg.setAttribute('stroke-width', 1); lg.setAttribute('fill', 'none');
+          // um <text> por rótulo, uma linha (tspan) por pedaço: nome em até duas linhas, números em até duas
+          var t1 = elemento('t' + id, 'text', gTexto); t1.setAttribute('x', n.lx); t1.setAttribute('y', n.ly); t1.setAttribute('text-anchor', n.anchor); if (!n.item.aviso) t1.setAttribute('class', 'clique'); else t1.removeAttribute('class');
+          tspans(t1, n.lx, n.item.rot.linhas);
+          t1._item = n.item; liga(t1, n.item);
+        });
+      });
+    }
     Object.keys(cache).forEach(function (k) { if (!cache[k]._vivo) { if (cache[k].parentNode) cache[k].parentNode.removeChild(cache[k]); delete cache[k]; } });
     pintar();
     cabecalho();
@@ -288,11 +372,13 @@
   function legendaTracejado() {
     if (!legendaEl) return;
     var itens = L.esq.concat(L.dir);
-    var temTrac = itens.some(function (x) { return x.item.no.tracejado || x.item.herdado; });
-    var temMin = itens.some(function (x) { return x.minima; });
+    var temTrac = itens.some(function (x) { return (x.item.no.tracejado || x.item.herdado) && !x.item.aviso; });
+    var temMin = itens.some(function (x) { return x.minima && !x.item.aviso; });
+    var aviso = itens.filter(function (x) { return x.item.aviso; })[0];
     var partes = [];
-    if (temTrac) partes.push('Faixas tracejadas são números calculados por este site (uma diferença entre o que entrou e o que saiu) ou o conjunto de onde a parte veio, quando o carimbo da fonte não a separa; nunca uma linha lida direto de um relatório. Passe o mouse numa faixa tracejada para ver o motivo dela.');
-    if (temMin) partes.push('Faixas muito finas são desenhadas com ' + MIN_H + ' px para dar para passar o mouse e clicar; o valor escrito é o verdadeiro.');
+    if (temTrac) partes.push('Faixas tracejadas são números calculados por este site (uma diferença entre o que entrou e o que saiu) ou o conjunto de onde a parte veio, quando o carimbo da fonte não a separa; nunca uma linha lida direto de um relatório. ' + (toque() ? 'Toque numa faixa tracejada: a ficha diz o motivo dela.' : 'Passe o mouse numa faixa tracejada para ver o motivo dela.'));
+    if (aviso) partes.push('A faixa cinza tracejada é um aviso, sem números: ' + aviso.item.no.sub + '.');
+    if (temMin) partes.push(L.empilhado ? 'Barras muito finas são desenhadas com 4 px para dar para tocar; o valor escrito é o verdadeiro.' : 'Faixas muito finas são desenhadas com ' + MIN_H + ' px para dar para passar o mouse e clicar; o valor escrito é o verdadeiro.');
     legendaEl.textContent = partes.join(' ');
     legendaEl.hidden = !partes.length;
   }
@@ -300,7 +386,7 @@
     Object.keys(cache).forEach(function (k) {
       var e = cache[k]; if (!e._item) return;
       var ativo = state.sel === e._item.no.id || state.hover === e._item.no.id;
-      if (k[0] === 'f') e.setAttribute('fill-opacity', e._item.herdado ? (ativo ? 0.6 : 0.38) : (ativo ? 0.96 : 0.74));
+      if (k[0] === 'f' || e._barra) e.setAttribute('fill-opacity', e._item.aviso ? 0.6 : (e._item.herdado ? (ativo ? 0.6 : 0.38) : (ativo ? 0.96 : 0.74)));
     });
   }
   var TEXTOS_CARIMBO = {
@@ -309,7 +395,9 @@
     estado: 'O outro lado não é rateio: é o carimbo da fonte na lei orçamentária (SIOP), que diz com que dinheiro cada despesa foi paga.',
     vazio_estado: 'O outro lado fica em branco porque o carimbo da fonte (SIOP) só é comparável no ano fechado; nada de aproximação.',
     ficha_esq: 'O que esse dinheiro pagou no ano', ficha_dir: 'Com que dinheiro foi pago', rotulo: 'carimbo da fonte',
-    termina: 'o carimbo da fonte'  // o que termina nas faixas do outro lado (elas não abrem): "o carimbo da fonte termina aqui"
+    termina: 'o carimbo da fonte',  // o que termina nas faixas do outro lado (elas não abrem): "o carimbo da fonte termina aqui"
+    vazio_nome: 'Sem carimbo da fonte até o ano fechar',
+    vazio_sub: 'o SIOP só diz com que dinheiro cada despesa foi paga quando o ano fecha; aqui não entra aproximação'
   };
   function textoOutro(v, chave, nome) { var o = outroDaVisao(v); var t = o[chave] || TEXTOS_CARIMBO[chave] || ''; return nome ? t.replace(/\{nome\}/g, '“' + nome + '”') : t; }
   function motivoTracejado(it) {
@@ -319,24 +407,33 @@
     return '';
   }
   function donoHerdado() { var it = (L.esq.concat(L.dir)).map(function (n) { return n.item; }).filter(function (it) { return it.herdado; })[0]; return it ? it.dono : null; }
-  function cabecalho() {
-    var v = L.v, z = L.z;
-    document.getElementById('centro-txt').textContent = z ? z.no.txt : v.centro_txt;
-    document.getElementById('centro-nome').textContent = z ? (z.no.nome + ' em ' + dados.ano + ' = R$ 1,00') : v.centro_nome;
-    var tEsq = document.getElementById('titulo-esq'), tDir = document.getElementById('titulo-dir');
-    if (tEsq) tEsq.textContent = v.titulo_esq || 'De onde veio';
-    if (tDir) tDir.textContent = v.titulo_dir || 'Para onde foi';
+  // títulos e legendas dos dois lados neste nível (cabeçalho do desenho largo; dentro do desenho no empilhado)
+  function legendas(v, z, modoOutro, dono) {
     var rate = ' (rateio: cada real tem a mesma origem e o mesmo destino que o conjunto)';
     var partes = z ? 'as partes ' + de(z.no.nome, z.no) + ': R$ · % · centavos de cada R$ 1,00 ' + de(z.no.nome, z.no) : '';
     var outroEsq = '', outroDir = '';
     if (z) {
-      if (L.modoOutro === 'rateio') { outroEsq = 'de onde veio cada real ' + de(z.no.nome, z.no) + rate; outroDir = 'para onde foi cada real ' + de(z.no.nome, z.no) + rate; }
-      else if (L.modoOutro === 'carimbo') { outroEsq = textoOutro(v, 'esq'); outroDir = textoOutro(v, 'dir'); }
-      else if (L.modoOutro === 'herdado') { var dono = donoHerdado(); outroEsq = textoOutro(v, 'herdado_esq', dono && dono.nome); outroDir = textoOutro(v, 'herdado_dir', dono && dono.nome); }
+      if (modoOutro === 'rateio') { outroEsq = 'de onde veio cada real ' + de(z.no.nome, z.no) + rate; outroDir = 'para onde foi cada real ' + de(z.no.nome, z.no) + rate; }
+      else if (modoOutro === 'carimbo') { outroEsq = textoOutro(v, 'esq'); outroDir = textoOutro(v, 'dir'); }
+      else if (modoOutro === 'herdado') { outroEsq = textoOutro(v, 'herdado_esq', dono && dono.nome); outroDir = textoOutro(v, 'herdado_dir', dono && dono.nome); }
       else { outroEsq = outroDir = textoOutro(v, 'vazio') || ('sem detalhe por fonte neste período: ' + (v.sem_fonte_motivo || 'o carimbo da fonte vem do SIOP e só vale no ano fechado')); }
     }
-    document.getElementById('legenda-esq').textContent = z ? (z.lado === 'dir' ? outroEsq : partes) : v.legenda_esq;
-    document.getElementById('legenda-dir').textContent = z ? (z.lado === 'esq' ? outroDir : partes) : v.legenda_dir;
+    return {
+      tEsq: v.titulo_esq || 'De onde veio', tDir: v.titulo_dir || 'Para onde foi',
+      esq: z ? (z.lado === 'dir' ? outroEsq : partes) : (v.legenda_esq || ''),
+      dir: z ? (z.lado === 'esq' ? outroDir : partes) : (v.legenda_dir || '')
+    };
+  }
+  function cabecalho() {
+    var v = L.v, z = L.z;
+    document.getElementById('centro-txt').textContent = z ? z.no.txt : v.centro_txt;
+    document.getElementById('centro-nome').textContent = z ? (z.no.nome + ' em ' + dados.ano + ' = R$ 1,00') : v.centro_nome;
+    var leg = legendas(v, z, L.modoOutro, L.modoOutro === 'herdado' ? donoHerdado() : null);
+    var tEsq = document.getElementById('titulo-esq'), tDir = document.getElementById('titulo-dir');
+    if (tEsq) tEsq.textContent = leg.tEsq;
+    if (tDir) tDir.textContent = leg.tDir;
+    document.getElementById('legenda-esq').textContent = leg.esq;
+    document.getElementById('legenda-dir').textContent = leg.dir;
   }
   function trilha() {
     var v = L.v, cam = L.z ? state.caminho : [];
@@ -357,9 +454,11 @@
         ? 'O outro lado é o rateio: na visão do R$ 1,00 o dinheiro não tem carimbo, então cada real tem a mesma origem (ou o mesmo destino) que o conjunto.'
         : (L.modoOutro === 'carimbo' ? textoOutro(L.v, 'estado') : (L.modoOutro === 'herdado' ? textoOutro(L.v, 'herdado_estado', dono && dono.nome) : textoOutro(L.v, 'vazio_estado')));
       var fim = (L.modoOutro === 'carimbo' || L.modoOutro === 'herdado') ? ' As faixas do outro lado não abrem (' + textoOutro(L.v, 'termina') + ' termina nelas): a ficha de cada uma tem o botão “Ir para”, que leva à faixa inteira correspondente.' : '';
-      estadoEl.textContent = 'Você está dentro ' + de(z.no.nome, z.no) + ': cada faixa deste lado é uma parte dela, com valor, porcentagem e centavos de cada R$ 1,00 ' + de(z.no.nome, z.no) + '. ' + outro + fim + ' Clique numa parte que tenha mais níveis para descer; a trilha acima traz de volta.';
+      estadoEl.textContent = 'Você está dentro ' + de(z.no.nome, z.no) + ': cada faixa deste lado é uma parte dela, com valor, porcentagem e centavos de cada R$ 1,00 ' + de(z.no.nome, z.no) + '. ' + outro + fim + (toque() ? ' Toque numa parte que tenha mais níveis para descer; a trilha acima traz de volta.' : ' Clique numa parte que tenha mais níveis para descer; a trilha acima traz de volta.');
     } else {
-      estadoEl.textContent = 'Passe o mouse numa faixa para ver os números dela; clique para entrar. As faixas sem nível de dentro mostram a ficha e dizem qual será o próximo nível.';
+      estadoEl.textContent = toque()
+        ? 'Toque numa faixa para entrar nela; a ficha, logo abaixo do desenho, mostra os números. As faixas sem nível de dentro só abrem a ficha e dizem qual será o próximo nível.'
+        : 'Passe o mouse numa faixa para ver os números dela; clique para entrar. As faixas sem nível de dentro mostram a ficha e dizem qual será o próximo nível.';
     }
   }
 
@@ -372,10 +471,14 @@
       state.caminho = a.pais.map(function (p) { return p.id; }).concat([a.no.id]);
       state.sel = a.no.id; state.hover = null; tip.hidden = true;
       desenhar(); ficha();
+      // na tela estreita, entrar numa faixa leva de volta ao alto do desenho (a lista nova começa lá)
+      if (L.empilhado) { var topo = document.getElementById('h-fluxo'); if (topo && topo.parentNode && topo.parentNode.scrollIntoView) topo.parentNode.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       return;
     }
     state.sel = state.sel === a.no.id ? null : a.no.id;
     pintar(); ficha();
+    // sem nível de dentro: na tela estreita, a ficha é a resposta, então ela entra na tela
+    if (L.empilhado && state.sel && fichaEl && fichaEl.scrollIntoView) fichaEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   // "Ir para X": sai da faixa de carimbo (que termina) e vai à faixa de verdade, inteira; entra nela se ela abre
   function irParaNo(id) {
@@ -396,6 +499,7 @@
   subirBtn.addEventListener('click', function () { irPara(state.caminho.length - 2); });
 
   function mostrarTip(it) {
+    if (L.empilhado || it.aviso) { tip.hidden = true; return; }
     var n = it.no, z = L.z;
     var resumo = it.rateado ? [n.pct, n.cent].filter(Boolean).join(' · ') + (z ? ' de cada R$ 1,00 ' + de(z.no.nome, z.no) + ' (rateio)' : '')
       : ((it.dentro || it.carimbo) && z ? [n.txt, n.pct_pai, n.cent_pai].filter(Boolean).join(' · ') + ' de cada R$ 1,00 ' + de(it.herdado && it.dono ? it.dono.nome : z.no.nome, it.herdado && it.dono ? it.dono : z.no) + (it.carimbo ? ' (' + textoOutro(L.v, 'rotulo') + (it.herdado ? ', do conjunto' : '') + ')' : '') : [n.txt, n.pct, n.cent].filter(Boolean).join(' · '));
@@ -520,6 +624,35 @@
       var h = document.getElementById('h-fluxo'); if (h && h.scrollIntoView) h.parentNode.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+
+  // "Ver o diagrama aqui" / "Voltar à lista" (só aparece em tela estreita, pelo CSS)
+  var btnDiagrama = document.getElementById('ver-diagrama'), sankeyEl = document.getElementById('sankey');
+  function rotularModo() {
+    if (!btnDiagrama) return;
+    var txt = document.getElementById('modo-desenho-txt'), dica = document.getElementById('modo-desenho-dica');
+    btnDiagrama.textContent = diagramaForcado ? 'Voltar à lista' : 'Ver o diagrama aqui';
+    if (txt) txt.textContent = diagramaForcado ? 'Você está vendo o diagrama de fluxo: role para o lado para ver os dois lados; o toque numa faixa funciona igual.' : 'Aqui o desenho está em lista. No computador ele é um diagrama de fluxo, com as fitas ligando cada origem a cada destino: a visão mais rica do site.';
+    if (dica) dica.textContent = diagramaForcado ? '' : '(rola para o lado e aceita zoom de pinça)';
+    if (sankeyEl) sankeyEl.classList.toggle('forcar-largo', diagramaForcado);
+  }
+  if (btnDiagrama) {
+    btnDiagrama.addEventListener('click', function () {
+      diagramaForcado = !diagramaForcado; state.hover = null; tip.hidden = true;
+      rotularModo(); desenhar();
+      if (sankeyEl) sankeyEl.scrollLeft = 0;
+    });
+    rotularModo();
+  }
+  var tResize = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(tResize);
+    tResize = setTimeout(function () { if (empilhado() || (L && L.empilhado)) desenhar(); }, 150);
+  });
+  window.addEventListener('orientationchange', function () {
+    clearTimeout(tResize);
+    tResize = setTimeout(function () { if (empilhado() || (L && L.empilhado)) desenhar(); }, 300);
+  });
+  if (mqEstreito && mqEstreito.addEventListener) mqEstreito.addEventListener('change', function () { tip.hidden = true; desenhar(); });
 
   desenhar();
   ficha();

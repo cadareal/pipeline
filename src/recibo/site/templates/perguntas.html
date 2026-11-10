@@ -27,8 +27,8 @@
         {% if q.afeta %}<h3 class="eyebrow">O que muda no site com a resposta</h3><p>{{ q.afeta }}</p>{% endif %}
       </div>
       <div>
-        <h3 class="eyebrow">A pergunta{% if q.status == 'aberta' %}, pronta para enviar{% else %} enviada{% endif %}</h3>
-        <p class="mini">Para: {{ q.orgao }}</p>
+        <h3 class="eyebrow">{% if q.status == 'aberta' %}A pergunta, pronta para enviar{% else %}Pergunta enviada ao {{ q.enviada_para or q.orgao }}{% endif %}</h3>
+        <p class="mini">{% if q.status == 'aberta' %}Para: {{ q.orgao }}{% else %}Pela Lei de Acesso à Informação (Fala.BR), para: {{ q.orgao }}{% endif %}</p>
         <blockquote class="pedido">{{ q.pergunta }}</blockquote>
         {% if q.protocolo or q.enviada_em or q.respondida_em %}
         <dl class="dl">
@@ -49,7 +49,7 @@
   <h2 id="h-duvida" class="h3" style="margin-bottom:8px">{{ p.tem_duvida.titulo }}</h2>
   <p style="font-size:15px;line-height:1.55;color:#3A423F">{{ p.tem_duvida.texto }}</p>
   <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
-    <a class="btn cheio" href="{{ site.url_issues }}">Enviar pelo GitHub →</a>
+    <a class="btn cheio" href="{{ site.url_issue_nova or site.url_issues }}">Enviar pelo GitHub →</a>
     <a class="btn" href="mailto:{{ site.email_contato }}">Enviar por e-mail</a>
   </div>
   <p class="mini" style="margin-top:10px">As limitações que não dependem de pergunta a ninguém (o que o site ainda não separa e o que vem depois) estão na <a href="{{ raiz }}metodologia/#limitacoes">metodologia</a>.</p>

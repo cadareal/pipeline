@@ -7,7 +7,8 @@ titulo: Cada Real
 slogan: o dinheiro público, real por real
 url_github: https://github.com/cadareal/pipeline
 url_issues: https://github.com/cadareal/pipeline/issues
-email_contato: "[E-MAIL DO PROJETO]"
+url_issue_nova: https://github.com/cadareal/pipeline/issues/new/choose   # abre a escolha do modelo (número, bug, metodologia)
+email_contato: contato@cadareal.org
 quem_fez: Caue Bertolino
 licenca: MIT
 # Domínio do site no GitHub Pages. Com `dominio`, o gerador escreve docs/CNAME a cada rodada (o `--limpar` apaga a pasta

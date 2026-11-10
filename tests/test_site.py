@@ -22,6 +22,31 @@ from test_mart_divida import staging_divida  # noqa: F401 - staging sintético c
 CONTEUDO = REPO_ROOT / "conteudo"
 
 
+def ano_em_andamento(exp: dict, divida: dict, ano: int = 2026, periodo: int = 4, mes_divida: int = 7) -> tuple[dict, dict]:
+    """Deriva de um export fechado o que o pipeline produz num ano em andamento: RREO até o 4º bimestre, sem SIOP
+    (sem detalhe por ação, sem carimbo da fonte), dívida com a posição do último mês publicado. Serve para conferir que
+    o site trata o ano aberto igual em todas as visões (nada em branco sem aviso), sem precisar de dados reais."""
+    e = json.loads(json.dumps(exp))
+    e["exercicio"], e["periodo"] = ano, periodo
+    e["estado"] = {"selo": "em_andamento", "nota": f"Dados até o {periodo}º bimestre de {ano} (RREO). Atualização a cada bimestre."}
+    e["fontes_de_recursos"] = {"disponivel": False, "motivo": "ano em andamento: o carimbo da fonte (SIOP) só é comparável no ano fechado"}
+    e["siop"] = {"disponivel": False, "usado_nas_linhas": False}
+    for l in e["linhas"]:
+        l["niveis"] = {"tipo": None, "itens": [], "nao_alocado": [], "soma": 0.0, "fecha": True, "diferenca": 0.0, "fonte": "", "acoes_fonte": ""}
+    d = json.loads(json.dumps(divida))
+    d["exercicio"], d["fechado"], d["mes_referencia"] = ano, False, mes_divida
+    for bloco in ("estoque_detalhe", "conta_do_ano"):
+        if d.get(bloco):
+            d[bloco]["exercicio"], d[bloco]["fechado"] = ano, False
+    if d.get("estoque_detalhe"):
+        d["estoque_detalhe"]["mes"] = mes_divida
+    if d.get("conta_do_ano"):
+        d["conta_do_ano"]["meses"] = list(range(1, mes_divida + 1))
+    if d.get("execucao"):
+        d["execucao"]["meses"], d["execucao"]["ultimo_mes_com_dados"] = mes_divida, mes_divida
+    return e, d
+
+
 @pytest.fixture
 def exports(populated_store_siop, staging_divida, config_dir, tmp_path):  # noqa: F811
     """Exports de 2024 (recibo com SIOP e níveis; dívida com execução por carteira) numa pasta data/export."""
@@ -203,6 +228,8 @@ def test_site_gera_paginas_consistentes(exports, config_dir, tmp_path):
     assert "ORDEM E PROGRESSO" in quem and 'aria-label="Bandeira do Brasil"' in quem and "<img" not in quem
     for pagina in (home, ano, met, dad, quem):
         assert "Todo o poder emana do povo" in pagina and 'class="bandeira bandeira-rodape"' in pagina
+        # v0.11.0: as duas linhas do cifrão são azul e amarelo da bandeira, no cabeçalho e no favicon
+        assert '<path d="M8 12 H56" stroke="#012169"' in pagina and '<path d="M8 20 H56" stroke="#FEDD00"' in pagina and "%23012169" in pagina and "%23FEDD00" in pagina
     # v0.10.2: a tubulação do domínio (CNAME, robots, sitemap, 404, Open Graph com imagem própria) e a página de perguntas
     cfg_site = __import__("yaml").safe_load((CONTEUDO / "site.yaml").read_text(encoding="utf-8"))
     url_base = cfg_site["url"]
@@ -219,12 +246,114 @@ def test_site_gera_paginas_consistentes(exports, config_dir, tmp_path):
     assert "Perguntas abertas" in perg and 'id="titulos-rreo-vs-emissoes"' in perg and 'id="vincendo-12-meses"' in perg and 'id="indexador-por-titulo"' in perg
     assert "{ano}" not in perg and "{titulos_rreo}" not in perg and "(indisponível)" not in perg.split('id="indexador-por-titulo"')[0]
     assert "Lei 12.527/2011" in perg and 'href="../perguntas-abertas/"' in met and "Limitações e próximos passos" in met and 'id="limitacoes"' in met
-    # v0.10.3: cada pergunta é um bloco expandível (<details>) com o status no resumo; sem protocolo, está "Aberta"
-    assert perg.count('<details class="pergunta"') == 3 and perg.count("<summary>") == 3 and perg.count('class="status status-aberta"') == 3
-    assert "3 aberta(s) · 0 enviada(s) · 0 respondida(s)" in perg and "Tem uma dúvida que não está aqui?" in perg and "Fala.BR" in perg and "Aguardando a resposta" not in perg
+    # v0.10.3: cada pergunta é um bloco expandível (<details>) com o status no resumo; o status sai dos campos do YAML
+    # (sem protocolo = aberta; com protocolo = enviada; com resposta = respondida), então o teste lê o YAML do repositório
+    pq = __import__("yaml").safe_load((CONTEUDO / "perguntas.yaml").read_text(encoding="utf-8"))["perguntas"]
+    n_resp = sum(1 for q in pq if q.get("resposta") or q.get("respondida_em")); n_env = sum(1 for q in pq if q.get("protocolo") and not (q.get("resposta") or q.get("respondida_em"))); n_ab = len(pq) - n_resp - n_env
+    assert perg.count('<details class="pergunta"') == len(pq) == 3 and perg.count("<summary>") == 3
+    assert perg.count('class="status status-aberta"') == n_ab and perg.count('class="status status-enviada"') == n_env and perg.count('class="status status-respondida"') == n_resp
+    assert f"{n_ab} aberta(s) · {n_env} enviada(s) · {n_resp} respondida(s)" in perg and "Tem uma dúvida que não está aqui?" in perg and "Fala.BR" in perg
+    assert perg.count("Aguardando a resposta") == n_env
+    for q in pq:
+        if q.get("protocolo"):
+            assert f"protocolo {q['protocolo']}" in perg and f"enviada em {q['enviada_em']}" in perg and f"Pergunta enviada ao {q.get('enviada_para') or q['orgao']}" in perg
     assert "Erro, bug ou discordância" in quem and "uma página que não abre" in quem and "o endereço da página" in quem
     assert '"ir_para"' in ano and "Ir para O gasto de verdade" in ano
     assert "Reserva de liquidez (não usado no ano)" in ano and "tracejado_motivo" in ano and 'id="legenda-tracejado"' in ano and "destaques" in ano
+    # v0.11.1: em tela estreita, a linha "ver o diagrama" (o JS troca o arranjo; o CSS só a mostra até 900 px) e as
+    # tabelas de três colunas ou mais marcadas como cartões, com o nome da coluna em cada célula
+    assert 'id="ver-diagrama"' in ano and 'class="mini so-estreito modo-desenho"' in ano and 'id="sankey"' in ano
+    assert 'class="tabela cartoes"' in met and 'data-rotulo="formato e cadência"' in met
+    assert dad.count('class="tabela cartoes"') == 2 and 'class="lacres cartoes"' in dad and 'data-rotulo="SHA-256"' in dad and 'data-rotulo="comparação internacional"' in dad
+    assert 'class="lacres cartoes"' in saude and 'data-rotulo="SHA-256"' in saude   # "ano a ano" só aparece com mais de um ano
+    assert 'href="https://github.com/cadareal/pipeline/issues/new/choose"' in quem and 'href="https://github.com/cadareal/pipeline/issues/new/choose"' in perg
+
+
+def _lados_vazios(view: dict) -> list[str]:
+    """Emula a regra do fluxo.js: um nó que abre (tem partes ou outro lado) mostra do outro lado o seu `outro_lado`, ou o do
+    conjunto de onde veio (`outro_lado_de`), ou nada. Devolve os ids que ficariam com o outro lado em branco."""
+    if (view.get("outro") or {}).get("modo") == "rateio":
+        return []
+    idx: dict[str, dict] = {}
+
+    def indexar(lista):
+        for n in lista:
+            idx[n["id"]] = n
+            indexar(n.get("filhos") or [])
+            indexar(n.get("outro_lado") or [])
+
+    indexar(view["entradas"])
+    indexar(view["saidas"])
+    vazios = []
+
+    def visitar(n):
+        filhos = [f for f in n.get("filhos") or [] if f["valor"] > 0]
+        outro = [o for o in n.get("outro_lado") or [] if o["valor"] > 0]
+        if (filhos or outro) and not outro:
+            dono = idx.get(n.get("outro_lado_de") or "")
+            if not (dono and [o for o in dono.get("outro_lado") or [] if o["valor"] > 0]):
+                vazios.append(n["id"])
+        for f in filhos:
+            visitar(f)
+
+    for n in view["entradas"] + view["saidas"]:
+        visitar(n)
+    return vazios
+
+
+def test_ano_em_andamento_tratado_igual_em_todas_as_visoes(exports, config_dir, tmp_path):
+    """v0.11.0: o ano aberto (sem SIOP, dívida até julho) não deixa nenhum lado do desenho em branco sem aviso, ganha a
+    linha de cobertura certa, e o ano fechado continua completo. A mesma regra vale para qualquer ano que entrar."""
+    export_dir, exp = exports
+    e24 = json.loads((export_dir / "recibo_2024.json").read_text(encoding="utf-8"))
+    d24 = json.loads((export_dir / "divida_2024.json").read_text(encoding="utf-8"))
+    e26, d26 = ano_em_andamento(e24, d24)
+    (export_dir / "recibo_2026.json").write_text(json.dumps(e26, ensure_ascii=False), encoding="utf-8")
+    (export_dir / "divida_2026.json").write_text(json.dumps(d26, ensure_ascii=False), encoding="utf-8")
+    out = tmp_path / "docs"
+    rel = construir(export_dir, out, CONTEUDO, config_dir, limpar=True)
+    assert rel.anos == [2024, 2026] and not rel.pulados
+    # a linha de cobertura, na página e no terminal, sai dos dados
+    assert rel.cobertura[2024] == "Ano fechado: RREO de janeiro a dezembro (6º bimestre); SIOP do ano inteiro (detalhe por ação e carimbo da fonte); dívida até dezembro."
+    assert rel.cobertura[2026].startswith("Ano em andamento: RREO de janeiro a agosto (4º bimestre); dívida até julho.")
+    assert "Sem detalhe por ação nem carimbo da fonte, que só entram com o ano fechado" in rel.cobertura[2026] and rel.cobertura[2026].endswith("Os números mudam a cada bimestre.")
+    assert "2026: Ano em andamento" in rel.resumo()
+    p24 = (out / "2024" / "index.html").read_text(encoding="utf-8")
+    p26 = (out / "2026" / "index.html").read_text(encoding="utf-8")
+    assert 'class="cobertura completa"' in p24 and rel.cobertura[2024] in p24
+    assert 'class="cobertura parcial"' in p26 and "Os números mudam a cada bimestre." in p26 and "2026, até o 4º bimestre" in p26
+    # a home continua sendo o último ano fechado
+    assert (out / "index.html").read_text(encoding="utf-8") == p24.replace('href="../', 'href="').replace('src="../', 'src="') or "2024" in (out / "index.html").read_text(encoding="utf-8")
+    # nenhum lado em branco: no ano fechado, todo nó que abre tem o outro lado (próprio ou do conjunto); no ano aberto,
+    # o caixa declara o motivo e os textos da faixa de aviso, e a dívida continua inteira
+    for pagina, aberto in ((p24, False), (p26, True)):
+        dados = json.loads(re.search(r'<script id="dados-fluxo" type="application/json">(.*?)</script>', pagina, re.S).group(1).replace("<\\/", "</"))
+        visoes = {v["id"]: v for v in dados["visoes"]}
+        assert set(visoes) == {"caixa", "gasto", "divida"}
+        assert _lados_vazios(visoes["divida"]) == []
+        if not aberto:
+            assert visoes["caixa"]["por_fonte"] and _lados_vazios(visoes["caixa"]) == []
+        else:
+            assert not visoes["caixa"]["por_fonte"] and "ano em andamento" in visoes["caixa"]["sem_fonte_motivo"]
+            assert visoes["caixa"]["outro"]["vazio_nome"] == "Sem carimbo da fonte até o ano fechar" and visoes["caixa"]["outro"]["vazio_sub"]
+            assert _lados_vazios(visoes["caixa"]), "o ano aberto tem lados sem carimbo; é a faixa de aviso que os cobre"
+            assert visoes["divida"]["entradas"] and all(n.get("outro_lado") for n in visoes["divida"]["entradas"])
+    assert "Ano em andamento" in p26 and "dívida até julho" in p26 and "A dívida cresceu até julho de 2026" in p26
+
+
+def test_cobertura_do_ano_sai_dos_dados():
+    from recibo.site.dados import cobertura_do_ano
+    fechado = {"periodo": 6, "estado": {"selo": "fechado"}, "siop": {"usado_nas_linhas": True}}
+    aberto = {"periodo": 2, "estado": {"selo": "em_andamento"}, "siop": {"usado_nas_linhas": False}}
+    div_fechada = {"mes": 12, "fechado": True}
+    c = cobertura_do_ano(fechado, {"execucao": {"disponivel": True, "ultimo_mes_com_dados": 12}}, {"por_fonte": True}, div_fechada)
+    assert c["completa"] and c["texto"] == "Ano fechado: RREO de janeiro a dezembro (6º bimestre); SIOP do ano inteiro (detalhe por ação e carimbo da fonte); dívida até dezembro."
+    c = cobertura_do_ano(aberto, {"execucao": {"disponivel": True, "ultimo_mes_com_dados": 2}}, {"por_fonte": False}, {"mes": 3, "fechado": False})
+    assert not c["completa"] and c["texto"].startswith("Ano em andamento: RREO de janeiro a abril (2º bimestre); dívida até março (juros e principal pagos até fevereiro).")
+    assert "Sem detalhe por ação nem carimbo da fonte, que só entram com o ano fechado; a dívida é a posição do último mês publicado" in c["texto"]
+    # fechado, mas sem o mart da dívida: diz o que falta, sem fingir completo
+    c = cobertura_do_ano(fechado, None, {"por_fonte": False}, None)
+    assert not c["completa"] and "SIOP: detalhe por ação" in c["texto"] and "Sem carimbo da fonte; sem a aba da dívida." in c["texto"]
 
 
 def test_perguntas_abertas_status_sai_dos_campos():

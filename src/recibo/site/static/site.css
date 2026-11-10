@@ -77,6 +77,18 @@ main.pagina{display:flex;flex-direction:column;gap:56px;padding-top:40px;padding
 .palavras-grade .cab-grupo b{font-weight:700;font-size:17px}
 .palavras-grade p{font-size:14px;line-height:1.55;color:var(--tinta-2)}
 
+/* quem somos: contato */
+.contato{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px 48px;border-top:1px solid var(--linha);padding-top:32px}
+.contato-lista{display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 16px;font-size:15px;line-height:1.5}
+.contato-lista a{overflow-wrap:anywhere}
+@media (max-width:900px){.contato{grid-template-columns:minmax(0,1fr)}.contato-lista{grid-template-columns:minmax(0,1fr)}.contato-lista strong{margin-top:8px}}
+
+/* a linha de cobertura do ano: o que está fechado e o que falta */
+.cobertura{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--tinta-2);margin-top:6px;max-width:860px}
+.cobertura-marca{flex:none;width:10px;height:10px;border-radius:50%;margin-top:6px}
+.cobertura.completa .cobertura-marca{background:var(--verde)}
+.cobertura.parcial .cobertura-marca{background:#B45309}
+
 /* desenho */
 .fluxo{display:flex;flex-direction:column;gap:16px}
 .trilha-linha{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px}
@@ -130,6 +142,7 @@ main.pagina{display:flex;flex-direction:column;gap:56px;padding-top:40px;padding
 .item summary:hover{background:#F1F0EA}
 .item[open] summary{background:var(--verde-claro)}
 .item .cor{display:block;width:20px;height:20px;border-radius:5px}
+.item .nome-bloco{display:flex;flex-direction:column;min-width:0}
 .item .nome{font-weight:600;font-size:16px}
 .item .barra{height:8px;border-radius:4px;background:var(--linha);overflow:hidden;margin-top:6px}
 .item .barra span{display:block;height:100%;border-radius:4px}
@@ -223,7 +236,24 @@ main.pagina{display:flex;flex-direction:column;gap:56px;padding-top:40px;padding
 .sem-js{border:1px solid var(--linha-2);border-radius:8px;padding:12px 16px;font-size:14px;color:var(--tinta-2);background:var(--papel)}
 
 @media (max-width:1180px){.flamula{display:none}}
+.so-estreito{display:none}
+.modo-desenho{border-left:3px solid var(--verde-borda);padding-left:12px}
+.modo-desenho .link{font-weight:700}
 @media (max-width:900px){
+  .so-estreito{display:block}
+  /* desenho empilhado: sem largura mínima, sem as colunas de título (os títulos entram no próprio desenho); fica só o total */
+  .cols,.area-svg{min-width:0}
+  .cols{display:block}
+  .cols > div:not(.centro){display:none}
+  .cols .centro{align-items:flex-start;text-align:left;margin-bottom:14px}
+  .tip{display:none}
+  /* "Ver o diagrama aqui": o arranjo largo de volta, dentro da área que rola para o lado */
+  .sankey.forcar-largo .cols,.sankey.forcar-largo .area-svg{min-width:960px}
+  .sankey.forcar-largo .cols{display:grid}
+  .sankey.forcar-largo .cols > div:not(.centro){display:block}
+  .sankey.forcar-largo .cols .centro{align-items:center;text-align:center;margin:0}
+  /* no calendário da dívida a terceira coluna sai (o que ela diz está na ficha e na tabela) */
+  .calendario td.mini{display:none}
   .abre h1{font-size:36px}
   .palavras-grade,.tres,.grade-2,.grade-3,.passos{grid-template-columns:minmax(0,1fr)}
   .ficha,.detalhe{grid-template-columns:minmax(0,1fr)}
@@ -234,6 +264,39 @@ main.pagina{display:flex;flex-direction:column;gap:56px;padding-top:40px;padding
   .dl dt{margin-top:8px}
   .flamula{display:none}
   .cols .centro b{font-size:26px}
+}
+/* tabelas de três colunas ou mais (fontes, arquivos, lacres, ano a ano) viram cartões em tela estreita: uma linha da
+   tabela = um bloco; cada célula numa linha própria, precedida do nome da coluna (data-rotulo). Nada quebra no meio
+   da palavra, nada rola para o lado; só o SHA-256 e os endereços quebram onde for preciso. */
+@media (max-width:600px){
+  .cartoes,.cartoes tbody,.cartoes tr,.cartoes td{display:block}
+  .cartoes thead{display:none}
+  .cartoes tr{padding:10px 0;border-bottom:1px solid var(--linha)}
+  .cartoes td,.cartoes td:last-child{border:0;padding:3px 0;text-align:left;white-space:normal;font-size:14px;width:auto}
+  .cartoes td::before{content:attr(data-rotulo) ": ";color:var(--tinta-3);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .cartoes td:first-child{font-weight:600}
+  .cartoes td{word-break:normal}
+  .cartoes td a,.cartoes td code{overflow-wrap:anywhere;word-break:break-all}
+  .cartoes td br{display:none}
+  .cartoes td a.mini{display:inline;margin-left:6px}
+  .cabec{display:none}
+  .item summary{grid-template-columns:14px minmax(0,1fr) 48px 18px;grid-template-areas:"cor nome cent seta" "cor valor cent seta";gap:2px 10px;padding:12px 6px}
+  .item .cor{grid-area:cor;width:14px;height:14px;margin-top:3px}
+  .item .nome-bloco{grid-area:nome}
+  .item .nome{font-size:15px}
+  .item .cent{grid-area:cent;font-size:22px;align-self:center}
+  .item .valor{grid-area:valor;text-align:left;font-size:13px;color:var(--tinta-3);font-weight:400}
+  .item .seta{grid-area:seta;align-self:center}
+  .item-dentro .cent{font-size:16px}
+  .item-dentro .cor{margin-left:0}
+  .detalhe{padding:4px 6px 18px}
+  .total-linha{flex-direction:column;gap:4px;padding:12px 6px 0}
+  .aba{padding:9px 14px;font-size:14px;min-height:40px}
+  .tres b{font-size:34px}
+  .ficha{padding:18px}
+  .card{padding:18px}
+  .wrap{padding:0 16px}
+  .marca-nome b{font-size:20px}
 }
 /* destaques no alto da aba da dívida: três números grandes */
 .destaques{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 28px}

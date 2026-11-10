@@ -1,0 +1,29 @@
+name: Discordância de metodologia
+description: Você discorda de uma regra (o que entra no R$ 1,00, como uma linha é calculada, que fonte vale) ou de uma explicação.
+title: "[metodologia] "
+labels: ["metodologia"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        As regras estão em [cadareal.org/metodologia](https://cadareal.org/metodologia/) e em `config/linhas.yaml`. O projeto não opina se o gasto é bom ou ruim; a discussão aqui é sobre como medir. Toda mudança aceita entra no histórico da metodologia, com a data e, se você quiser, o seu nome.
+  - type: input
+    id: regra
+    attributes:
+      label: Qual regra ou explicação
+      description: O trecho da metodologia, a linha de `config/linhas.yaml` ou a faixa do site.
+      placeholder: "Metodologia, seção 'O que fica fora do R$ 1,00': empréstimos do FIES"
+    validations:
+      required: true
+  - type: textarea
+    id: argumento
+    attributes:
+      label: Do que você discorda, e por quê
+      description: O argumento, com a referência quando houver (lei, manual do Tesouro, norma contábil, artigo).
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: O que você faria no lugar
+      description: Como a regra ficaria, e o que mudaria nos números, se souber. Opcional.
