@@ -1,6 +1,6 @@
 [project]
 name = "recibo"
-version = "0.2.1"
+version = "0.7.1"
 description = "Pipeline aberto: de cada R$ 1,00 de imposto, quantos centavos foram para onde. Fase 1: Recibo do Contribuinte."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -9,6 +9,7 @@ dependencies = [
   "polars>=1.0",
   "duckdb>=1.0",
   "pyyaml>=6.0",
+  "openpyxl>=3.1",
 ]
 
 [project.optional-dependencies]

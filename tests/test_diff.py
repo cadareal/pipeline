@@ -25,13 +25,23 @@ def test_diff_lists_lines_functions_and_subfunctions(staging, config_dir):
     assert by_line["saude"].variacao == pytest.approx(200 / 270 - 1)
     assert by_line["assistencia"].b == pytest.approx(90.0)
     assert by_line["juros"].b == pytest.approx(350.0 * ESCALA_2023)
-    assert by_line["maquina_demais"].b == pytest.approx(63.0)
+    assert by_line["maquina_demais"].b == pytest.approx(25.2)  # 0,9 x (70 - 42): sem SIOP a exclusão (conta do Tesouro) sai inteira do resíduo
 
     # totais e exclusões
     tot = {p.chave: p for p in d.totais}
     assert tot["total_base_anexo02"].a == 2610.0 and tot["total_base_anexo02"].b == pytest.approx(2349.0)
+    assert tot["total_recibo"].a == pytest.approx(2408.0) and "Anexo 06" in tot["total_recibo"].nome
     assert tot["servico_divida_fora_843_844"].a == pytest.approx(10.0) and tot["servico_divida_fora_843_844"].b == pytest.approx(9.0)
     assert tot["excluido:servico_divida_bruto"].b == pytest.approx(450.0)
+    # a exclusão de empréstimos é a conta do Tesouro nos dois períodos (exata, sem SIOP)
+    emp = tot["excluido:emprestimos_financeiros"]
+    assert emp.a == pytest.approx(42.0) and emp.b == pytest.approx(37.8) and "aproximação" not in emp.nome
+
+    # memos em reais nos dois períodos (2023 = 90% de 2024)
+    memos = {p.chave: p for p in d.memos}
+    assert memos["tributos"].a == 2100.0 and memos["tributos"].b == pytest.approx(1890.0)
+    assert memos["resultado_primario"].a == 290.0 and memos["divida"].a == 120.0
+    assert "gasto_por_real_de_tributo" not in memos and "origem_do_real_gasto" not in memos  # só unidades em reais
 
     # Anexo 01 por cod_conta
     a01 = {p.chave: p for p in d.anexo01}
@@ -60,7 +70,7 @@ def test_render_and_json(staging, config_dir, tmp_path):
 
     txt = render(d, top=3)
     assert txt.startswith("diff 2024/p6 contra 2023/p6 | valores em R$")
-    assert "SUBFUNÇÕES DO ANEXO 02" in txt and "mostrando 3" in txt
+    assert "SUBFUNÇÕES DO ANEXO 02" in txt and "mostrando 3" in txt and "MEMOS (fora do R$ 1,00" in txt and "Receita primária total" in txt
     assert "ATENCAO BASICA" in txt and "+122.2%" in txt and "-25.9%" in txt
 
     so28 = render(d, top=0, funcoes=["28"])
@@ -75,6 +85,17 @@ def test_render_and_json(staging, config_dir, tmp_path):
 
 def test_diff_against_missing_period_shows_new(staging, config_dir):
     linhas = load_yaml(config_dir, "linhas.yaml")
-    d = diff_periodos(staging, linhas, Periodo(2024, 6), Periodo(2022, 6))
+    d = diff_periodos(staging, linhas, Periodo(2024, 6), Periodo(2022, 6))  # 2022 não está no staging: B inteiro zero
     assert all(p.b == 0.0 for p in d.subfuncoes)
+    assert all(p.b == 0.0 for p in d.linhas) and all(p.b == 0.0 for p in d.totais) and all(p.b == 0.0 for p in d.memos)
     assert "novo" in render(d, top=5)
+
+
+def test_percent_treats_float_dust_as_zero():
+    from recibo.diff import Par, _pct
+
+    # resíduo de ponto flutuante em B (soma de positivos e negativos) não pode virar "-1803879903137.8%"
+    assert _pct(Par("x", "x", 6.5e9, -3.6e-12)) == "novo"
+    assert _pct(Par("x", "x", 0.0, 0.0)) == "-"
+    assert _pct(Par("x", "x", 110.0, 100.0)) == "+10.0%"
+    assert Par("x", "x", 1.0, 1e-9).variacao is None

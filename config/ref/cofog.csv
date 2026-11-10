@@ -1,0 +1,80 @@
+codigo,nivel,nome
+01,divisao,Serviços públicos gerais
+011,grupo,"Órgãos executivos e legislativos, assuntos financeiros e fiscais, relações exteriores"
+012,grupo,Ajuda econômica externa
+013,grupo,Serviços gerais
+014,grupo,Pesquisa básica
+015,grupo,P&D em serviços públicos gerais
+016,grupo,Serviços públicos gerais não classificados
+017,grupo,Transações da dívida pública
+018,grupo,Transferências de caráter geral entre níveis de governo
+02,divisao,Defesa
+021,grupo,Defesa militar
+022,grupo,Defesa civil
+023,grupo,Ajuda militar externa
+024,grupo,P&D em defesa
+025,grupo,Defesa não classificada
+03,divisao,Ordem pública e segurança
+031,grupo,Serviços de polícia
+032,grupo,Serviços de proteção contra incêndios
+033,grupo,Tribunais de justiça
+034,grupo,Prisões
+035,grupo,P&D em ordem pública e segurança
+036,grupo,Ordem pública e segurança não classificadas
+04,divisao,Assuntos econômicos
+041,grupo,"Assuntos econômicos, comerciais e trabalhistas gerais"
+042,grupo,"Agricultura, silvicultura, pesca e caça"
+043,grupo,Combustíveis e energia
+044,grupo,"Mineração, indústria e construção"
+045,grupo,Transportes
+046,grupo,Comunicações
+047,grupo,Outras indústrias
+048,grupo,P&D em assuntos econômicos
+049,grupo,Assuntos econômicos não classificados
+05,divisao,Proteção ambiental
+051,grupo,Gestão de resíduos
+052,grupo,Gestão de águas residuais
+053,grupo,Redução da poluição
+054,grupo,Proteção da biodiversidade e da paisagem
+055,grupo,P&D em proteção ambiental
+056,grupo,Proteção ambiental não classificada
+06,divisao,Habitação e serviços comunitários
+061,grupo,Desenvolvimento habitacional
+062,grupo,Desenvolvimento comunitário
+063,grupo,Abastecimento de água
+064,grupo,Iluminação pública
+065,grupo,P&D em habitação e serviços comunitários
+066,grupo,Habitação e serviços comunitários não classificados
+07,divisao,Saúde
+071,grupo,"Produtos, aparelhos e equipamentos médicos"
+072,grupo,Serviços ambulatoriais
+073,grupo,Serviços hospitalares
+074,grupo,Serviços de saúde pública
+075,grupo,P&D em saúde
+076,grupo,Saúde não classificada
+08,divisao,"Recreação, cultura e religião"
+081,grupo,Serviços recreativos e esportivos
+082,grupo,Serviços culturais
+083,grupo,Serviços de radiodifusão e publicação
+084,grupo,Serviços religiosos e outros serviços comunitários
+085,grupo,"P&D em recreação, cultura e religião"
+086,grupo,"Recreação, cultura e religião não classificadas"
+09,divisao,Educação
+091,grupo,Educação pré-primária e primária
+092,grupo,Educação secundária
+093,grupo,Educação pós-secundária não superior
+094,grupo,Educação superior
+095,grupo,Educação não definida por nível
+096,grupo,Serviços auxiliares à educação
+097,grupo,P&D em educação
+098,grupo,Educação não classificada
+10,divisao,Proteção social
+101,grupo,Doença e invalidez
+102,grupo,Velhice
+103,grupo,Sobreviventes
+104,grupo,Família e filhos
+105,grupo,Desemprego
+106,grupo,Habitação
+107,grupo,Exclusão social não classificada
+108,grupo,P&D em proteção social
+109,grupo,Proteção social não classificada

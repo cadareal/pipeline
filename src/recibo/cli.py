@@ -1,4 +1,4 @@
-"""CLI: recibo fetch | inspect | transform | mart | diff | run"""
+"""CLI: recibo fetch | inspect | transform | mart (recibo, cofog) | diff | run (fontes: siconfi S4, siop S8, cofog S7, divida S1, bcb S16)"""
 
 from __future__ import annotations
 
@@ -10,10 +10,12 @@ from . import __version__
 from .config import load_yaml, settings, source_config
 from .http import Http
 from .store import make_store
+from .textnorm import norm
 
 log = logging.getLogger("recibo")
 
-FONTES = {"siconfi": "S4", "siop": "S8"}
+FONTES = {"siconfi": "S4", "siop": "S8", "cofog": "S7", "divida": "S1", "bcb": "S16"}
+EXERCICIOS_PADRAO = [2024, 2025, 2026]
 
 
 def _http(st, timeout: float | None = None) -> Http:
@@ -29,16 +31,38 @@ def cmd_fetch(args) -> int:
     cfg = source_config(st.config_dir, FONTES[args.fonte])
     # consultas agregadas do SIOP podem levar dezenas de segundos: o timeout HTTP vem de sources.yaml (timeout_http_s)
     timeout = max(st.timeout_seconds, float(cfg.get("timeout_http_s", 0) or 0))
+    exercicios = args.exercicios or (None if args.fonte in ("cofog", "divida", "bcb") else EXERCICIOS_PADRAO)  # cofog: todos os anos do CKAN; divida e bcb: séries inteiras
     try:
         with _http(st, timeout=timeout) as http:
             if args.fonte == "siconfi":
                 from .fetchers.siconfi import run_fetch
 
-                run_fetch(http, store, cfg, args.exercicios, args.periodos, args.anexos)
+                run_fetch(http, store, cfg, exercicios, args.periodos, args.anexos)
+            elif args.fonte == "cofog":
+                from .fetchers.cofog import run_fetch as run_fetch_cofog
+
+                results = run_fetch_cofog(http, store, cfg, exercicios, getattr(args, "force", False))
+                if any(r.status == "erro" for r in results):
+                    log.error("fetch cofog terminou com anos em erro (veja o log e o _index.json)")
+                    return 5
+            elif args.fonte == "divida":
+                from .fetchers.divida import run_fetch as run_fetch_divida
+
+                results = run_fetch_divida(http, store, cfg, getattr(args, "datasets", None), getattr(args, "force", False))
+                if any(r.status == "erro" for r in results):
+                    log.error("fetch divida terminou com recursos em erro (veja o log e o _index.json de cada dataset)")
+                    return 5
+            elif args.fonte == "bcb":
+                from .fetchers.bcb import run_fetch as run_fetch_bcb
+
+                results = run_fetch_bcb(http, store, cfg, getattr(args, "series", None), getattr(args, "force", False))
+                if any(r.status == "erro" for r in results):
+                    log.error("fetch bcb terminou com séries em erro (veja o log e o _index.json)")
+                    return 5
             else:
                 from .fetchers.siop import run_fetch as run_fetch_siop
 
-                results = run_fetch_siop(http, store, cfg, args.exercicios, getattr(args, "agregacoes", None), getattr(args, "force", False))
+                results = run_fetch_siop(http, store, cfg, exercicios, getattr(args, "agregacoes", None), getattr(args, "force", False))
                 if any(r.status == "erro" for r in results):
                     log.error("fetch siop terminou com consultas em erro (veja o log e o _index.json); rode de novo com --force depois")
                     return 5
@@ -49,9 +73,24 @@ def cmd_fetch(args) -> int:
     return 0
 
 
+def _emit(texto: str, out: str | None) -> None:
+    """Imprime e, com --out, grava o mesmo texto num arquivo (o terminal corta saídas longas; o arquivo não)."""
+    print(texto)
+    if out:
+        from pathlib import Path
+
+        Path(out).expanduser().write_text(texto + "\n", encoding="utf-8")
+        log.info("saída gravada em %s", out)
+
+
 def cmd_inspect(args) -> int:
+    import re
+
     st = settings()
     store = make_store(st)
+    if args.fonte in ("siconfi", "siop", "cofog") and args.exercicio is None:
+        log.error("inspect %s exige --exercicio", args.fonte)
+        return 2
     if args.fonte == "siconfi":
         from .inspect_ import inspect_key
 
@@ -60,12 +99,31 @@ def cmd_inspect(args) -> int:
             return 2
         linhas = load_yaml(st.config_dir, "linhas.yaml")
         key = f"{args.exercicio}/{args.periodo:02d}/{args.anexo}"
-        rx = None if args.todas_colunas else linhas["metrica"]["coluna_regex"]
-        print(inspect_key(store, st.config_dir, key, rx, rows=args.rows))
+        if args.coluna:
+            # texto literal (não regex), comparado com a coluna normalizada: `--coluna "ATE O BIMESTRE (C)"` acha a
+            # coluna de receitas realizadas do Anexo 01 sem escapar parênteses
+            rx = re.escape(norm(args.coluna))
+        else:
+            rx = None if args.todas_colunas else linhas["metrica"]["coluna_regex"]
+        _emit(inspect_key(store, st.config_dir, key, rx, rows=args.rows), args.out)
+    elif args.fonte == "cofog":
+        from .inspect_cofog import inspect_cofog
+        from .transform.cofog import STAGING_FILE as COFOG_FILE
+
+        _emit(inspect_cofog(st.staging_dir / COFOG_FILE, args.exercicio, por=args.por, rows=args.rows, cofog=args.cofog, config_dir=st.config_dir, store=store), args.out)
+    elif args.fonte == "divida":
+        from .inspect_divida import inspect_divida
+
+        _emit(inspect_divida(st.staging_dir, dataset=getattr(args, "dataset", None), rows=args.rows, ano=getattr(args, "ano", None), filtros=getattr(args, "filtro", None)), args.out)
+    elif args.fonte == "bcb":
+        from .inspect_bcb import inspect_bcb
+        from .transform.bcb import STAGING_FILE as BCB_FILE
+
+        _emit(inspect_bcb(st.staging_dir / BCB_FILE, serie=getattr(args, "serie", None), ano=getattr(args, "ano", None), rows=args.rows), args.out)
     else:
         from .inspect_siop import inspect_siop
 
-        print(inspect_siop(store, args.exercicio, args.agregacao, args.funcao, rows=args.rows))
+        _emit(inspect_siop(store, args.exercicio, args.agregacao, args.funcao, rows=args.rows), args.out)
     return 0
 
 
@@ -76,6 +134,29 @@ def cmd_transform(args) -> int:
         from .transform.siconfi import build_staging
 
         build_staging(store, st.config_dir, st.staging_dir)
+    elif args.fonte == "cofog":
+        from .transform.cofog import CofogFormato, build_staging as build_staging_cofog
+
+        try:
+            build_staging_cofog(store, st.staging_dir, source_config(st.config_dir, FONTES["cofog"]))
+        except CofogFormato as e:
+            log.error("transform cofog parou: %s", e)
+            log.error("nada foi gravado no staging; o raw continua intacto")
+            return 6
+    elif args.fonte == "divida":
+        from .transform.divida import build_staging as build_staging_divida
+
+        build_staging_divida(store, st.staging_dir, source_config(st.config_dir, FONTES["divida"]))
+    elif args.fonte == "bcb":
+        from .transform.bcb import build_staging as build_staging_bcb
+        from .transform.cofog import CofogFormato
+
+        try:
+            build_staging_bcb(store, st.staging_dir, source_config(st.config_dir, FONTES["bcb"]))
+        except CofogFormato as e:
+            log.error("transform bcb parou: %s", e)
+            log.error("nada foi gravado no staging; o raw continua intacto")
+            return 6
     else:
         from .transform.siop import build_staging as build_staging_siop
 
@@ -97,7 +178,7 @@ def _periodo_disponivel(store, exercicio: int, anexo_regex_hint: str = "Anexo 02
 
 def _estado(exercicio: int, periodo: int) -> dict:
     if periodo >= 6:
-        return {"selo": "fechado", "nota": "6º bimestre: exercício completo (RREO). Preliminar até o COFOG do ano ser publicado."}
+        return {"selo": "fechado", "nota": "6º bimestre: exercício completo (RREO)."}
     return {"selo": "em_andamento", "nota": f"Dados até o {periodo}º bimestre de {exercicio} (RREO). Atualização a cada bimestre."}
 
 
@@ -108,8 +189,48 @@ def _siop_staging(st):
     return p if p.exists() else None
 
 
+def cmd_mart_cofog(args) -> int:
+    """Produto separado do recibo: a despesa do Governo Central pela régua internacional, com a ponte para o recibo."""
+    from .marts.cofog import compute_cofog, print_summary_cofog, to_export_cofog, write_outputs_cofog
+    from .marts.recibo import SemDados
+    from .transform.cofog import STAGING_FILE as COFOG_FILE
+    from .transform.siconfi import STAGING_FILE
+
+    st = settings()
+    store = make_store(st)
+    stg_cofog = st.staging_dir / COFOG_FILE
+    if not stg_cofog.exists():
+        log.error("staging do COFOG não encontrado (%s); rode `recibo fetch cofog` e `recibo transform cofog`", stg_cofog)
+        return 2
+    stg = st.staging_dir / STAGING_FILE
+    periodo = _periodo_disponivel(store, args.exercicio) if stg.exists() else None
+    linhas = load_yaml(st.config_dir, "linhas.yaml")
+    fontes = load_yaml(st.config_dir, "sources.yaml")
+    try:
+        res = compute_cofog(stg_cofog, linhas, fontes, args.exercicio, stg_siconfi=stg if stg.exists() else None, periodo_recibo=periodo, siop_path=_siop_staging(st), config_dir=st.config_dir)
+    except SemDados as e:
+        log.error("%s", e)
+        return 2
+    export = to_export_cofog(res, linhas)
+    p_json, p_csv, p_exp = write_outputs_cofog(export, st.marts_dir, st.export_dir)
+    import contextlib
+    import io
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        print_summary_cofog(export)
+        print(f"\narquivos: {p_json}\n          {p_csv}\n          {p_exp}")
+    _emit(buf.getvalue().rstrip("\n"), getattr(args, "out", None))
+    if not res.publicavel:
+        log.error("COFOG %s: NÃO PUBLICÁVEL (%s). O recibo não é afetado.", args.exercicio, res.selo)
+        return 3
+    return 0
+
+
 def cmd_mart(args) -> int:
-    from .marts.recibo import compute, print_summary, to_export, write_outputs
+    if args.nome == "cofog":
+        return cmd_mart_cofog(args)
+    from .marts.recibo import SemDados, compute, print_summary, to_export, write_outputs
     from .transform.siconfi import STAGING_FILE
 
     st = settings()
@@ -127,11 +248,21 @@ def cmd_mart(args) -> int:
     siop = _siop_staging(st)
     if siop is None:
         log.info("staging do SIOP ausente: conferências cruzadas não rodam (rode `recibo fetch siop` e `recibo transform siop`)")
-    res = compute(stg, linhas, args.exercicio, periodo, siop_path=siop)
+    try:
+        res = compute(stg, linhas, args.exercicio, periodo, siop_path=siop, config_dir=st.config_dir)
+    except SemDados as e:
+        log.error("%s", e)
+        return 2
     export = to_export(res, linhas, fontes, _estado(args.exercicio, periodo))
     p_json, p_csv, p_exp = write_outputs(export, st.marts_dir, st.export_dir)
-    print_summary(export)
-    print(f"\narquivos: {p_json}\n          {p_csv}\n          {p_exp}")
+    import contextlib
+    import io
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        print_summary(export)
+        print(f"\narquivos: {p_json}\n          {p_csv}\n          {p_exp}")
+    _emit(buf.getvalue().rstrip("\n"), getattr(args, "out", None))
     if not res.publicavel:
         log.error("reconciliação crítica falhou: NÃO PUBLICÁVEL. Rode `recibo inspect siconfi` e calibre.")
         return 3
@@ -156,8 +287,14 @@ def cmd_diff(args) -> int:
         return 2
     periodo_contra = args.periodo_contra or periodo
     linhas = load_yaml(st.config_dir, "linhas.yaml")
-    d = diff_periodos(stg, linhas, Periodo(args.exercicio, periodo), Periodo(args.contra, periodo_contra))
-    print(render(d, top=args.top, funcoes=args.funcao, ordem=args.ordem))
+    from .marts.recibo import SemDados
+
+    try:
+        d = diff_periodos(stg, linhas, Periodo(args.exercicio, periodo), Periodo(args.contra, periodo_contra))
+    except SemDados as e:
+        log.error("%s", e)
+        return 2
+    _emit(render(d, top=args.top, funcoes=args.funcao, ordem=args.ordem), getattr(args, "out_txt", None))
     if args.out:
         print(f"\njson: {write_json(d, Path(args.out))}")
     return 0
@@ -192,32 +329,43 @@ def main(argv: list[str] | None = None) -> int:
 
     f = sub.add_parser("fetch", help="baixa dados de uma fonte para a camada raw")
     f.add_argument("fonte", choices=sorted(FONTES))
-    f.add_argument("--exercicios", type=int, nargs="+", default=[2024, 2025, 2026])
+    f.add_argument("--exercicios", type=int, nargs="+", default=None, help="padrão: 2024 2025 2026 (siconfi, siop); cofog: todos os anos do CKAN; divida e bcb ignoram")
+    f.add_argument("--datasets", nargs="+", help="divida: nomes em sources.yaml (S1.datasets), ex.: estoque_dpf fatores_variacao (padrão: todos)")
+    f.add_argument("--series", type=int, nargs="+", help="bcb: códigos do SGS (padrão: todas as de sources.yaml)")
     f.add_argument("--periodos", type=int, nargs="+", help="siconfi: bimestres (padrão: 1 a 6)")
     f.add_argument("--anexos", nargs="+", help='siconfi: nomes exatos, ex.: "RREO-Anexo 02" (padrão: sources.yaml)')
     f.add_argument("--agregacoes", nargs="+", help="siop: ids de agregação em sources.yaml (padrão: todas)")
-    f.add_argument("--force", action="store_true", help="siop: refaz mesmo sem mudança na data de atualização do grafo")
+    f.add_argument("--force", action="store_true", help="siop: refaz mesmo sem mudança na data de atualização do grafo; cofog e divida: baixam de novo mesmo sem mudança no CKAN")
     f.set_defaults(fn=cmd_fetch)
 
     i = sub.add_parser("inspect", help="mostra como a API devolveu uma chave e como foi classificada")
     i.add_argument("fonte", choices=sorted(FONTES))
-    i.add_argument("--exercicio", type=int, required=True)
+    i.add_argument("--exercicio", type=int, help="siconfi, siop e cofog: obrigatório; divida e bcb não usam")
     i.add_argument("--periodo", type=int, help="siconfi: bimestre (obrigatório)")
     i.add_argument("--anexo", default="RREO-Anexo 02", help="siconfi: nome do anexo")
     i.add_argument("--agregacao", default="acao_subfuncao", help="siop: id da agregação (padrão: acao_subfuncao)")
     i.add_argument("--funcao", help="siop: restringe a uma função, ex.: 28")
     i.add_argument("--rows", type=int, default=100)
     i.add_argument("--todas-colunas", action="store_true", help="siconfi: não filtrar pela coluna da métrica")
+    i.add_argument("--coluna", help='siconfi: filtrar por esta coluna (texto literal, ex.: "ATE O BIMESTRE (C)" para receitas realizadas)')
+    i.add_argument("--por", default="divisao", help="cofog: divisao | grupo | classe | gfs | gnd | ajuste | uo | acao | natureza | anos")
+    i.add_argument("--cofog", help="cofog: restringe a um código COFOG (prefixo), ex.: 10.2 ou 017")
+    i.add_argument("--dataset", help="divida: só esse dataset (nome em sources.yaml), ex.: estoque_dpf")
+    i.add_argument("--filtro", action="append", help='divida (CSV): recorta linhas, COLUNA=VALOR (texto exato); repetível, ex.: --filtro "Mes do Estoque=12/2024"')
+    i.add_argument("--serie", type=int, help="bcb: só essa série (código do SGS)")
+    i.add_argument("--ano", type=int, help="bcb: tabela de todas as séries nesse ano; divida (XLSX): todas as linhas nas colunas desse ano")
+    i.add_argument("--out", help="grava a mesma saída neste arquivo (o terminal corta saídas longas)")
     i.set_defaults(fn=cmd_inspect)
 
     t = sub.add_parser("transform", help="raw -> staging (parquet)")
     t.add_argument("fonte", choices=sorted(FONTES))
     t.set_defaults(fn=cmd_transform)
 
-    m = sub.add_parser("mart", help="staging -> recibo (json/csv) com reconciliações")
-    m.add_argument("nome", choices=["recibo"])
+    m = sub.add_parser("mart", help="staging -> recibo (json/csv) com reconciliações; cofog: régua internacional com a ponte para o recibo")
+    m.add_argument("nome", choices=["recibo", "cofog"])
     m.add_argument("--exercicio", type=int, required=True)
-    m.add_argument("--periodo", type=int, help="bimestre (padrão: o último disponível no índice)")
+    m.add_argument("--periodo", type=int, help="recibo: bimestre (padrão: o último disponível no índice); cofog ignora (ano fechado)")
+    m.add_argument("--out", help="grava o resumo do terminal neste arquivo (além do json/csv de sempre)")
     m.set_defaults(fn=cmd_mart)
 
     d = sub.add_parser("diff", help="o que mudou entre dois períodos: linhas, Anexo 01, funções e subfunções")
@@ -229,6 +377,7 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument("--funcao", nargs="+", help="restringe a lista de subfunções a estas funções, ex.: 28 09")
     d.add_argument("--ordem", choices=["diff", "excesso"], default="diff", help="diff: variação absoluta; excesso: variação além do crescimento do total")
     d.add_argument("--out", help="salva o diff completo em JSON neste caminho")
+    d.add_argument("--out-txt", dest="out_txt", help="grava o texto do terminal neste arquivo")
     d.set_defaults(fn=cmd_diff)
 
     r = sub.add_parser("run", help="fetch + transform (siconfi e siop) + mart para os exercícios")

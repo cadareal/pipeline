@@ -25,10 +25,13 @@ codigo,nome
 211,Relações Diplomáticas
 212,Cooperação Internacional
 241,Assistência ao Idoso
+241,Assistência à Pessoa Idosa
 242,Assistência ao Portador de Deficiência
 242,Assistência à Pessoa com Deficiência
 243,Assistência à Criança e ao Adolescente
 244,Assistência Comunitária
+245,Serviços Socioassistenciais
+246,Segurança de Renda
 271,Previdência Básica
 272,Previdência do Regime Estatutário
 273,Previdência Complementar
@@ -52,9 +55,11 @@ codigo,nome
 367,Educação Especial
 368,Educação Básica
 391,Patrimônio Histórico Artístico e Arqueológico
+391,"Patrimônio Histórico, Artístico e Arqueológico"
 392,Difusão Cultural
 421,Custódia e Reintegração Social
 422,Direitos Individuais Coletivos e Difusos
+422,"Direitos Individuais, Coletivos e Difusos"
 423,Assistência aos Povos Indígenas
 451,Infra-Estrutura Urbana
 451,Infraestrutura Urbana
@@ -73,14 +78,14 @@ codigo,nome
 572,Desenvolvimento Tecnológico e Engenharia
 573,Difusão do Conhecimento Científico e Tecnológico
 601,Promoção da Produção Vegetal
-601,Promoção da Produção Agropecuária
 602,Promoção da Produção Animal
 603,Defesa Sanitária Vegetal
 604,Defesa Sanitária Animal
-604,Defesa Agropecuária
 605,Abastecimento
 606,Extensão Rural
 607,Irrigação
+608,Promoção da Produção Agropecuária
+609,Defesa Agropecuária
 631,Reforma Agrária
 632,Colonização
 661,Promoção Industrial

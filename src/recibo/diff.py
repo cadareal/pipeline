@@ -16,7 +16,9 @@ from pathlib import Path
 
 import duckdb
 
-from .marts.recibo import base_where, base_where_static, compute, lit, periodo_where, sql_sum
+from .marts.recibo import Resultado, SemDados, base_where, base_where_static, compute, lit, periodo_where, sql_sum
+
+ZERO = 1e-6  # abaixo disto (em R$) um valor é zero: evita variações absurdas sobre resíduos de ponto flutuante
 
 
 @dataclass(frozen=True)
@@ -44,7 +46,7 @@ class Par:
 
     @property
     def variacao(self) -> float | None:
-        return (self.a / self.b - 1.0) if self.b else None
+        return (self.a / self.b - 1.0) if abs(self.b) >= ZERO else None
 
     def as_dict(self) -> dict:
         return {"chave": self.chave, "nome": self.nome, "a": self.a, "b": self.b, "diff": self.diff, "variacao": self.variacao}
@@ -59,6 +61,7 @@ class Diff:
     anexo01: list[Par] = field(default_factory=list)
     funcoes: list[Par] = field(default_factory=list)
     subfuncoes: list[Par] = field(default_factory=list)
+    memos: list[Par] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         fator = fator_total(self)
@@ -76,6 +79,7 @@ class Diff:
             "totais": grp(self.totais),
             "linhas": grp(self.linhas),
             "anexo01": grp(self.anexo01),
+            "memos": grp(self.memos),
             "funcoes": grp(self.funcoes),
             "subfuncoes": grp(self.subfuncoes),
         }
@@ -101,23 +105,36 @@ def diff_periodos(stg_path: Path, linhas_cfg: dict, a: Periodo, b: Periodo) -> D
     b01 = bases.get("anexo01_conta")
     out = Diff(a, b)
 
-    # 1) Linhas do recibo e totais: o mesmo compute() do mart, nos dois períodos
+    # 1) Linhas do recibo, totais e memos: o mesmo compute() do mart, nos dois períodos (sem SIOP: o diff compara o
+    # que o RREO mostra; a exclusão de empréstimos é exata pelo Anexo 06, sem detalhe por linha). B pode não existir
+    # no staging: aí tudo em B é zero e as linhas saem como "novo".
     ra = compute(stg_path, linhas_cfg, a.exercicio, a.periodo)
-    rb = compute(stg_path, linhas_cfg, b.exercicio, b.periodo)
-    lb = {x.id: x for x in rb.linhas}
+    rb: Resultado | None
+    try:
+        rb = compute(stg_path, linhas_cfg, b.exercicio, b.periodo)
+    except SemDados:
+        rb = None
+    lb = {x.id: x for x in rb.linhas} if rb else {}
     out.linhas = [Par(x.id, x.nome, x.valor, lb[x.id].valor if x.id in lb else 0.0) for x in ra.linhas]
 
-    def rec(res, rid: str) -> float:
-        return next((r.obtido for r in res.reconciliacoes if r.id == rid), 0.0)
+    def rec(res: Resultado | None, rid: str) -> float:
+        return next((r.obtido for r in res.reconciliacoes if r.id == rid), 0.0) if res else 0.0
 
     out.totais = [
-        Par("total_base_anexo02", "Despesas exceto intra (Anexo 02)", ra.total_base_anexo02, rb.total_base_anexo02),
-        Par("total_recibo", "Total do recibo (ex-refinanciamento, ex-amortização)", ra.total_recibo, rb.total_recibo),
+        Par("total_base_anexo02", "Despesas exceto intra (Anexo 02)", ra.total_base_anexo02, rb.total_base_anexo02 if rb else 0.0),
+        Par("total_recibo", "Total do recibo (despesa primária Anexo 06 + juros; ex-rolagem, ex-amortização, ex-empréstimos)", ra.total_recibo, rb.total_recibo if rb else 0.0),
         Par("servico_divida_fora_843_844", "Juros + amortização fora de 843/844 (ajuste)", rec(ra, "servico_divida_fora_843_844"), rec(rb, "servico_divida_fora_843_844")),
     ]
     for x in ra.excluidos:
-        xb = next((e for e in rb.excluidos if e.id == x.id), None)
+        xb = next((e for e in rb.excluidos if e.id == x.id), None) if rb else None
         out.totais.append(Par(f"excluido:{x.id}", x.nome, x.valor, xb.valor if xb else 0.0))
+    # memos em reais (receitas, resultado primário e nominal, dívida, restos a pagar): só os disponíveis em A
+    mb = {m.id: m for m in rb.memos} if rb else {}
+    for m in ra.memos:
+        if not m.disponivel or m.unidade != "reais" or m.valor is None:
+            continue
+        b_m = mb.get(m.id)
+        out.memos.append(Par(m.id, m.nome, m.valor, (b_m.valor or 0.0) if (b_m and b_m.disponivel) else 0.0))
 
     con = duckdb.connect()
     con.execute(f"CREATE VIEW stg AS SELECT * FROM read_parquet({lit(str(stg_path))})")
@@ -151,8 +168,8 @@ def _escala(valores: list[float]) -> tuple[float, str, int]:
 
 
 def _pct(p: Par) -> str:
-    if p.b == 0:
-        return "novo" if p.a else "-"
+    if abs(p.b) < ZERO:
+        return "novo" if abs(p.a) >= ZERO else "-"
     return f"{p.variacao * 100:+.1f}%"
 
 
@@ -175,7 +192,7 @@ def render(d: Diff, top: int = 40, funcoes: list[str] | None = None, ordem: str 
     if ordem not in ORDENS:
         raise ValueError(f"ordem deve ser uma de {ORDENS}")
     fator = fator_total(d)
-    todos = [v for grp in (d.totais, d.linhas, d.anexo01, d.funcoes, d.subfuncoes) for p in grp for v in (p.a, p.b)]
+    todos = [v for grp in (d.totais, d.linhas, d.anexo01, d.memos, d.funcoes, d.subfuncoes) for p in grp for v in (p.a, p.b)]
     div, unidade, dec = _escala(todos)
     w = 16
 
@@ -211,6 +228,9 @@ def render(d: Diff, top: int = 40, funcoes: list[str] | None = None, ordem: str 
     out += [row(p.nome, p) for p in d.linhas]
     out += head("REFERÊNCIAS DO ANEXO 01")
     out += [row(f"{p.chave} ({p.nome})", p) for p in d.anexo01]
+    if d.memos:
+        out += head("MEMOS (fora do R$ 1,00: receitas, resultado, juros por competência, dívida, restos a pagar)")
+        out += [row(p.nome, p) for p in d.memos]
     out += head(f"FUNÇÕES DO ANEXO 02 ({rotulo_ordem})")
     out += [row(f"{p.chave} {p.nome}", p) for p in ordenar(d.funcoes)]
     subs = ordenar(d.subfuncoes)

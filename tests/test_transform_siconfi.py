@@ -93,5 +93,29 @@ def test_build_staging_writes_parquet(populated_store, config_dir, tmp_path):
     df = pl.read_parquet(path)
     assert df.height == N_ROWS_STAGING
     assert df.schema["valor"] == pl.Float64
-    assert set(df["anexo_norm"].unique().to_list()) == {"RREO-ANEXO 01", "RREO-ANEXO 02"}
+    assert set(df["anexo_norm"].unique().to_list()) == {"RREO-ANEXO 01", "RREO-ANEXO 02", "RREO-ANEXO 06"}
+    # Anexo 06: cod_conta preservado, uma coluna por medida, sem escopo (não tem cabeçalho de bloco)
+    a06 = df.filter(pl.col("anexo_norm") == "RREO-ANEXO 06")
+    assert a06.filter((pl.col("cod_conta") == "RREO6TotalDespesaPrimaria") & (pl.col("coluna_norm") == "DESPESAS LIQUIDADAS") & (pl.col("exercicio") == 2024))["valor"].item() == 2058.0
+    assert set(a06["escopo"].unique().to_list()) == {"desconhecido"}
+    assert "ATE O BIMESTRE 2024 (B)" in a06["coluna_norm"].unique().to_list() and "EM 31/12/2023 (A)" in a06["coluna_norm"].unique().to_list()
+    # receitas do Anexo 01 na coluna própria
+    rec = df.filter((pl.col("anexo_norm") == "RREO-ANEXO 01") & (pl.col("coluna_norm") == "ATE O BIMESTRE (C)") & (pl.col("exercicio") == 2024))
+    assert rec.filter(pl.col("cod_conta") == "ReceitaTributaria")["valor"].item() == 900.0
     assert "fu_inconsistente" in df.columns and "rotulo_norm" in df.columns
+
+
+def test_inspect_filters_a_column_by_literal_text(populated_store, config_dir):
+    import re
+
+    from recibo.inspect_ import inspect_key
+    from recibo.textnorm import norm
+
+    # `inspect siconfi --coluna "DESPESAS LIQUIDADAS ATE O BIMESTRE (D)"`: texto literal, com parênteses, comparado com a
+    # coluna normalizada (é como se acham as receitas realizadas do Anexo 01, coluna "ATE O BIMESTRE (C)")
+    rx = re.escape(norm("Despesas Liquidadas até o Bimestre (D)"))
+    texto = inspect_key(populated_store, config_dir, "2024/06/RREO-Anexo 01", rx, rows=40)
+    assert "filtrando coluna_norm ~" in texto and "-> 19 linhas" in texto
+    assert "AmortizacaoDaDivida" in texto
+    sem = inspect_key(populated_store, config_dir, "2024/06/RREO-Anexo 01", re.escape(norm("coluna que não existe")), rows=5)
+    assert "-> 0 linhas" in sem

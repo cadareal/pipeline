@@ -1,15 +1,20 @@
-# Planilha-mãe como código (v0.2.1, fase 1 com a fonte S8 conferindo e dando valor à linha de aposentados).
+# Planilha-mãe como código (v0.6.3: RREO + SIOP no recibo, total pela conta oficial do Tesouro, receitas e memos; o
+# bloco `cofog` no fim é um produto separado e não altera nenhum número do recibo).
 # Cada entrada gera, ao mesmo tempo: o SQL que calcula o número, a ficha técnica publicada e as reconciliações.
 # Mudou aqui, mudou nos três. Nenhum valor é digitado neste arquivo.
-# Calibrado em 2026-11-08 contra o RREO da União: 2024/6º, 2025/6º e 2026/4º bimestre (ver docstring de
-# transform/siconfi.py). Os valores citados nos comentários são observações dessas rodadas, não entradas.
+# Calibrado em 2026-11-08/09 contra o RREO da União (2023/6º, 2024/6º, 2025/6º e 2026/4º bimestre) e o SIOP
+# (2023 a 2026). Os valores citados nos comentários são observações dessas rodadas, não entradas.
 
-versao: "0.2.1"
+versao: "0.6.3"   # números do recibo iguais aos da 0.5.1; a 0.6.3 só acrescenta o bloco `cofog` (mart separado)
 
 regra_rateio: >
-  O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção da despesa executada do exercício,
-  excluídos refinanciamento e amortização da dívida (operações de estoque, não consumo). As linhas somam R$ 1,00.
-  O que foi gasto além do arrecadado aparece como memo (déficit), nunca dentro do R$ 1,00.
+  O imposto é fungível: cada R$ 1,00 arrecadado é rateado na proporção do que o governo gastou no período. "Gastou"
+  é a conta oficial do Tesouro: a despesa primária do Anexo 06 do RREO (salários, aposentadorias, benefícios,
+  custeio, obras, repasses; liquidada), mais os juros da dívida pagos (Anexo 01). Fica fora do R$ 1,00 o que não é
+  gasto e sim troca de ativo: refinanciamento e amortização da dívida (pagar o principal) e o que o Tesouro
+  classifica como financeiro (emprestar, comprar título, integralizar capital com retorno). As linhas somam
+  R$ 1,00. O que saiu do caixa como empréstimo aparece no "Fora do R$ 1,00", com a lista do que foi emprestado; o
+  que foi gasto além do arrecadado aparece como memo (resultado primário), nunca dentro do R$ 1,00.
 
 metrica:
   descricao: Despesas liquidadas até o bimestre (no 6º bimestre, o exercício inteiro), exceto intraorçamentárias.
@@ -18,7 +23,8 @@ metrica:
   nota: >
     O RREO não traz "pago" por função; liquidado é o estágio mais próximo da execução. Liquidado no exercício
     subestima investimento (boa parte paga via restos a pagar): no ano fechado, a fonte definitiva passa a ser o
-    COFOG (S7: liquidado + restos a pagar pagos) e esta métrica vira preliminar.
+    COFOG (S7: liquidado + restos a pagar pagos) e esta métrica vira preliminar. O memo restos_a_pagar mostra o
+    tamanho disso pelo Anexo 06.
 
 bases:
   anexo02_subfuncao:
@@ -39,7 +45,19 @@ bases:
     usa_escopo: false
     descricao: >
       Contas do Anexo 01 (balanço orçamentário), selecionadas por cod_conta, que é estável e já distingue
-      as linhas intraorçamentárias (sufixo "Intra").
+      as linhas intraorçamentárias (sufixo "Intra"). Despesas na coluna da métrica; receitas na coluna
+      "ATE O BIMESTRE (C)" (receitas realizadas até o bimestre), ver referencias_anexo01_receitas.
+  anexo06_conta:
+    fonte: S4
+    dataset: siconfi_rreo
+    anexo_regex: "^RREO-ANEXO 0?6$"
+    nivel: null
+    usa_escopo: false
+    descricao: >
+      Contas do Anexo 06 (demonstrativo dos resultados primário e nominal), selecionadas por cod_conta. É a conta
+      oficial do Tesouro de "quanto o governo arrecadou e gastou" fora a dívida. A coluna muda conforme a medida
+      (receitas realizadas, despesas liquidadas, pagas, restos a pagar pagos, VALOR, VALOR INCORRIDO, saldos da
+      dívida) e é dita em cada uso (anexo06.colunas).
   siop_elemento:
     fonte: S8
     dataset: siop_execucao
@@ -52,8 +70,26 @@ bases:
       fiscal e da seguridade, sem intraorçamentárias). Só vale para ano fechado: o SIOP é acumulado até a última
       atualização, o RREO até o bimestre. Os filtros usam funcao_cod e subfuncao_cod como no Anexo 02 (a view
       siop_lin dá esses nomes às colunas do SIOP), por isso a mesma regra de uma linha do RREO pode ser aplicada ao SIOP.
+  siop_gnd:
+    fonte: S8
+    dataset: siop_execucao
+    fonte_valor: siop
+    agregacao: fonte_gnd_subfuncao
+    medida: liquidado
+    universo: "ofss AND NOT intra"
+    descricao: Execução do SIOP por grupo de despesa, fonte, função e subfunção, no universo do RREO. Base do chip de investimento.
+  siop_rp:
+    fonte: S8
+    dataset: siop_execucao
+    fonte_valor: siop
+    agregacao: rp_subfuncao
+    medida: liquidado
+    universo: "ofss AND NOT intra"
+    descricao: >
+      Execução do SIOP por identificador de resultado primário (RP), grupo, função e subfunção, no universo do RREO.
+      Base do chip de emendas (RP 6 a 9) e da atribuição por linha dos empréstimos (GND 5 com RP 0).
 
-# cod_conta do Anexo 01 usados em linhas e reconciliações (observados em 2024/6).
+# cod_conta do Anexo 01 usados em linhas e reconciliações (observados em 2024/6), na coluna da métrica (despesas).
 referencias_anexo01:
   total_exceto_intra: DespesasExcetoIntraOrcamentarias
   juros: JurosEEncargosDaDivida
@@ -61,20 +97,131 @@ referencias_anexo01:
   refinanciamento: AmortizacaoRefinanciamentoDaDivida
   beneficios_previdenciarios: BeneficiosPrevidenciarios
   pessoal: PessoalEEncargosSociais
+  outras_correntes: OutrasDespesasCorrentes
   investimentos: Investimentos
+  inversoes_financeiras: InversoesFinanceiras
   transferencias_modalidade: TransferenciasAEstadosDistritoFederalEMunicipios
+
+# Receitas do Anexo 01 (balanço orçamentário), coluna "ATE O BIMESTRE (C)" = receitas realizadas até o bimestre.
+# Observado em 2024/6 e 2025/6: a hierarquia fecha ao centavo (correntes + capital = exceto intra (I)). Os dois
+# últimos códigos são longos e o inspect os corta em 34 caracteres: por isso vão por prefixo (nunca casa "Intra").
+referencias_anexo01_receitas:
+  coluna_regex: "^ATE O BIMESTRE"
+  contas:
+    receitas_exceto_intra: ReceitasExcetoIntraOrcamentarias   # (I)
+    correntes: ReceitasCorrentes
+    tributaria: ReceitaTributaria                              # impostos, taxas e contribuições de melhoria
+    impostos: Impostos
+    taxas: Taxas
+    contribuicoes: ReceitaDeContribuicoes
+    contribuicoes_sociais: ContribuicoesSociais
+    patrimonial: ReceitaPatrimonial
+    agropecuaria: ReceitaAgropecuaria
+    industrial: ReceitaIndustrial
+    servicos: ReceitaDeServicos
+    transferencias_correntes: TransferenciasCorrentes
+    outras_correntes: OutrasReceitasCorrentes
+    a_classificar: ReceitasCorrentesAClassificar
+    capital: ReceitasDeCapital
+    operacoes_credito: ReceitasDeOperacoesDeCredito            # títulos vendidos além da rolagem (dívida nova)
+    alienacao_bens: AlienacaoDeBens
+    amortizacoes_emprestimos: AmortizacoesDeEmprestimos        # o que tomadores devolveram ao Tesouro
+    transferencias_capital: TransferenciasDeCapital
+    outras_capital: OutrasReceitasDeCapital
+    remuneracao_caixa: {prefixo: RemuneracaoDasDisponibilidadesDoTe}   # rendimento do caixa do Tesouro no Banco Central
+    resultado_bc: {prefixo: ResultadoDoBancoCentralDoBrasil}           # resultado do Banco Central repassado (linha nova em 2025)
+    refinanciamento: OperacoesDeCreditoRefinanciamento         # (IV) rolagem: não é receita nova
+    total: TotalReceitas                                       # (V)
+    deficit: Deficit                                           # (VII) só existe quando a despesa total supera a receita total
+
+# Anexo 06 (resultados primário e nominal) da União: cod_conta por grupo e as colunas de cada grupo. Chaves no código:
+# "conta:coluna" (ex.: pessoal:liquidadas, primario_acima:valor, divida_liquida:saldo_final). Observado em 2023/6 a
+# 2026/4: as identidades (I = soma das receitas correntes; VII = IV + V + VI; IX = III - pagas - restos pagos + ajuste)
+# fecham ao centavo. O ajuste metodológico só existe em 2025 e 2026. Pessoal e investimentos do Anexo 06 são iguais
+# aos do Anexo 01; outras despesas correntes diferem em R$ 0,45 bi (2025) e inversões financeiras em R$ 128,4 bi:
+# é o que o Tesouro trata como financeiro, e é o que fica fora do R$ 1,00.
+anexo06:
+  base: anexo06_conta
+  colunas:
+    previsao: "^PREVISAO ATUALIZADA"
+    realizadas: "^RECEITAS REALIZADAS"
+    dotacao: "^DOTACAO ATUALIZADA"
+    empenhadas: "^DESPESAS EMPENHADAS"
+    liquidadas: "^DESPESAS LIQUIDADAS"
+    pagas: "^DESPESAS PAGAS"
+    rp_processados_pagos: "^RESTOS A PAGAR PROCESSADOS PAGOS"
+    rpnp_liquidados: "^LIQUIDADOS"
+    rpnp_pagos: "^PAGOS"
+    valor: "^VALOR$"
+    valor_incorrido: "^VALOR INCORRIDO"
+    saldo_inicial: "^EM 31/12/"
+    saldo_final: "^ATE O BIMESTRE"
+  grupos:
+    receitas:
+      colunas: [realizadas, previsao]
+      contas:
+        receitas_correntes: ReceitasPrimariasCorrentes             # (I); sem o prefixo RREO6, como a API devolve
+        tributarias: RREO6ReceitasTributarias                      # impostos, taxas e contribuições de melhoria
+        contribuicoes: RREO6ReceitasDeContribuicoes
+        patrimonial: RREO6ReceitaPatrimonial
+        transferencias_correntes: RREO6TransferenciasCorrentes
+        demais_correntes: RREO6DemaisReceitasCorrentes
+        receitas_capital: RREO6ReceitasPrimariasDeCapital          # (II)
+        alienacao_bens: RREO6AlienacaoDeBens
+        transferencias_capital: RREO6TransferenciasDeCapital
+        outras_capital: RREO6OutrasReceitasDeCapital               # só apareceu em 2026
+        receita_primaria_total: RREO6TotalReceitaPrimaria          # (III) = (I) + (II)
+    despesas:
+      colunas: [liquidadas, pagas, empenhadas, dotacao, rp_processados_pagos, rpnp_liquidados, rpnp_pagos]
+      contas:
+        despesas_correntes: RREO6DespesasPrimariasCorrentes        # (IV)
+        pessoal: RREO6PessoalEEncargosSociais
+        outras_correntes: RREO6OutrasDespesasCorrentes
+        transferencias_constitucionais: RREO6TransferenciasConstitucionaisELegais
+        demais_despesas_correntes: RREO6DemaisDespesasCorrentes
+        despesas_capital: RREO6DespesasPrimariasDeCapital          # (V)
+        investimentos: RREO6Investimentos
+        inversoes: RREO6InversoesFinanceiras                       # só a parte que o Tesouro conta como gasto
+        reserva_contingencia: RREO6ReservaDeContingencia           # (VI) só dotação
+        despesa_primaria_total: RREO6TotalDespesaPrimaria          # (VII) = (IV) + (V) + (VI); numerada (VIII) em 2023 e 2024
+    resultados:
+      colunas: [valor]
+      contas:
+        primario_acima: RREO6ResultadoPrimarioEstadosMunicipios    # "RESULTADO PRIMÁRIO - Acima da Linha (IX)": é esse o cod_conta no RREO da União
+        ajuste_metodologico: RREO6AjusteMetodologicoDoResultadoPrimarioAcimaDaLinha   # existe a partir de 2025
+        primario_abaixo: ResultadoPrimarioAbaixoDaLinha            # (XXVII), a conta do Banco Central
+        nominal_acima: ResultadoNominalAcimaDaLinha                # (XII) = IX + (X - XI)
+        nominal_abaixo: ResultadoNominalAbaixoDaLinha              # (XVII)
+        nominal_ajustado: ResultadoNominalAjustado                 # (XXVI)
+        variacao_saldo_rpp: VariacaoSaldoRPP                       # (XVIII)
+        passivos_reconhecidos: PassivosReconhecidosNaDC            # (XX)
+        outros_ajustes: OutrosAjustes                              # (XXV)
+    juros:
+      colunas: [valor_incorrido]
+      contas:
+        juros_ativos: JurosEEncargosAtivos                         # (X) juros que o governo recebeu
+        juros_passivos: JurosEEncargosPassivos                     # (XI) juros que a dívida gerou (competência)
+    divida:
+      colunas: [saldo_inicial, saldo_final]
+      contas:
+        divida_consolidada: DividaConsolidada                      # (XIII)
+        deducoes: DeducoesDaDividaConsolidada                      # (XIV) caixa e haveres
+        caixa_bruta: DisponibilidadeDeCaixaBruta
+        rp_processados_deducao: RestosAPagarProcessadosExcetoPrecatorios
+        demais_haveres: DemaisHaveresFinanceiros
+        divida_liquida: DividaConsolidadaLiquida                   # (XVI) = XIII - XIV
 
 # Ajustes metodológicos declarados (cada um é uma decisão, não um detalhe de código).
 ajustes:
   # Juros (GND 2) + amortização (GND 6) do Anexo 01 excedem as subfunções 843/844 (serviço da dívida): em 2024/6,
-  # R$ 40,8 bi (1,2% da despesa exceto intra); em 2025, R$ 124,0 bi (3,3%), valor idêntico ao centavo do 4º ao 6º
-  # bimestre (lançamento único, concluído até agosto); em 2026/4, zero ao centavo. Essa parcela está classificada
-  # em outras subfunções; em 2025 a única com espaço para ela é a 846 (Outros Encargos Especiais), que cai no
-  # residual. Sem o ajuste, esses juros seriam contados duas vezes (na linha de juros e no residual) e essa
-  # amortização entraria como gasto. Com o ajuste, o residual é reduzido nesse valor e vale a identidade:
-  # total do recibo = despesa exceto intra - amortização do Anexo 01. O total está certo por construção; o risco
-  # é de alocação (se parte estiver numa linha nomeada, ela fica inflada e o residual subestimado).
-  # Hipótese a confirmar com o SIOP (GND x subfunção) na fase 1.1; `recibo diff` ajuda a localizar.
+  # R$ 40,8 bi (1,2% da despesa exceto intra); em 2025, R$ 124,0 bi (3,3%); em 2023 e em 2026/4, zero. Confirmado
+  # no SIOP (v0.2.0, por ação): é a ação 0669 "Cobertura do Resultado Negativo Apurado no Banco Central do Brasil"
+  # (Lei 13.820/2019), classificada na 846 (Outros Encargos Especiais), que cai no residual: R$ 36,5 bi de
+  # amortização + R$ 4,2 bi de juros em 2024; R$ 111,2 bi + R$ 12,8 bi em 2025. Sem o ajuste, esses juros seriam
+  # contados duas vezes (na linha de juros e no residual) e essa amortização entraria como gasto. Com o ajuste, o
+  # residual é reduzido nesse valor e vale a identidade: soma das linhas = despesa primária do Anexo 06 + juros do
+  # Anexo 01. A conferência servico_divida_fora_843_844_siop (crítica) mede o mesmo valor no SIOP e nomeia as ações;
+  # ela é o que transforma o ajuste em valor nomeado.
   servico_divida_fora_843_844: true
 
 linhas:
@@ -151,21 +298,24 @@ linhas:
   - id: juros
     nome: Juros da dívida
     definicao: >
-      Juros e encargos da dívida (grupo de despesa) do Anexo 01, cod_conta JurosEEncargosDaDivida. Substitui as
-      subfunções 843/844 do Anexo 02, que misturam juros e amortização.
+      Juros e encargos da dívida (grupo de despesa) do Anexo 01, cod_conta JurosEEncargosDaDivida: o que foi pago
+      em dinheiro no período. Substitui as subfunções 843/844 do Anexo 02, que misturam juros e amortização. Os
+      juros que a dívida gerou no período (competência, Anexo 06) são bem maiores e estão no memo juros_nominais.
     base: anexo01_conta
     filtro: "cod_conta = 'JurosEEncargosDaDivida'"
 
   - id: maquina_demais
     nome: Encargos especiais e demais funções
     definicao: >
-      Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima, das exclusões e do
-      ajuste do serviço da dívida fora de 843/844. Duas metades de tamanho parecido em 2025: a subfunção 846
-      "Outros Encargos Especiais" (R$ 346 bi, descontados os R$ 124 bi da cobertura do Banco Central e as pensões
-      militares que vão para a linha de aposentados: sentenças judiciais e precatórios, financiamentos com retorno
-      como o Plano Brasil Soberano, o Minha Casa Minha Vida e os fundos regionais, honras de aval) e todas as outras
-      funções juntas (R$ 208 bi: Judiciário, Legislativo, Essencial à Justiça, Administração, Agricultura, Ciência,
-      Gestão ambiental, Transporte, Relações exteriores e as pequenas). O hover abre a 846 por ação, pelo SIOP.
+      Tudo o que sobra do Anexo 02 (exceto intraorçamentárias) depois das linhas acima, das exclusões (serviço da
+      dívida, empréstimos e aplicações financeiras) e do ajuste do serviço da dívida fora de 843/844. Em 2025: a
+      subfunção 846 "Outros Encargos Especiais" sem a cobertura do Banco Central, sem as pensões militares (linha de
+      aposentados) e sem os empréstimos (fora do R$ 1,00): sentenças judiciais e precatórios (R$ 77 bi), subvenções
+      e honras de aval; os repasses aos fundos constitucionais FNE, FNO e FCO (R$ 27,6 bi), que a lei orçamentária
+      carimba como financeiros e o Tesouro conta como gasto; e todas as outras funções juntas (Judiciário,
+      Legislativo, Essencial à Justiça, Administração, Agricultura, Ciência, Gestão ambiental, Transporte, Relações
+      exteriores e as pequenas), também sem os seus empréstimos (Fundo Clima, FNDCT, dívidas rurais). O hover abre a
+      846 por ação, pelo SIOP.
     base: anexo02_subfuncao
     residual: true
 
@@ -190,28 +340,199 @@ excluidos:
     base: anexo02_subfuncao
     filtro: "subfuncao_cod IN ('843', '844')"
 
+  # Exclusão pela conta do Tesouro (calculo: tesouro). O valor é uma diferença, não uma soma de linhas:
+  #   despesa exceto intra (Anexo 02) - AmortizacaoDaDivida (Anexo 01) - despesa primária liquidada (Anexo 06) - juros (Anexo 01).
+  # Por grupo de despesa, é Anexo 01 menos a parte primária do Anexo 06 (por_grupo). Por linha, o que sai de cada
+  # linha nomeada é o GND 5 com RP 0 do SIOP (ano fechado; por_linha); o resto sai do resíduo. Em ano em andamento,
+  # ou sem SIOP, o total continua exato (Anexo 06) e tudo sai do resíduo, com avisos nas linhas (avisos_sem_siop).
+  - id: emprestimos_financeiros
+    nome: Empréstimos e aplicações financeiras do Tesouro
+    motivo: >
+      Dinheiro que saiu do caixa mas não foi gasto: virou um direito de receber de volta (empréstimo a empresa,
+      estudante, banco público ou fundo que empresta; compra de título; capital em empresa estatal com retorno). É
+      como pagar o principal da dívida: sai dinheiro, não é consumo. O tamanho vem da conta oficial do Tesouro: é a
+      diferença entre a despesa do RREO (Anexo 02, sem amortização) e a despesa primária do Anexo 06 mais os juros.
+      Em 2025, R$ 128,8 bi (R$ 128,4 bi em inversões financeiras, grupo 5; R$ 0,45 bi em outras despesas correntes,
+      grupo 3). Por linha, usamos o carimbo da lei orçamentária (grupo 5 com identificador de resultado primário 0)
+      no SIOP: o FAT emprestado ao BNDES sai de Trabalho (R$ 28,9 bi em 2025), o FIES sai de Educação (R$ 5,6 bi), e
+      o resto sai da linha "Encargos especiais e demais funções". Onde a lei carimba como financeiro e o Tesouro conta
+      como gasto (R$ 31,9 bi em 2025, dos quais R$ 27,6 bi são os repasses aos fundos constitucionais FNE, FNO e
+      FCO: 3% do IR e do IPI que a Constituição manda entregar e que não voltam ao Tesouro), o valor fica dentro do
+      R$ 1,00, nessa mesma linha, com a diferença declarada. A própria LDO (art. 7º, §4º) diz que o carimbo serve
+      para "auxiliar a apuração do resultado primário" pela metodologia do Tesouro: o número oficial é o do Tesouro.
+      O que não voltar vira gasto no ano em que for perdoado (balanço patrimonial, não orçamento). O subsídio
+      embutido (juro abaixo do mercado) já está no R$ 1,00, como equalização (grupo 3).
+    base: anexo06_conta
+    calculo: tesouro
+    por_grupo:                       # grupo -> (referencias_anexo01, anexo06.grupos.despesas, coluna liquidadas)
+      pessoal: {anexo01: pessoal, anexo06: pessoal}
+      outras_despesas_correntes: {anexo01: outras_correntes, anexo06: outras_correntes}
+      investimentos: {anexo01: investimentos, anexo06: investimentos}
+      inversoes_financeiras: {anexo01: inversoes_financeiras, anexo06: inversoes}
+    por_linha:
+      base: siop_rp
+      filtro: "cod_gnd = '5' AND cod_resultado_primario = '0'"
+    lei_vs_tesouro:
+      grupo: inversoes_financeiras   # a comparação lei (RP 0 do SIOP) x Tesouro (por_grupo) é feita no grupo 5
+      fundos_constitucionais:
+        nome: Fundos constitucionais de financiamento do Nordeste, Norte e Centro-Oeste (FNE, FNO, FCO)
+        acoes: ["0029", "0030", "0031", "0534"]   # 0029 FCO; 0030 e 0031 FNE (semiárido e demais); 0534 FNO. Função 28, subfunção 846.
+        nota: >
+          A Constituição (art. 159, I, c) manda entregar 3% do IR e do IPI a esses fundos, que emprestam a empresas e
+          produtores das três regiões. A lei orçamentária carimba o repasse como financeiro (grupo 5, RP 0); o
+          Tesouro o trata como repartição de receita, igual ao FPM, e conta como gasto. Fica dentro do R$ 1,00.
+    nota_sem_siop: >
+      total exato pelo Anexo 06; sem detalhe por linha neste período (o SIOP só é comparável em ano fechado): tudo
+      sai da linha "Encargos especiais e demais funções".
+    avisos_sem_siop:
+      - linha: trabalho
+        nota: >
+          inclui, até o fechamento do ano, o FAT emprestado ao BNDES (grupo 5, RP 0; R$ 28,9 bi em 2025), que
+          em ano fechado sai desta linha para o "Fora do R$ 1,00"
+      - linha: educacao
+        nota: >
+          inclui, até o fechamento do ano, o financiamento estudantil FIES (grupo 5, RP 0; R$ 5,6 bi em 2025), que
+          em ano fechado sai desta linha para o "Fora do R$ 1,00"
+
+# Chips: medidas transversais. O mesmo real já está em alguma linha; o chip diz quanto daquela linha é isso.
+# Calculados no SIOP (ano fechado), no mesmo universo do RREO, com o filtro do chip E o filtro da linha. O resíduo
+# recebe o que sobra, fora as subfunções excluídas (841-844).
 chips:
   - id: folha_ativos
-    nome: Salários de servidores ativos
-    definicao: GND 1 (pessoal e encargos) menos inativos e pensionistas. Transversal às funções; não é linha, para não dupla-contar.
-    status: fase_1_1
+    nome: Salários e encargos de servidores ativos
+    definicao: >
+      Grupo 1 (pessoal e encargos sociais) menos aposentadorias, reservas, reformas e pensões (elementos 01 e 03).
+      Inclui salários de civis e militares da ativa, encargos patronais com o RGPS de empregados públicos,
+      sentenças judiciais de pessoal e benefícios como auxílio-alimentação. Transversal às linhas: não é linha, para
+      não contar duas vezes.
+    base: siop_elemento
+    filtro: "cod_gnd = '1' AND COALESCE(cod_elemento_despesa, '') NOT IN ('01', '03')"
+    status: implementado
   - id: emendas
-    nome: Indicação parlamentar
-    definicao: Despesa com marcador RP 6, 7 e 8 (SIOP). Transversal às funções.
-    status: fase_1_1
+    nome: Indicação parlamentar (emendas)
+    definicao: >
+      Despesa com identificador de resultado primário 6 (emendas individuais), 7 (de bancada), 8 (de comissão) e 9
+      (de relator, o "orçamento secreto", extinto depois de 2022). É dinheiro cuja destinação foi decidida por
+      parlamentares, dentro das linhas onde foi gasto (saúde, assistência, transferências...). O valor do chip é o
+      liquidado no exercício, a métrica do recibo, e subestima o tamanho das emendas: o empenhado (o carimbo do
+      Congresso) foi R$ 47,1 bi em 2025 contra R$ 31,7 bi liquidados; individuais liquidam 83% do empenhado no ano,
+      de bancada 55%, de comissão 48%. Emenda de custeio da saúde (repasse fundo a fundo) liquida no ano (87%);
+      emenda de obra (urbanismo 2%, agricultura 12%) fica em restos a pagar. Por isso a ficha traz também
+      dotação, empenhado e pago: pelo liquidado a Saúde é 71% das emendas; pelo empenhado, 54%.
+    base: siop_rp
+    filtro: "cod_resultado_primario IN ('6', '7', '8', '9')"
+    status: implementado
   - id: investimento
     nome: Investimento
-    definicao: GND 4. Transversal às funções. Liquidado no exercício subestima; usar liquidado + RP pagos.
-    status: fase_1_1
+    definicao: >
+      Grupo 4 (investimentos: obras, equipamentos, material permanente) liquidado no exercício, inclusive o
+      transferido a estados e municípios com carimbo de obra. Subestima: investimento é a despesa que mais fica
+      para o ano seguinte como restos a pagar; o memo restos_a_pagar mostra o investimento pago no ano somando os
+      restos (Anexo 06). Não inclui inversões financeiras (grupo 5) nem o investimento das estatais.
+    base: siop_gnd
+    filtro: "cod_gnd = '4'"
+    status: implementado
 
+# Memos: números publicados ao lado do recibo, fora do R$ 1,00 (receitas, déficit, juros, dívida, restos a pagar).
+# Cada um sai com valor, componentes, notas e as chaves do Anexo 06 / Anexo 01 que usou. O código calcula pelo id;
+# um memo marcado "implementado" sem cálculo no código derruba o mart (ConfigInvalida).
 memos:
-  - id: deficit
-    nome: Gasto além do arrecadado
-    definicao: Despesa primária menos receita primária (Anexo 06); vira dívida nova, isto é, imposto futuro.
-    status: fase_1_1
+  - id: tributos
+    nome: Tributos (impostos, taxas e contribuições)
+    definicao: >
+      Impostos (IR, IPI, IOF, imposto de importação...), taxas e contribuições (INSS, COFINS, CSLL, PIS/PASEP, CIDE)
+      arrecadados pela União no período. É o dinheiro que sai do bolso de pessoas e empresas por obrigação de lei.
+      Valor do Anexo 06 (receita primária), conferido ao centavo com o Anexo 01 (tributos_anexo01_vs_anexo06).
+    unidade: reais
+    status: implementado
+  - id: receita_primaria
+    nome: Receita primária total
+    definicao: >
+      Tudo o que o governo arrecadou sem se endividar: tributos mais royalties e dividendos (receita patrimonial),
+      venda de bens, taxas de serviço e outras receitas. É o lado "entrou" da conta do déficit (Anexo 06, linha III).
+    unidade: reais
+    status: implementado
+  - id: receitas_financeiras
+    nome: O que entrou além da receita primária
+    definicao: >
+      Dinheiro que entrou no caixa e não é arrecadação: títulos vendidos além da rolagem (dívida nova), rendimento
+      do caixa do Tesouro no Banco Central, resultado do Banco Central repassado, empréstimos que tomadores
+      devolveram e algumas receitas que o Tesouro classifica como financeiras (parte da patrimonial e dos serviços).
+      É a diferença entre as receitas do Anexo 01 (exceto intra, linha I) e a receita primária do Anexo 06. A rolagem
+      (linha IV do Anexo 01) aparece ao lado, fora do total: é título novo pagando título velho.
+    unidade: reais
+    status: implementado
+  - id: gasto_por_real_de_tributo
+    nome: Gasto por R$ 1,00 de tributo
+    definicao: >
+      Quanto o governo gastou (o total do recibo: despesa primária mais juros pagos) para cada R$ 1,00 de tributo
+      arrecadado. Acima de R$ 1,00, a diferença veio de outras receitas e de dívida nova.
+    unidade: reais_por_real
+    status: implementado
+  - id: origem_do_real_gasto
+    nome: De onde veio cada R$ 1,00 gasto
+    definicao: >
+      De cada R$ 1,00 que o governo gastou, quantos centavos vieram de tributos, quantos de outras receitas
+      (royalties, dividendos, serviços, venda de bens) e quantos foram cobertos com dívida nova ou com o caixa.
+      Conta pelo gasto liquidado do recibo; o déficit oficial usa o pago, com restos a pagar (memo resultado_primario).
+    unidade: centavos
+    status: implementado
+  - id: resultado_primario
+    nome: Resultado primário (déficit antes dos juros)
+    definicao: >
+      Receita primária menos despesa primária paga no ano, inclusive contas de anos anteriores pagas agora (restos a
+      pagar). Negativo é déficit: o governo gastou mais do que arrecadou, antes de contar os juros. O Tesouro publica
+      dois números: "acima da linha" (linha IX: a conta de receitas e despesas mais um "ajuste metodológico" que,
+      segundo a nota 1 do próprio anexo, é a diferença para o número do boletim mensal do Tesouro, o Relatório do
+      Tesouro Nacional, que segue o Manual de Estatísticas de Finanças Públicas; o anexo não abre os itens) e "abaixo
+      da linha" (linha XXVII: a conta do Banco Central, pela variação da dívida). Os dois saem aqui, com a conta aberta.
+      Em 2024 e 2025 o abaixo da linha é igual ao centavo à conta de caixa antes do ajuste.
+    unidade: reais
+    status: implementado
+  - id: juros_nominais
+    nome: Juros que a dívida gerou (competência)
+    definicao: >
+      Juros, encargos e variações monetárias que a dívida pública gerou no período, pela competência (venceram,
+      mesmo que ainda não tenham sido pagos em dinheiro), menos os que o governo recebeu de quem lhe deve (Anexo 06,
+      linhas XI e X). Compare com os juros pagos, que estão na linha "Juros da dívida" do recibo: a diferença é juro
+      que virou dívida nova.
+    unidade: reais
+    status: implementado
+  - id: resultado_nominal
+    nome: Resultado nominal (déficit com os juros)
+    definicao: >
+      Resultado primário mais os juros líquidos: o déficit completo. É o quanto a dívida precisou crescer para
+      fechar a conta do período. Acima da linha (XII) pelo Tesouro; abaixo da linha (XVII) e ajustado (XXVI) pelo
+      Banco Central.
+    unidade: reais
+    status: implementado
+  - id: divida
+    nome: Dívida consolidada e dívida líquida
+    definicao: >
+      Dívida consolidada (tudo o que a União deve) e dívida consolidada líquida (descontando o caixa e o que a União
+      tem a receber), no fim do ano anterior e no fim do período (Anexo 06, linhas XIII, XIV e XVI). O valor do memo
+      é a variação da líquida no período: a dívida nova.
+    unidade: reais
+    status: implementado
+  - id: restos_a_pagar
+    nome: Contas de anos anteriores pagas neste ano (restos a pagar)
+    definicao: >
+      Restos a pagar processados e não processados pagos no período (Anexo 06, colunas b e c da despesa primária).
+      O recibo usa o liquidado do próprio ano; investimento é o grupo em que isso mais pesa, por isso o memo mostra o
+      investimento pago no ano somando os restos.
+    unidade: reais
+    status: implementado
+  - id: emprestimos_retorno
+    nome: Empréstimos que voltaram
+    definicao: >
+      O que tomadores devolveram ao Tesouro no período (receita de capital "Amortizações de Empréstimos" do
+      Anexo 01), ao lado do que foi emprestado (exclusão emprestimos_financeiros). Perdão e calote não aparecem no
+      orçamento (ficam no balanço patrimonial, BGU): fonte a definir na torneira da dívida.
+    unidade: reais
+    status: implementado
   - id: imposto_futuro
     nome: Dívida nova por habitante
-    definicao: Variação líquida do estoque da DPF no ano, dividida pela população (S1 e S14).
+    definicao: Variação da dívida líquida no período (memo divida) dividida pela população (S14, IBGE).
     status: fase_1_1
 
 reconciliacoes:
@@ -234,20 +555,104 @@ reconciliacoes:
     descricao: Os centavos publicados somam exatamente 100.
     critica: true
   - id: identidade_total
-    descricao: Total do recibo = despesa exceto intra (Anexo 02) menos AmortizacaoDaDivida (Anexo 01).
+    descricao: >
+      Soma das linhas do recibo = despesa primária liquidada do Anexo 06 (conta oficial do Tesouro) + juros e
+      encargos da dívida do Anexo 01. Vale por construção quando o ajuste do serviço da dívida está ligado; se
+      alguém desligar o ajuste ou a fonte mudar, acusa.
     critica: true
+  - id: exclusao_financeira_por_grupo
+    descricao: >
+      O que fica fora do R$ 1,00 além da amortização (despesa exceto intra - amortização - despesa primária - juros)
+      tem que ser igual à soma, por grupo de despesa, de Anexo 01 menos a parte primária do Anexo 06 (pessoal, outras
+      despesas correntes, investimentos, inversões financeiras). Se um grupo novo aparecer num dos anexos, acusa.
+      Tolerância de 1 em 10 milhões (o RREO de 2023 vem em dezenas de reais; a soma de sete linhas arredondadas não
+      fecha ao centavo).
+    critica: true
+    tolerancia_relativa: 0.0000001
+  - id: exclusao_por_linha
+    descricao: >
+      O que sai das linhas nomeadas pelo carimbo da lei (GND 5 com RP 0 no SIOP: FAT/BNDES de Trabalho, FIES de
+      Educação) tem que caber dentro do total que o Tesouro trata como financeiro; o resto sai do resíduo.
+    critica: true
+  - id: tributos_anexo01_vs_anexo06
+    descricao: >
+      Impostos, taxas e contribuições do Anexo 01 (ReceitaTributaria + ReceitaDeContribuicoes, exceto intra) =
+      os mesmos do Anexo 06 (RREO6ReceitasTributarias + RREO6ReceitasDeContribuicoes). Em 2024 e 2025 bateu ao
+      centavo (R$ 1.146.491.700.715,94 de impostos e taxas em 2025).
+    critica: true
+    tolerancia_relativa: 0.0000001
+  - id: receitas_anexo01_hierarquia
+    descricao: >
+      Receitas do Anexo 01: correntes = soma das suas contas; capital = soma das suas contas; exceto intra (I) =
+      correntes + capital. Se a União criar uma conta nova, acusa.
+    critica: true
+  - id: receitas_anexo06_hierarquia
+    descricao: >
+      Receitas primárias do Anexo 06: correntes (I) = tributárias + contribuições + patrimonial + transferências +
+      demais; capital (II) = alienação + transferências de capital + outras; total (III) = I + II.
+    critica: true
+  - id: despesas_anexo06_hierarquia
+    descricao: >
+      Despesas primárias liquidadas do Anexo 06: correntes (IV) = pessoal + outras correntes; outras correntes =
+      transferências constitucionais e legais + demais; capital (V) = investimentos + inversões; total (VII) =
+      IV + V + reserva de contingência.
+    critica: true
+  - id: resultado_primario_acima_da_linha
+    descricao: >
+      Resultado primário acima da linha (IX) = receita primária realizada (III) - despesa primária paga - restos a
+      pagar processados pagos - restos a pagar não processados pagos + ajuste metodológico (quando existe). É a
+      própria fórmula do Tesouro; conferida ao centavo de 2023 a 2026.
+    critica: true
+  - id: pessoal_anexo06_vs_anexo01
+    descricao: Pessoal e encargos liquidados do Anexo 06 contra PessoalEEncargosSociais do Anexo 01. Iguais em 2023 a 2026.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: investimentos_anexo06_vs_anexo01
+    descricao: Investimentos liquidados do Anexo 06 contra Investimentos do Anexo 01. Iguais em 2023 a 2026.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: resultado_nominal_acima_da_linha
+    descricao: Resultado nominal acima da linha (XII) = resultado primário (IX) + juros ativos (X) - juros passivos (XI).
+    critica: false
+  - id: resultado_primario_abaixo_da_linha
+    descricao: Resultado primário abaixo da linha (XXVII) = resultado nominal ajustado (XXVI) - (juros ativos - juros passivos).
+    critica: false
+  - id: divida_liquida_identidade
+    descricao: Dívida consolidada líquida (XVI) = dívida consolidada (XIII) - deduções (XIV), no saldo final.
+    critica: false
+  - id: nominal_abaixo_vs_divida_liquida
+    descricao: >
+      Resultado nominal abaixo da linha (XVII) = dívida consolidada líquida no início do período - no fim: o déficit
+      completo é a dívida nova, com o sinal trocado. Igual ao centavo em 2023 a 2026 (R$ 907,9 bi, 1.076,0, 845,7 e
+      801,9 até agosto de 2026).
+    critica: false
+  - id: lei_vs_tesouro_inversoes
+    descricao: >
+      Inversões financeiras que a lei orçamentária carimba como financeiras (GND 5 com RP 0 no SIOP) contra as que o
+      Tesouro trata como financeiras (InversoesFinanceiras do Anexo 01 menos a parte primária do Anexo 06). A
+      diferença fica dentro do R$ 1,00, no resíduo: em 2025, R$ 31,9 bi (R$ 27,6 bi de fundos constitucionais
+      FNE/FNO/FCO e R$ 4,3 bi sem ação identificada); em 2024, R$ 27,3 bi (24,8 + 2,4); em 2023, R$ 25,3 bi
+      (21,4 + 3,9). Acusa só se o Tesouro passar a tratar como financeiro mais do que a lei carimba.
+    critica: false
   - id: servico_divida_fora_843_844
     descricao: >
       Juros + amortização (Anexo 01) menos subfunções 843/844: parcela do serviço da dívida classificada em outras
       subfunções. Ideal zero; tolerada até 2% da despesa exceto intra. Em 2024/6 deu R$ 40,8 bi (1,2%); em 2025
-      deu R$ 124,0 bi (3,3%) e acusou; em 2026/4, zero.
+      deu R$ 124,0 bi (3,3%), acima da tolerância, mas explicada ao real pela conferência do SIOP
+      (servico_divida_fora_843_844_siop: ação 0669, cobertura do Banco Central). Quando a conferência do SIOP
+      passa, esta é marcada "explicada" e não acusa; só acusa quando o SIOP não explica (ano em andamento, por
+      exemplo). Em 2026/4, zero; em 2023, -R$ 2,26 (o RREO de 2023 vem em dezenas de reais), que conta como zero:
+      negativo do tamanho do arredondamento da fonte (R$ 1 ou um bilionésimo do total) passa.
     critica: false
     tolerancia_relativa: 0.02
+    explicada_por: servico_divida_fora_843_844_siop
   - id: inss_vs_beneficios_anexo01
     descricao: >
       Previdência Básica (271) deve ficar a menos de 5% de BeneficiosPrevidenciarios do Anexo 01. Diferença de
       R$ 25,3 bi em 2024/6 (2,7%), R$ 38,0 bi em 2025/6 (3,7%) e R$ 37,9 bi em 2026/4 (4,9%); hipótese: sentenças
-      judiciais e compensação previdenciária do RGPS classificadas em Encargos Especiais (846).
+      judiciais e compensação previdenciária do RGPS classificadas em Encargos Especiais (846). Em 2023 acusou
+      (R$ 54,3 bi, 6,0%): os R$ 37,8 bi de precatórios da seguridade pagos em dezembro de 2023 na 846 explicam a
+      maior parte.
     critica: false
     tolerancia_relativa: 0.05
   - id: variacao_anual
@@ -255,8 +660,9 @@ reconciliacoes:
       Cada linha do recibo comparada com o mesmo período do exercício anterior (2026/p4 contra 2025/p4; 2025/p6
       contra 2024/p6). Mesmo período, porque o gasto não é um sexto por bimestre (13º, abono, cupons de títulos,
       obras em dezembro). Variação acima do limite é aviso, não erro: pode ser economia real, calendário ou
-      mudança de classificação na fonte. Em 2025/6 acusaria inativos (-16%) e máquina (+34%); investigue com
-      `recibo diff`.
+      mudança de classificação na fonte. Em 2025/6 (v0.3.0) acusou o resíduo (+25,5%): precatórios de volta ao
+      normal depois do vale de 2024 (dezembro de 2023 pagou o estoque adiado), empréstimos novos e Agricultura
+      (+99%, dois terços empréstimo); investigue com `recibo diff` e `recibo inspect siop`.
     critica: false
     limite_relativo: 0.15
 
@@ -264,8 +670,10 @@ reconciliacoes:
   # da seguridade, sem intraorçamentárias, sem refinanciamento quando se compara com o Anexo 02). Só em ano fechado.
   # Calibradas em 2025 (9/nov): juros com diferença de R$ 0,57, GND 6 total com R$ 2,20, e com refinanciamento
   # definido como GND 6 + fonte 443 as funções batem ao real. O SIOP publica valores em reais inteiros, por isso a
-  # tolerância é de 1 em 10 milhões (R$ 370 mil num total de R$ 3,7 tri), não zero. Como a linha de aposentados agora
-  # vem do SIOP, as duas conferências que garantem que as fontes descrevem o mesmo universo são críticas.
+  # tolerância é de 1 em 10 milhões (R$ 370 mil num total de R$ 3,7 tri), não zero. Toda tolerância relativa tem um
+  # piso absoluto igual ao das identidades (R$ 1 ou um bilionésimo do total): um esperado perto de zero não vira
+  # tolerância zero (2023: -R$ 2,26 contra 0,00 reprovava o ano). Como a linha de aposentados agora vem do SIOP, as
+  # duas conferências que garantem que as fontes descrevem o mesmo universo são críticas.
   - id: siop_vs_rreo_funcao
     descricao: >
       Liquidado por função no SIOP (OFSS, sem modalidade 91, sem refinanciamento) contra a soma das funções do
@@ -303,6 +711,32 @@ reconciliacoes:
       A diferença é o que está nessas subfunções sem ser aposentadoria ou pensão (em 2025, cerca de R$ 1 bi).
     critica: false
     tolerancia_relativa: 0.02
+  - id: siop_investimentos_vs_anexo01
+    descricao: GND 4 no SIOP (OFSS, sem intra) contra Investimentos do Anexo 01. Sustenta o chip de investimento.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: siop_pessoal_vs_anexo01
+    descricao: GND 1 no SIOP (OFSS, sem intra) contra PessoalEEncargosSociais do Anexo 01. Sustenta o chip de folha de ativos e a linha de aposentados.
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: siop_inversoes_vs_anexo01
+    descricao: >
+      GND 5 no SIOP (OFSS, sem intra) contra InversoesFinanceiras do Anexo 01. Sustenta a atribuição por linha dos
+      empréstimos: o detalhe separa a parte que a lei carimba como financeira (RP 0) da primária (RP 1, 2, 3 e
+      emendas). Em 2025: R$ 172,9 bi dos dois lados; RP 0 R$ 160,3 bi, primária R$ 12,6 bi (7%).
+    critica: false
+    tolerancia_relativa: 0.0000001
+  - id: subfuncoes_ref_vs_siop
+    descricao: >
+      Os apelidos de subfunção de config/ref/subfuncoes.csv (nome do RREO -> código) conferidos contra os rótulos do
+      SIOP no exercício: um nome que no CSV aponta para um código e no SIOP tem outro código é erro de referência
+      (não muda centavo, porque nenhuma linha filtra esses códigos, mas o `diff` e as fichas imprimiriam o código
+      errado). Achado em 9/nov: "Promoção da Produção Agropecuária" era 601 no CSV e é 608 no SIOP; "Defesa
+      Agropecuária" era 604 e é 609. O detalhe também lista nomes que o SIOP usa e o CSV ainda não conhece: em 9/nov,
+      245 "Serviços Socioassistenciais" e 246 "Segurança de Renda" (subfunções novas da assistência a partir de 2025,
+      a reclassificação do Bolsa Família que o RREO mostra como "FU08 - Demais") e três renomeações (241, 391, 422),
+      todas incluídas no CSV na v0.4.1.
+    critica: true
   - id: siop_comparavel
     descricao: >
       Emitida em ano em andamento: o SIOP é acumulado até a última atualização do grafo, o RREO até o bimestre, então
@@ -313,6 +747,60 @@ reconciliacoes:
 siop:
   agregacao_gnd: fonte_gnd_subfuncao
   agregacao_acao: acao_subfuncao
+  agregacao_acao_rp: acao_rp_subfuncao     # ação com RP: lista o que foi emprestado (GND 5, RP 0), por linha e no total
   agregacao_elemento: elemento_orgao
+  agregacao_rp: rp_subfuncao
   subfuncoes_servico_divida: ["841", "842", "843", "844"]
   subfuncao_outros_encargos: "846"
+  acoes_listadas: 40                        # quantas ações entram na lista do "Fora do R$ 1,00" (export e hover)
+
+# ---------------------------------------------------------------------------------------------------------------------
+# COFOG (S7): produto separado do recibo, `recibo mart cofog --exercicio AAAA`. É a despesa do Governo Central medida
+# pela régua internacional (manual de estatísticas fiscais do FMI, GFSM 2014, funções COFOG), como o Tesouro publica.
+# Serve para quem pergunta "e pelo padrão internacional?"; não entra no R$ 1,00 do recibo, que segue a conta de caixa
+# do Tesouro (Anexo 06 + juros pagos). O que liga os dois é a ponte abaixo: partindo do total do recibo e somando só o
+# que o COFOG declaradamente faz diferente, o total do COFOG tem que aparecer dentro da tolerância; se não aparecer,
+# o mart do COFOG não é publicável (o recibo continua sendo). Observado em 9/nov/2026: diferença não explicada de
+# -0,31% em 2024 e -0,66% em 2023.
+cofog:
+  ref: ref/cofog.csv                        # nomes das dez divisões e dos 69 grupos
+  ponte:
+    tolerancia_relativa: 0.02               # 2% do total do COFOG: folga para o que o COFOG mede por caixa, aperto para pegar erro de unidade ou de ano
+    # Ajustes metodológicos do Tesouro que ACRESCENTAM ao total (casados por prefixo do texto da coluna, sem acento). Os
+    # demais ajustes (FUNDEB, Fundo do DF, precatórios, bolsas, Minha Casa Minha Vida, Pé-de-Meia...) remanejam despesas
+    # que já estão no orçamento para a função certa e não somam: a ponte fecha em 0,3% sem eles e abriria 173 bi com eles.
+    somam:
+      juros:
+        prefixo: "JUROS"
+        nome: "Juros pelo Banco Central, por competência (o que a dívida gerou no ano, pago ou não), no lugar dos juros pagos em dinheiro"
+      irrf:
+        prefixo: "TRANSFERENCIA DO IRRF"
+        nome: "Imposto de renda retido na fonte que estados e municípios descontam dos próprios servidores e ficam (não passa pelo orçamento da União; o manual do FMI manda contar como arrecadado e transferido)"
+      alienacoes:
+        prefixo: "RECEITA DE ALIENACOES"
+        nome: "Venda de bens (o COFOG desconta do investimento; no orçamento é receita)"
+  # O que o leitor precisa saber para não comparar os dois totais como se fossem a mesma conta.
+  glossario:
+    - termo: competência e caixa
+      texto: >
+        Caixa é quando o dinheiro sai; competência é quando a obrigação nasce. O recibo conta os juros pagos em dinheiro
+        no ano (caixa). O COFOG conta os juros que a dívida gerou no ano, pagos ou não (competência), com o número do
+        Banco Central. Por isso os juros pesam cerca do dobro na régua do COFOG.
+    - termo: restos a pagar
+      texto: >
+        Contas de anos anteriores pagas neste ano. O RREO do ano não as conta como despesa deste ano; o COFOG soma as
+        não processadas pagas (as que ainda não tinham sido conferidas quando o ano virou).
+    - termo: IRRF retido por estados e municípios
+      texto: >
+        O imposto de renda descontado do salário dos servidores estaduais e municipais fica com o estado ou município,
+        por regra da Constituição; a União nunca recebe nem paga. O manual do FMI manda registrar como se a União
+        tivesse arrecadado e transferido, para países com arranjos diferentes ficarem comparáveis.
+    - termo: venda de bens
+      texto: >
+        No orçamento, vender um prédio é receita. No COFOG, a venda entra negativa na gaveta de investimento (compra
+        menos venda), porque trocar um bem por dinheiro não muda o patrimônio do governo.
+    - termo: resolução
+      texto: >
+        A partir do arquivo de 2024 o Tesouro publica em R$ milhões com duas casas: cada linha só é precisa até R$ 10 mil.
+        Somas de milhares de linhas carregam esse arredondamento; por isso a ponte tem tolerância em por cento, não em
+        centavos.

@@ -4,16 +4,42 @@
 
 fontes:
   - id: S1
-    nome: Tesouro CKAN, Dívida (Estoque da DPF, Fatores de Variação, Emissões e Resgates)
+    nome: Tesouro CKAN, Dívida Pública Federal (estoque, fatores de variação, emissões e resgates, execução orçamentária)
     orgao: Tesouro Nacional
     base_url: https://www.tesourotransparente.gov.br/ckan/api/3/action
-    formato: xlsx/csv via CKAN
+    formato: csv e xlsx via CKAN (um dataset por assunto; o fetch baixa os recursos nos formatos listados)
     cadencia: mensal (últimos 10 dias do mês seguinte)
     cobertura: desde 2006 (estoque) e 2007 (fatores)
     chave: nenhuma
     camada: arquivo
-    status: planejado
-    usos: [juros (linha 7), imposto futuro (M1), vencimentos]
+    status: ativo
+    timeout_http_s: 600
+    # Catálogo lido em 9/nov/2026 (91 datasets no CKAN do Tesouro). DPF = Dívida Pública Federal, os títulos e contratos
+    # que o Tesouro deve; DPMFi = a parte interna em títulos. O Relatório Mensal da Dívida (detentores por classe, colchão
+    # de liquidez) não está no CKAN em planilha; os limites da LRF para a dívida da União pararam em 2021.
+    # v0.7.0 só baixa, lacra e lê (inspect); o que cada arquivo tem de verdade define o mart na v0.7.1.
+    datasets:
+      estoque_dpf:
+        dataset_id: 0998f610-bc25-4ce3-b32c-a873447500c2
+        formatos: [CSV, XLSX]
+        o_que: "estoque da DPF por mês (interna e externa; composição por indexador e por título)"
+      fatores_variacao:
+        dataset_id: fc2ea6ab-2130-4525-98f6-8bf04407f7fe
+        formatos: [XLSX]
+        o_que: "por que a dívida variou no mês: emissões, resgates e juros apropriados (os juros que o estoque gerou, pagos ou não)"
+      emissoes_resgates:
+        dataset_id: 48a31b6b-034a-473b-be7d-228be30437a1
+        formatos: [XLSX]
+        o_que: "emissões e resgates da DPF por mês"
+      execucao_natureza:
+        dataset_id: a95da98c-a4ab-46d5-aadb-3bb270377b85
+        formatos: [CSV]
+        o_que: "execução orçamentária e financeira da DPF por natureza da despesa (juros, amortização, refinanciamento), a conferir com o Anexo 01"
+      tesouro_direto_estoque:
+        dataset_id: 4d4dac3b-96d2-4011-92c9-ddf7d8392622
+        formatos: [CSV]
+        o_que: "estoque do Tesouro Direto (a parte da DPF na mão de pessoas físicas)"
+    usos: ["mart divida (v0.7.1): estoque, juros apropriados, risco de rolagem; conferência do Anexo 01 com a execução da DPF"]
 
   - id: S2
     nome: Relatório Mensal da Dívida (RMD) e anexos
@@ -60,7 +86,7 @@ fontes:
       - "RREO-Anexo 04.0 - RGPS"
       - "RREO-Anexo 06"
     periodos_padrao: [1, 2, 3, 4, 5, 6]
-    usos: [despesa por função e subfunção, juros (Anexo 01), previdência RPPS (Anexo 04), resultado primário (Anexo 06)]
+    usos: [despesa por função e subfunção (Anexo 02), juros e receitas (Anexo 01), previdência RPPS (Anexo 04), total do recibo e memos (Anexo 06: despesa primária, receita primária, resultado primário e nominal, juros por competência, dívida, restos a pagar)]
 
   - id: S5
     nome: CUSTOS, pessoal ativo, inativos e pensionistas
@@ -86,15 +112,42 @@ fontes:
 
   - id: S7
     nome: COFOG, despesa do Governo Central por função (GFSM 2014)
-    orgao: Tesouro Nacional
+    orgao: Tesouro Nacional (CESEF)
     base_url: https://www.tesourotransparente.gov.br/ckan/api/3/action
-    formato: xlsx via CKAN
-    cadencia: anual (1 ano de defasagem)
+    # dataset "Despesas por Função do Governo Central - Classificação COFOG" no CKAN do Tesouro Transparente; um CSV por
+    # ano, "Base COFOG AAAA", ~20 MB cada (2010 a 2024 em 9/nov/2026; 2024 criado em 12/dez/2025). Metadados (PDF no
+    # mesmo dataset): Governo Central Orçamentário (Executivo, Legislativo, Judiciário, RPPS e RGPS; sem o Banco Central);
+    # despesa liquidada mais restos a pagar não processados pagos; transferências a outros entes pelo caixa; juros por
+    # competência (Banco Central); venda de bens entra negativa; coluna "Ajustes Metodológicos" para alinhar ao GFSM 2014.
+    dataset_id: 22d13d17-bf69-4a1a-add2-25cc1e25f2d7
+    dataset_nome: despesas-por-funcao-do-governo-central-classificacao-cofog
+    recurso_regex: "^Base COFOG (\\d{4})$"
+    formato: csv via CKAN (um arquivo por ano)
+    cadencia: anual (um ano de defasagem; publicado depois das Estatísticas de Finanças Públicas)
     cobertura: desde 2010
     chave: nenhuma
     camada: arquivo
-    status: planejado
-    usos: [fonte definitiva das linhas por função no ano fechado]
+    status: ativo
+    timeout_http_s: 600
+    # guarda de escala do transform: o total de um ano, já em reais, tem que ficar nesta faixa, senão a leitura dos
+    # números (ou a unidade declarada abaixo) está errada
+    total_minimo_reais: 500000000000
+    total_maximo_reais: 20000000000000
+    # unidade da coluna de valor, por ano. O cabeçalho diz "VALOR (R$)" em todos os arquivos, mas eles não estão na mesma
+    # unidade: 2019 e 2020 (republicados em mar/2025) vêm em reais com centavos; 2024 (criado em dez/2025) vem em
+    # R$ milhões com duas casas, ou seja, cada linha tem resolução de R$ 10 mil. A unidade é declarada aqui, nunca
+    # adivinhada: o transform multiplica pelo fator (reais 1, milhares 1.000, milhoes 1.000.000), guarda o número
+    # original em `valor_fonte` e a guarda de escala para se a unidade declarada não fechar com o total do ano.
+    unidade_valor_padrao: reais
+    unidade_valor_por_exercicio:
+      2024: milhoes
+    # cabeçalho dos metadados (PDF). O CSV real (9/nov/2026) traz os mesmos campos em maiúsculas, sem acento e com nomes
+    # curtos (ANO, AJUSTE METODOLOGICO, ACAO GOVERNO, UNIDADE ORCAMENTARIA, CLASSIFICACAO ECONOMICA GFS, ... DESCRICAO)
+    colunas: [Ano de Lançamento, Ajustes Metodológicos, Natureza Despesa Detalhada, Natureza Despesa Detalhada - Descrição,
+              Ação Governo - Código, Ação Governo - Descrição, Unidade Orçamentária - Código, Unidade Orçamentária - Descrição,
+              Classificação Econômica GFS - Código, Classificação Econômica GFS - Descrição, Classificação COFOG,
+              Classificação COFOG - Descrição, Valor (R$)]
+    usos: [mart cofog (produto separado do recibo): régua das dez divisões, ajustes do Tesouro, ponte com o total do recibo]
 
   - id: S8
     nome: SIOP, orçamento federal por classificador (inclui marcador de emendas RP 6/7/8)
@@ -141,7 +194,11 @@ fontes:
         dimensoes: [esfera, modalidade_aplicacao, funcao, subfuncao, gnd, acao]
         fatiar_por_funcao: true
         descricao: ação por subfunção (abre a 846; nomeia o serviço da dívida fora de 843/844)
-    usos: [conferência cruzada com o RREO, serviço da dívida fora de 843/844 por ação, inativos por elemento, chip emendas, chip investimento, folha de ativos]
+      - id: acao_rp_subfuncao
+        dimensoes: [esfera, modalidade_aplicacao, funcao, subfuncao, gnd, resultado_primario, acao]
+        fatiar_por_funcao: true
+        descricao: ação com identificador de resultado primário (lista o que foi emprestado, GND 5 com RP 0, por linha e no total; emendas por ação)
+    usos: [conferência cruzada com o RREO, serviço da dívida fora de 843/844 por ação, inativos por elemento, chip emendas, chip investimento, folha de ativos, empréstimos fora do R$ 1,00 (GND 5 com RP 0) por linha e por ação]
 
   - id: S9
     nome: Portal da Transparência (bulk e API de Dados)
@@ -223,12 +280,162 @@ fontes:
     usos: [ranking nominal de remunerações (fase 2)]
 
   - id: S16
-    nome: BCB SGS, séries da dívida e juros
+    nome: BCB SGS, séries da dívida, dos juros nominais e dos resultados por esfera
     orgao: Banco Central
     base_url: https://api.bcb.gov.br/dados/serie/bcdata.sgs
-    formato: json/csv
+    metadados_url: https://dadosabertos.bcb.gov.br/api/3/action    # package_show?id={codigo}-... dá nome e descrição da série
+    formato: json
     cadencia: mensal
     chave: nenhuma
     camada: api
-    status: planejado
-    usos: [fallback de prazo médio e detentores]
+    status: ativo
+    timeout_http_s: 120
+    desde: "01/01/2006"
+    # SGS = o sistema de séries do Banco Central; cada série tem um número. Códigos lidos no portal de dados abertos do
+    # BC em 9/nov/2026 (os nomes abaixo são os do BC, encurtados). NFSP = necessidades de financiamento do setor público,
+    # a conta "abaixo da linha" do BC: mede o déficit pelo que a dívida cresceu. "Sem desvalorização cambial" é a versão
+    # padrão dos fluxos (tira o efeito do câmbio sobre o estoque). tipo: fluxo (soma no ano) | saldo (fim do ano) | taxa.
+    # Valores em R$ milhões nos fluxos e saldos; % nas taxas e participações; meses no prazo médio.
+    series:
+      - codigo: 4607
+        nome: "juros nominais, Governo Federal (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+        uso: "juros por competência do BC; candidata a ser a linha JUROS do COFOG"
+      - codigo: 4608
+        nome: "juros nominais, Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4606
+        nome: "juros nominais, Governo Federal e Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4616
+        nome: "juros nominais, setor público consolidado (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4640
+        nome: "resultado primário, Governo Federal (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+        uso: "conferir o abaixo da linha (XXVII) do Anexo 06"
+      - codigo: 4641
+        nome: "resultado primário, Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4639
+        nome: "resultado primário, Governo Federal e Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4649
+        nome: "resultado primário, setor público consolidado (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 7853
+        nome: "resultado primário, Governo Federal sem INSS (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 7854
+        nome: "resultado primário, INSS (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4574
+        nome: "resultado nominal, Governo Federal (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+        uso: "conferir o nominal abaixo da linha (XVII) do Anexo 06"
+      - codigo: 4575
+        nome: "resultado nominal, Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4573
+        nome: "resultado nominal, Governo Federal e Banco Central (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4583
+        nome: "resultado nominal, setor público consolidado (fluxo mensal)"
+        tipo: fluxo
+        unidade: "R$ milhões"
+      - codigo: 4469
+        nome: "dívida líquida do setor público, Governo Federal (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4470
+        nome: "dívida líquida do setor público, Banco Central (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4468
+        nome: "dívida líquida do setor público, Governo Federal e Banco Central (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4478
+        nome: "dívida líquida do setor público, consolidado (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4504
+        nome: "dívida líquida do setor público, Governo Federal (% PIB)"
+        tipo: taxa
+        unidade: "% do PIB"
+      - codigo: 4503
+        nome: "dívida líquida do setor público, Governo Federal e Banco Central (% PIB)"
+        tipo: taxa
+        unidade: "% do PIB"
+      - codigo: 4513
+        nome: "dívida líquida do setor público, consolidado (% PIB)"
+        tipo: taxa
+        unidade: "% do PIB"
+      - codigo: 4536
+        nome: "dívida líquida do governo geral (% PIB)"
+        tipo: taxa
+        unidade: "% do PIB"
+      - codigo: 13762
+        nome: "dívida bruta do governo geral (% PIB, metodologia de 2008)"
+        tipo: taxa
+        unidade: "% do PIB"
+        uso: "a medida de dívida bruta mais citada"
+      - codigo: 4151
+        nome: "dívida mobiliária, títulos do Tesouro, total emitido (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4154
+        nome: "dívida mobiliária, títulos do Tesouro, total em mercado (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+        uso: "conferir com o estoque da DPMFi do Tesouro"
+      - codigo: 4152
+        nome: "dívida mobiliária, títulos do Tesouro na carteira do Banco Central (saldo)"
+        tipo: saldo
+        unidade: "R$ milhões"
+      - codigo: 4177
+        nome: "dívida mobiliária, participação por indexador, Over/Selic"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4178
+        nome: "dívida mobiliária, participação por indexador, prefixado"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4173
+        nome: "dívida mobiliária, participação por indexador, câmbio"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4175
+        nome: "dívida mobiliária, participação por indexador, IGP-M"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4176
+        nome: "dívida mobiliária, participação por indexador, IGP-DI"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4174
+        nome: "dívida mobiliária, participação por indexador, TR"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 4180
+        nome: "dívida mobiliária, participação por indexador, outros"
+        tipo: taxa
+        unidade: "%"
+      - codigo: 10618
+        nome: "dívida mobiliária federal, títulos do Tesouro emitidos, prazo médio"
+        tipo: taxa
+        unidade: "meses"
+    usos: ["mart divida (v0.7.1): dívida líquida e bruta, juros nominais por esfera, conferência do abaixo da linha do Anexo 06 e dos juros do COFOG"]
