@@ -18,6 +18,12 @@ def norm(s: object) -> str:
     return _WS.sub(" ", t).strip().upper()
 
 
+def normalizar_familia(fam: str) -> str:
+    """Família de título da dívida com grafia única. O CSV do Tesouro grafa o mesmo título ora "NTN-I", ora "ntn-i":
+    uma sigla curta toda em minúsculas vira maiúscula; "Euro", "Global BRL" e "BIRD9172-BR" ficam como estão."""
+    return fam.upper() if fam and len(fam) <= 7 and fam == fam.lower() and " " not in fam else fam
+
+
 def split_leading_code(s: str) -> tuple[str | None, str]:
     """'10 - SAUDE' -> ('10', 'SAUDE'); 'SAUDE' -> (None, 'SAUDE')."""
     m = _LEAD_CODE.match(s)

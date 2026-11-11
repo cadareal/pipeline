@@ -143,7 +143,7 @@ visoes:
       comecou: Começou {ano} devendo
       vendeu: Vendeu títulos (emissões)
       pagou: Pagou (principal e juros, em dinheiro)
-      juros: Juros que viraram dívida sem passar pelo caixa (apropriados)
+      juros: Juros que a dívida gerou no ano, somados ao saldo (apropriados)
       bc: Operações do mercado com o Banco Central
       terminou: Terminou {data_curta} devendo
       por_habitante: Dividido pela população
@@ -151,9 +151,9 @@ visoes:
       caiu: A dívida caiu
       nota_conta: >
         É a conta do próprio Tesouro: a dívida no fim do ano anterior, mais o que ele vendeu, menos o que pagou (principal
-        e juros em dinheiro), mais os juros que a dívida gerou sem ninguém pagar ainda (apropriados: entram no saldo e
-        serão pagos depois), mais as operações do mercado com o Banco Central. Tem que fechar com a dívida no fim do
-        período; é uma conferência crítica.
+        e juros em dinheiro), mais os juros que a dívida gerou no ano, pagos ou não (apropriados: todos entram no saldo;
+        os pagos em dinheiro no mesmo ano já estão descontados em "pagou"), mais as operações do mercado com o Banco
+        Central. Tem que fechar com a dívida no fim do período; é uma conferência crítica.
       nota_publico: >
         "Em poder do público" quer dizer fora do Banco Central. Os títulos do Tesouro que estão com o BC (ele os usa para
         controlar a quantidade de dinheiro na economia) ficam fora desse número e aparecem à parte, abaixo.

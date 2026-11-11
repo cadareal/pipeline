@@ -783,6 +783,13 @@ siop:
   subfuncao_outros_encargos: "846"
   acoes_listadas: 40                        # quantas ações entram na lista do "Fora do R$ 1,00" (export e hover)
   niveis_acoes_maximo: 0                    # ações por subfunção e órgãos por elemento nos níveis do export (0 = todas: o site mostra tudo)
+  # Uma subfunção de onde saiu dinheiro para uma linha medida por elemento de despesa (aposentados e pensionistas,
+  # elementos 01 e 03) não abre por ação quando o que saiu passa desta fração do que as ações do SIOP somam nela: a
+  # agregação por ação não traz o elemento, então as ações apareceriam inteiras, com dinheiro que já está em outra faixa
+  # (2025: Previdência do Regime Estatutário no resíduo, 99% fora; Administração Geral da Defesa, 48%). Abaixo da
+  # fração, as ações aparecem inteiras e a ficha diz quanto está em outra faixa. Débito da V2 (DEBITOS.md): a agregação
+  # ação x elemento abre todas sem ressalva.
+  niveis_acoes_saida_maxima: 0.25
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Fontes de recursos (S8, SIOP): com que dinheiro cada despesa foi paga, pelo carimbo da fonte na lei orçamentária.

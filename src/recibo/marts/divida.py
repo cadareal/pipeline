@@ -34,7 +34,7 @@ from pathlib import Path
 import polars as pl
 
 from ..grade import GradeFormato, Planilha
-from ..textnorm import norm
+from ..textnorm import norm, normalizar_familia
 from ..transform.bcb import STAGING_FILE as BCB_FILE
 from ..transform.divida import INDICE_FILE
 from .recibo import SemDados, tolerancia
@@ -337,7 +337,10 @@ def familia_do_titulo(titulo: str) -> str:
     partes = (titulo or "").strip().split()
     while len(partes) > 1 and partes[-1][:1].isdigit():
         partes.pop()
-    return " ".join(partes) or (titulo or "").strip() or "(sem nome)"
+    fam = " ".join(partes) or (titulo or "").strip() or "(sem nome)"
+    # o CSV do Tesouro grafa o mesmo título ora "NTN-I", ora "ntn-i": uma sigla curta toda em minúsculas vira maiúscula,
+    # para a família ser uma só (o site casa o nome com a lista de famílias do conteúdo). "Euro" e "Global" não mudam.
+    return normalizar_familia(fam)
 
 
 def faixa_de(meses_ate_vencer: int | None, faixas: list[dict], sem_venc: dict) -> dict:
@@ -981,7 +984,7 @@ def compute_divida(
         "operacoes_bc": fat["operacoes_bc"], "estoque_fim": fat["estoque_fim"], "variacao": var_dpf,
         "fecha": bool(identidade and identidade.ok and identidade.calculada),
         "nota": "Como o Tesouro abre a variação da DPF em poder do público (Anexo 2.9): estoque no fim do ano anterior, mais o que vendeu (emissões), "
-                "menos o que pagou (resgates: principal e juros pagos em dinheiro), mais os juros que a dívida gerou sem passar pelo caixa (apropriados), "
+                "menos o que pagou (resgates: principal e juros pagos em dinheiro), mais os juros que a dívida gerou no ano, pagos ou não (apropriados: todos entram no saldo; os pagos em dinheiro já estão nos resgates), "
                 "mais as operações do mercado com o Banco Central. A conta tem que fechar com o estoque do fim do período (conferência crítica dpf_fatores_identidade).",
     } if fat else {"disponivel": False, "motivo": fontes.erros.get("fatores_xlsx") or "planilha de fatores indisponível", "fonte": fonte_fat}
     mensal: list[dict] = []

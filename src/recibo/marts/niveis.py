@@ -63,6 +63,7 @@ class Niveis:
         self.ag_acao_rp = scfg.get("agregacao_acao_rp", "acao_rp_subfuncao")
         maximo = int(scfg.get("niveis_acoes_maximo", 0) or 0)
         self.n_acoes = maximo if maximo > 0 else 10**9  # 0 = todas: o site mostra tudo e cresce para baixo
+        self.saida_maxima = float(scfg.get("niveis_acoes_saida_maxima", 0.25))  # acima disso, a subfunção não abre por ação
         self.divida_subf = [str(s) for s in scfg.get("subfuncoes_servico_divida", ["841", "842", "843", "844"])]
         self.tem_acoes = bool(tem_siop and usa_siop and q(f"SELECT COUNT(*) FROM siop WHERE exercicio = {int(exercicio)} AND agregacao = {lit(self.ag_acao_rp)}") > 0)
         self.nomes_funcao = {str(c): str(n or "").strip() for c, n in rows(f"SELECT funcao_cod, MAX(conta) FROM stg WHERE {self.w02_fun} GROUP BY 1")}
@@ -130,8 +131,10 @@ class Niveis:
             total += sobra
         return total
 
-    def _acoes(self, f: str, s: str, codigos_funcao: list[str]) -> dict:
-        """Ações do SIOP dentro de (função, subfunção), sem o que não é gasto do R$ 1,00 (GND 5 com RP 0; GND 2 e 6)."""
+    def _acoes(self, f: str, s: str, codigos_funcao: list[str], excluir: str | None = None) -> dict:
+        """Ações do SIOP dentro de (função, subfunção), sem o que não é gasto do R$ 1,00 (GND 5 com RP 0; GND 2 e 6).
+        `excluir` é um filtro a mais (no resíduo, as subfunções das linhas nomeadas: o balde "demais" de uma função
+        não pode listar a Previdência Básica do INSS como se fosse resíduo)."""
         if not self.tem_acoes:
             return {}
         if s == "demais":
@@ -139,6 +142,8 @@ class Niveis:
             cond = f"funcao_cod = {lit(f)}" + (f" AND COALESCE(subfuncao_cod, '') NOT IN ({', '.join(lit(c) for c in tipicas)})" if tipicas else "")
         else:
             cond = f"funcao_cod = {lit(f)} AND subfuncao_cod = {lit(s)}"
+        if excluir:
+            cond += f" AND ({excluir})"
         w = f"{self.uni_acoes} AND {cond} AND NOT (cod_gnd = '5' AND cod_resultado_primario = '0') AND cod_gnd NOT IN ('2', '6')"
         try:
             lista = self.rows(f"SELECT cod_acao, MAX(nome_acao), SUM(valor) FROM siop_lin WHERE {w} GROUP BY 1 HAVING SUM(valor) <> 0 ORDER BY 3 DESC")
@@ -153,12 +158,34 @@ class Niveis:
             "acoes_total_siop": sum(a["valor"] for a in acoes),
         }
 
-    def _pendurar_acoes(self, itens: list[dict]) -> None:
+    def _pendurar_acoes(self, itens: list[dict], excluir: str | None = None) -> None:
+        """Pendura as ações do SIOP em cada subfunção. Quando parte da subfunção saiu para uma linha medida por elemento
+        de despesa (aposentados e pensionistas: elementos 01 e 03), a lista de ações não consegue acompanhar, porque a
+        agregação do SIOP por ação não traz o elemento, e as ações aparecem inteiras (com dinheiro que o site mostra em
+        outra faixa). O que sai registrado: `acoes_saida` (quanto saiu, para onde, que fração do total das ações é) quando
+        a parte é pequena; `acoes_bloqueadas` (sem lista de ações, com os mesmos números) quando passa de
+        `siop.niveis_acoes_saida_maxima` do total das ações, em vez de listar R$ 104 bi de uma ação dentro de uma faixa
+        de R$ 959 mi. Débito da V2 (DEBITOS.md): a agregação ação x elemento, que abre todas sem ressalva."""
         por_funcao: dict[str, list[str]] = {}
         for it in itens:
             por_funcao.setdefault(it["funcao_cod"], []).append(it["subfuncao_cod"])
+        por_elemento = {x.id: x.nome for x in self.v.linhas if x.fonte_valor == "siop"}
         for it in itens:
-            it.update(self._acoes(it["funcao_cod"], it["subfuncao_cod"], por_funcao[it["funcao_cod"]]))
+            saidas = [a for a in (it.get("ajustes") or []) if a.get("para") in por_elemento and float(a.get("valor") or 0.0) < 0]
+            acoes = self._acoes(it["funcao_cod"], it["subfuncao_cod"], por_funcao[it["funcao_cod"]], excluir)
+            if saidas and acoes:
+                saiu = -sum(float(a["valor"]) for a in saidas)
+                total = float(acoes.get("acoes_total_siop") or 0.0)
+                info = {
+                    "total_siop": total, "saiu": saiu, "fracao": (saiu / total) if total > 0 else None,
+                    "para": sorted({por_elemento[a["para"]] for a in saidas}), "limite": self.saida_maxima,
+                    "motivo": "parte desta subfunção saiu para uma linha medida por elemento de despesa, e a lista de ações do SIOP não traz o elemento",
+                }
+                if total <= 0 or saiu > self.saida_maxima * total:
+                    it["acoes_bloqueadas"] = info
+                    continue
+                it["acoes_saida"] = info
+            it.update(acoes)
 
     # ------------------------------------------------------------------ por tipo de linha
 
@@ -251,7 +278,7 @@ class Niveis:
             for s_item in self.v.linhas:
                 if s_item.fonte_valor == "siop":
                     nao_alocado.append({"nome": f"saiu para a linha {s_item.nome}", "para": s_item.id, "valor": -s_item.valor})
-        self._pendurar_acoes([it for it in itens if it.get("subfuncao_cod")])
+        self._pendurar_acoes([it for it in itens if it.get("subfuncao_cod")], excluir=filtro)
         # agrupa por função, para o desenho abrir em dois passos (função, depois subfunção)
         funcoes: dict[str, dict] = {}
         for it in itens:

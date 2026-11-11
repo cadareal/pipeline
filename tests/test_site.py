@@ -14,7 +14,7 @@ from recibo.config import REPO_ROOT, load_yaml
 from recibo.marts.divida import compute_divida, to_export_divida, write_outputs_divida
 from recibo.marts.recibo import compute, to_export, write_outputs
 from recibo.site.build import construir
-from recibo.site.dados import carregar_exports, dados_do_desenho, fmt_bi, fmt_cent, fmt_exato, fmt_hab, fmt_pct, modelo_ano, slug
+from recibo.site.dados import carregar_exports, dados_do_desenho, fmt_bi, fmt_cent, fmt_exato, fmt_hab, fmt_pct, ids_repetidos, modelo_ano, slug
 from recibo.transform.siconfi import build_staging as build_staging_rreo
 from recibo.transform.siop import build_staging
 from test_mart_divida import staging_divida  # noqa: F401 - staging sintético com dívida, BCB e RREO
@@ -91,11 +91,25 @@ def test_modelo_do_ano_usa_so_o_export(exports, config_dir):
         assert por[l["id"]]["cent"] == fmt_cent(None, None, l["centavos"]) and por[l["id"]]["valor"] == l["valor"] and por[l["id"]]["pagina"] == f"linha/{slug(l['id'])}/"
     assert sum(n["valor"] for n in gasto["entradas"]) == pytest.approx(exp["total_recibo"])
     assert [n["id"] for n in gasto["entradas"]] == ["tributos", "outras_primarias", "divida_ou_caixa"]
-    assert [f["id"] for f in por["saude"]["filhos"]] == ["10-301", "10-302"] and por["saude"]["filhos"][0]["filhos"][0]["id"].startswith("acao-")
+    # v1.0.0: ids compostos com o caminho (a mesma ação e o mesmo órgão aparecem em várias linhas; cada nó tem id só seu)
+    assert [f["id"] for f in por["saude"]["filhos"]] == ["saude-10-301", "saude-10-302"] and por["saude"]["filhos"][0]["filhos"][0]["id"].startswith("saude-10-301-acao-")
     assert por["saude"]["filhos"][0]["filhos"][0]["tipo"] == "acao" and por["saude"]["filhos"][0]["filhos"][0]["hab"] == ""
-    assert por["juros"]["filhos"] and {f["id"] for f in por["juros"]["filhos"]} == {"carteira-mercado", "carteira-banco_central", "carteira-cobertura_bc"}
-    assert por["maquina_demais"]["filhos"][0]["id"] == "funcao-28" and por["maquina_demais"]["nao_alocado"]
-    assert por["inativos_pensionistas"]["filhos"][0]["id"] == "elemento-01" and por["inativos_pensionistas"]["filhos"][0]["filhos"][0]["id"].startswith("orgao-")
+    assert por["juros"]["filhos"] and {f["id"] for f in por["juros"]["filhos"]} == {"juros-carteira-mercado", "juros-carteira-banco_central", "juros-carteira-cobertura_bc"}
+    assert por["maquina_demais"]["filhos"][0]["id"] == "maquina_demais-funcao-28" and por["maquina_demais"]["nao_alocado"]
+    assert por["inativos_pensionistas"]["filhos"][0]["id"] == "inativos_pensionistas-elemento-01" and por["inativos_pensionistas"]["filhos"][0]["filhos"][0]["id"].startswith("inativos_pensionistas-elemento-01-orgao-")
+    # v1.0.0: de uma subfunção de onde saiu dinheiro por elemento de despesa (pensões militares dentro de Defesa: 20% do
+    # que as ações somam), as ações aparecem inteiras e a ficha diz quanto está em outra faixa; quando passa do limite
+    # (Previdência do Regime Estatutário no resíduo: 100%), a subfunção não abre por ação e a ficha diz por quê, com os
+    # dois números, uma vez só (no "próximo nível", não na nota)
+    adm = next(f for f in por["defesa_seguranca"]["filhos"] if f["id"] == "defesa_seguranca-05-122")
+    assert [f["id"] for f in adm["filhos"]] == ["defesa_seguranca-05-122-acao-2000", "defesa_seguranca-05-122-acao-0179"] and not adm["proximo"]
+    assert adm["nota"].startswith("No RREO esta subfunção tem R$ 50,00") and "R$ 10,00 desta subfunção (20,0% do que as ações somam) estão na linha Aposentados e pensionistas do setor público, por elemento de despesa" in adm["nota"]
+    assert "Débito registrado para a V2" in adm["nota"] and "fecham por função, não por subfunção" not in adm["nota"]  # 50 - 10 = 40: a diferença é só o que saiu
+    f09 = next(f for f in por["maquina_demais"]["filhos"] if f["id"] == "maquina_demais-funcao-09")
+    s272 = next(f for f in f09["filhos"] if f["id"] == "maquina_demais-funcao-09-09-272")
+    assert s272["filhos"] == [] and s272["proximo"].startswith("Esta subfunção não abre por ação: as ações do SIOP dentro dela somam R$ 100,00, mas R$ 100,00 (100,0% disso) saíram daqui para a linha Aposentados e pensionistas do setor público")
+    assert "Débito registrado para a V2" in s272["proximo"] and "não abre por ação" not in s272["nota"]
+    assert [f["id"] for f in next(f for f in por["defesa_seguranca"]["filhos"] if f["id"] == "defesa_seguranca-05-151")["filhos"]] == ["defesa_seguranca-05-151-acao-2058"]
     # visão do caixa: entradas e saídas fecham com a faixa da diferença; a rolagem aparece dos dois lados
     caixa = m["visoes"][0]
     ent, sai = sum(n["valor"] for n in caixa["entradas"]), sum(n["valor"] for n in caixa["saidas"])
@@ -108,7 +122,7 @@ def test_modelo_do_ano_usa_so_o_export(exports, config_dir):
     assert {f["id"] for f in titulos["filhos"]} == {"rolagem_entrada", "divida_nova"}
     dp = next(n for n in caixa["saidas"] if n["id"] == "divida_paga")
     assert dp["valor"] == pytest.approx(exp["anexo01_referencias"]["amortizacao"] + exp["anexo01_referencias"]["refinanciamento"])
-    assert {f["id"] for f in dp["filhos"]} == {"carteira-mercado", "carteira-banco_central", "carteira-cobertura_bc"}
+    assert {f["id"] for f in dp["filhos"]} == {"divida_paga-carteira-mercado", "divida_paga-carteira-banco_central", "divida_paga-carteira-cobertura_bc"}
     g = next(n for n in caixa["saidas"] if n["id"] == "gasto")
     assert g["valor"] == exp["total_recibo"] and [f["id"] for f in g["filhos"]] == [n["id"] for n in gasto["saidas"]]
     assert "R$ 1,00 de título vendido" in caixa["frase_rolagem"] and caixa["por_fonte"]
@@ -146,6 +160,25 @@ def test_modelo_do_ano_usa_so_o_export(exports, config_dir):
     assert dv_d["saidas"][0]["filhos"][0]["outro_lado"][0]["ir_para"] == {"id": "idx-selic", "nome": dv_d["entradas"][0]["nome"]}
     # conferências e lacres
     assert m["conferencias"]["n"] == len(exp["reconciliacoes"]) and m["lacres"][0]["sha256"] and m["lacres"][0]["arquivo"].endswith("Anexo 01")
+
+
+def test_ids_repetidos_trava_o_desenho():
+    # v1.0.0: o desenho acha o nó pelo id; com dois nós de mesmo id, a ficha mostrava o irmão (Ministério da Defesa com
+    # R$ 28,9 bi na faixa e R$ 35,4 bi na ficha). Falhou, não publica.
+    def n(i, nome, filhos=None, outro=None):
+        d = {"id": i, "nome": nome, "valor": 1.0}
+        if filhos:
+            d["filhos"] = filhos
+        if outro:
+            d["outro_lado"] = outro
+        return d
+    ok = {"id": "gasto", "entradas": [n("a", "A", [n("a-x", "X", [n("a-x-orgao-52000", "Defesa")])])], "saidas": [n("b", "B", [n("b-x", "X", [n("b-x-orgao-52000", "Defesa")])], [n("b-outro", "O")])]}
+    ids_repetidos(ok, 2025)
+    ruim = {"id": "gasto", "entradas": [n("a", "A", [n("x", "X", [n("orgao-52000", "Defesa")])])], "saidas": [n("b", "B", [n("y", "Y", [n("orgao-52000", "Defesa")])])]}
+    with pytest.raises(ValueError, match=r"2025 / visão gasto: 1 id\(s\) de nó repetido\(s\).*orgao-52000: A > X > Defesa e B > Y > Defesa"):
+        ids_repetidos(ruim, 2025)
+    with pytest.raises(ValueError, match="b-outro"):
+        ids_repetidos({"id": "caixa", "entradas": [n("b-outro", "O")], "saidas": [n("b", "B", None, [n("b-outro", "O")])]}, 2024)
 
 
 def test_site_gera_paginas_consistentes(exports, config_dir, tmp_path):

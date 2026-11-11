@@ -17,6 +17,8 @@ import json
 import re
 from pathlib import Path
 
+from ..textnorm import normalizar_familia
+
 ACOES_NO_DESENHO = None  # sem limite: o desenho cresce para baixo para caber tudo; None = todas as ações
 MINIMO_NO_DESENHO = 0.0  # partes com valor <= 0 não são desenhadas (ficam na ficha)
 
@@ -215,27 +217,51 @@ def _financeiras(exp: dict, total: float, pop: float | None, conteudo: dict) -> 
 # --------------------------------------------------------------------------------------------------------------------
 
 
-def _acoes_para_filhos(item: dict, total: float, pop: float | None, pai_valor: float, limite: int | None) -> tuple[list[dict], str]:
+def _acoes_para_filhos(item: dict, total: float, pop: float | None, pai_valor: float, limite: int | None, prefixo: str) -> tuple[list[dict], str]:
+    """As ações do SIOP dentro de uma subfunção. Os ids levam o prefixo da subfunção: a mesma ação ("2000 Administração
+    da Unidade") existe em várias linhas e subfunções, e cada nó do desenho precisa de um id só seu."""
+    bloqueio = item.get("acoes_bloqueadas") or None
+    if bloqueio:
+        # parte desta subfunção saiu para outra linha por elemento de despesa, e a agregação do SIOP por ação não tem
+        # elemento: não dá para dizer de qual ação saiu. Passou do limite, não abre por ação, e a ficha diz por quê.
+        para = " e ".join(bloqueio.get("para") or []) or "outra linha"
+        fr = bloqueio.get("fracao")
+        return [], (f"Esta subfunção não abre por ação: as ações do SIOP dentro dela somam {fmt_bi(bloqueio.get('total_siop'))}, mas {fmt_bi(bloqueio.get('saiu'))}"
+                    + (f" ({fmt_pct(fr, 1.0)} disso)" if fr is not None else "")
+                    + f" saíram daqui para a linha {para} (por elemento de despesa, que a lista de ações do SIOP não traz), e não dá para dizer de qual ação saiu o quê. "
+                    f"Mostrar as ações inteiras seria mostrar dinheiro que já está em outra faixa. Débito registrado para a V2 (agregação ação por elemento).")
     acoes = item.get("acoes") or []
     if not acoes:
         return [], ""
     lista = acoes if limite is None else acoes[:limite]
     resto = acoes[len(lista):]
-    filhos = [no(f"acao-{a['cod']}", f"{a['cod']} {a['nome']}".strip(), a["valor"], total, None, pai_valor=pai_valor, tipo="acao") for a in lista]
+    filhos = [no(f"{prefixo}-acao-{a['cod']}", f"{a['cod']} {a['nome']}".strip(), a["valor"], total, None, pai_valor=pai_valor, tipo="acao") for a in lista]
     demais = item.get("acoes_demais") or None
     n_resto = len(resto) + (demais["n"] if demais else 0)
     v_resto = sum(a["valor"] for a in resto) + (demais["valor"] if demais else 0.0)
     if n_resto:
-        filhos.append(no("acoes-demais", f"Demais {n_resto} ações", v_resto, total, None, pai_valor=pai_valor, tipo="acao"))
-    nota = ""
+        filhos.append(no(f"{prefixo}-acoes-demais", f"Demais {n_resto} ações", v_resto, total, None, pai_valor=pai_valor, tipo="acao"))
+    notas = []
+    saida = item.get("acoes_saida") or None
+    saiu = float(saida.get("saiu") or 0.0) if saida else 0.0
+    if saida:
+        # uma parte pequena desta subfunção está em outra faixa (por elemento de despesa); as ações aparecem inteiras
+        para = " e ".join(saida.get("para") or []) or "outra linha"
+        fr = saida.get("fracao")
+        notas.append(f"{fmt_bi(saiu)} desta subfunção" + (f" ({fmt_pct(fr, 1.0)} do que as ações somam)" if fr is not None else "")
+                     + f" estão na linha {para}, por elemento de despesa; a lista de ações do SIOP não traz o elemento, então as ações aparecem inteiras, "
+                     f"sem esse desconto, e o desenho reparte a faixa na proporção delas. Débito registrado para a V2 (agregação ação por elemento).")
     tot_siop = item.get("acoes_total_siop")
-    if tot_siop is not None and abs(tot_siop - pai_valor) > max(1.0, abs(pai_valor) * 1e-6):
-        nota = f"As ações somam {fmt_bi(tot_siop)} pelo SIOP; a subfunção vale {fmt_bi(pai_valor)} pelo RREO (os dois sistemas fecham por função, não por subfunção). O desenho reparte a faixa na proporção das ações."
-    return filhos, nota
+    if tot_siop is not None and abs(tot_siop - saiu - pai_valor) > max(1.0, abs(pai_valor) * 1e-6):
+        # o que sobra de diferença depois de descontar o que saiu é a dos dois sistemas (fecham por função, não por subfunção)
+        notas.append(f"As ações somam {fmt_bi(tot_siop)} pelo SIOP" + (f" ({fmt_bi(tot_siop - saiu)} sem o que saiu)" if saiu else "")
+                     + f"; a subfunção vale {fmt_bi(pai_valor)} pelo RREO (os dois sistemas fecham por função, não por subfunção). O desenho reparte a faixa na proporção das ações.")
+    return filhos, " ".join(notas)
 
 
-def _subfuncao_no(item: dict, total: float, pop: float | None, pai_valor: float, limite_acoes: int | None, proximo_sem_acoes: str) -> dict:
-    n = no(item["id"], item["nome"], item["valor"], total, pop, pai_valor=pai_valor, cod=item.get("subfuncao_cod"), funcao=item.get("funcao"),
+def _subfuncao_no(item: dict, total: float, pop: float | None, pai_valor: float, limite_acoes: int | None, proximo_sem_acoes: str, prefixo: str) -> dict:
+    nid = f"{prefixo}-{item['id']}"
+    n = no(nid, item["nome"], item["valor"], total, pop, pai_valor=pai_valor, cod=item.get("subfuncao_cod"), funcao=item.get("funcao"),
            fonte="RREO, Anexo 02 (despesa liquidada por subfunção)" if item.get("subfuncao_cod") else "SIOP e Anexo 06 (lei contra Tesouro)")
     ajustes = item.get("ajustes") or []
     if ajustes:
@@ -244,8 +270,12 @@ def _subfuncao_no(item: dict, total: float, pop: float | None, pai_valor: float,
         n["nota"] = f"No RREO esta subfunção tem {fmt_bi(item.get('valor_rreo'))}; " + "; ".join(f"{a['nome']}: {fmt_bi(a['valor'])}" for a in ajustes) + "."
     if item.get("detalhe"):
         n["nota"] = (n["nota"] + " " if n["nota"] else "") + " ".join(str(item["detalhe"].get("nota") or "").split())
-    filhos, nota_acoes = _acoes_para_filhos(item, total, pop, n["valor"], limite_acoes)
+    filhos, nota_acoes = _acoes_para_filhos(item, total, pop, n["valor"], limite_acoes, nid)
     n["filhos"] = filhos
+    if item.get("acoes_bloqueadas"):
+        # não abre por ação: o motivo vai no "próximo nível" da ficha, uma vez só
+        n["proximo"] = nota_acoes
+        return n
     if nota_acoes:
         n["nota"] = (n["nota"] + " " if n["nota"] else "") + nota_acoes
     if not filhos:
@@ -264,7 +294,7 @@ def _filhos_da_linha(linha: dict, total: float, pop: float | None, conteudo: dic
         exe = (divida or {}).get("execucao") or {}
         if exe.get("disponivel") and exe.get("por_carteira"):
             filhos = [
-                no(f"carteira-{c['id']}", c["nome"], c["juros"], total, pop, pai_valor=linha["valor"], definicao=c.get("definicao", ""), fonte=exe.get("fonte", "Tesouro, execução da DPF"),
+                no(f"{linha['id']}-carteira-{c['id']}", c["nome"], c["juros"], total, pop, pai_valor=linha["valor"], definicao=c.get("definicao", ""), fonte=exe.get("fonte", "Tesouro, execução da DPF"),
                    proximo="Fim do que o Tesouro publica por carteira. Quem são os donos dos títulos no mercado (bancos, fundos, previdência, pessoas, estrangeiros) só sai em PDF, no Relatório Mensal da Dívida.")
                 for c in exe["por_carteira"] if c.get("juros")
             ]
@@ -273,23 +303,26 @@ def _filhos_da_linha(linha: dict, total: float, pop: float | None, conteudo: dic
                 nota = f"As carteiras somam {fmt_bi(soma)} pelo CSV de execução do Tesouro; a linha vale {fmt_bi(linha['valor'])} pelo RREO (Anexo 01). A diferença está nomeada na conferência da dívida."
             return _ordenar(filhos), nao_alocado, nota, ""
         return [], nao_alocado, "", "As partes dos juros (títulos no mercado, Banco Central, externa, cobertura do BC) vêm do produto da dívida; rode o mart da dívida deste ano para abri-las."
+    lid = linha["id"]
     if tipo == "subfuncoes":
-        filhos = [_subfuncao_no(it, total, pop, linha["valor"], limite_acoes, prox.get("acoes_sem_siop", "")) for it in niv.get("itens", [])]
+        filhos = [_subfuncao_no(it, total, pop, linha["valor"], limite_acoes, prox.get("acoes_sem_siop", ""), lid) for it in niv.get("itens", [])]
         return _ordenar(filhos), nao_alocado, "", ""
     if tipo == "funcoes":
         filhos = []
         for f in niv.get("itens", []):
-            fn = no(f"funcao-{f['cod']}", f["nome"], f["valor"], total, pop, pai_valor=linha["valor"], cod=f["cod"], fonte="RREO, Anexo 02 (despesa liquidada por função, no que sobra depois das linhas nomeadas)")
-            fn["filhos"] = _ordenar([_subfuncao_no(it, total, pop, fn["valor"], limite_acoes, prox.get("acoes_sem_siop", "")) for it in f.get("subfuncoes", [])])
+            fid = f"{lid}-funcao-{f['cod']}"
+            fn = no(fid, f["nome"], f["valor"], total, pop, pai_valor=linha["valor"], cod=f["cod"], fonte="RREO, Anexo 02 (despesa liquidada por função, no que sobra depois das linhas nomeadas)")
+            fn["filhos"] = _ordenar([_subfuncao_no(it, total, pop, fn["valor"], limite_acoes, prox.get("acoes_sem_siop", ""), fid) for it in f.get("subfuncoes", [])])
             filhos.append(fn)
         return _ordenar(filhos), nao_alocado, "", ""
     if tipo == "elementos":
         filhos = []
         for e in niv.get("itens", []):
-            en = no(f"elemento-{e['cod']}", e["nome"], e["valor"], total, pop, pai_valor=linha["valor"], cod=e["cod"], fonte="SIOP, elemento de despesa (liquidado)")
-            orgs = [no(f"orgao-{o['cod']}", o["nome"], o["valor"], total, None, pai_valor=en["valor"], tipo="orgao") for o in e.get("orgaos", [])]
+            eid = f"{lid}-elemento-{e['cod']}"
+            en = no(eid, e["nome"], e["valor"], total, pop, pai_valor=linha["valor"], cod=e["cod"], fonte="SIOP, elemento de despesa (liquidado)")
+            orgs = [no(f"{eid}-orgao-{o['cod']}", o["nome"], o["valor"], total, None, pai_valor=en["valor"], tipo="orgao") for o in e.get("orgaos", [])]
             if e.get("orgaos_demais"):
-                orgs.append(no("orgaos-demais", f"Demais {e['orgaos_demais']['n']} órgãos", e["orgaos_demais"]["valor"], total, None, pai_valor=en["valor"], tipo="orgao"))
+                orgs.append(no(f"{eid}-orgaos-demais", f"Demais {e['orgaos_demais']['n']} órgãos", e["orgaos_demais"]["valor"], total, None, pai_valor=en["valor"], tipo="orgao"))
             en["filhos"] = _ordenar(orgs)
             filhos.append(en)
         return _ordenar(filhos), nao_alocado, "", ""
@@ -550,7 +583,7 @@ def _visao_caixa(exp: dict, pop: float | None, conteudo: dict, gasto_no: dict, d
     exe = (divida or {}).get("execucao") or {}
     if exe.get("disponivel") and exe.get("por_carteira"):
         n_dp["filhos"] = _ordenar([
-            no(f"carteira-{c['id']}", c["nome"], c["principal"], total, pop, pai_valor=n_dp["valor"], definicao=c.get("definicao", ""), fonte=exe.get("fonte", ""),
+            no(f"divida_paga-carteira-{c['id']}", c["nome"], c["principal"], total, pop, pai_valor=n_dp["valor"], definicao=c.get("definicao", ""), fonte=exe.get("fonte", ""),
                proximo="Fim do que o Tesouro publica por carteira.") for c in exe["por_carteira"] if c.get("principal")
         ])
         soma = sum(x["valor"] for x in n_dp["filhos"])
@@ -766,6 +799,15 @@ def fmt_medida(m: dict | None) -> str:
     return _br(v, 2)
 
 
+def _normalizar_familias(celulas: list[dict]) -> None:
+    """Exports gerados antes da v1.0.0 podem ter a mesma família grafada de dois jeitos ("NTN-I" e "ntn-i"); o site
+    junta as duas, como o mart passou a fazer."""
+    for c in celulas:
+        fam = str(c.get("familia") or "")
+        if fam:
+            c["familia"] = normalizar_familia(fam)
+
+
 def _visao_divida(divida: dict | None, conteudo: dict, pop_recibo: float | None) -> dict | None:
     det = (divida or {}).get("estoque_detalhe") or {}
     if not det.get("disponivel") or not det.get("celulas"):
@@ -775,6 +817,7 @@ def _visao_divida(divida: dict | None, conteudo: dict, pop_recibo: float | None)
     data_longa, data_curta = _data_referencia(ano, mes)
     total = float(det["total"])
     celulas = det["celulas"]
+    _normalizar_familias(celulas)
     fonte = det.get("fonte", "")
     m_pop = _medida(divida, "por_habitante", "populacao")
     pop = float(m_pop["valor"]) if m_pop and m_pop.get("valor") else pop_recibo
@@ -820,7 +863,7 @@ def _visao_divida(divida: dict | None, conteudo: dict, pop_recibo: float | None)
         fams: dict[str, float] = {}
         for c in celulas:
             if c["indexador"] == iid:
-                fams[c["familia"]] = fams.get(c["familia"], 0.0) + c["valor"]
+                fams[c["familia"]] = fams.get(c["familia"], 0.0) + c["valor"]   # a família já passou por _normalizar_familias
         filhos = []
         for fam, fv in fams.items():
             f = no(f"idx-{iid}-fam-{slug(fam)}", fam_nomes.get(fam, fam), fv, total, pop, pai_valor=v, tipo="familia", fonte=fonte, proximo=fim_csv + " A família reúne os títulos de um mesmo tipo, com vencimentos diferentes.")
@@ -861,7 +904,7 @@ def _visao_divida(divida: dict | None, conteudo: dict, pop_recibo: float | None)
                 {"id": "comecou", "nome": str(tira.get("comecou", "Começou {ano} devendo")).format(ano=ano), "txt": fmt_bi(conta_src.get("estoque_anterior")), "exato": fmt_exato(conta_src.get("estoque_anterior"))},
                 {"id": "vendeu", "nome": tira.get("vendeu", "Vendeu títulos (emissões)"), "txt": "+ " + fmt_bi(conta_src.get("emissoes")), "exato": fmt_exato(conta_src.get("emissoes"))},
                 {"id": "pagou", "nome": tira.get("pagou", "Pagou (principal e juros, em dinheiro)"), "txt": "- " + fmt_bi(abs(conta_src.get("resgates") or 0.0)), "exato": fmt_exato(abs(conta_src.get("resgates") or 0.0))},
-                {"id": "juros", "nome": tira.get("juros", "Juros que viraram dívida (apropriados)"), "txt": "+ " + fmt_bi(conta_src.get("juros_apropriados")), "exato": fmt_exato(conta_src.get("juros_apropriados"))},
+                {"id": "juros", "nome": tira.get("juros", "Juros que a dívida gerou no ano, somados ao saldo (apropriados)"), "txt": "+ " + fmt_bi(conta_src.get("juros_apropriados")), "exato": fmt_exato(conta_src.get("juros_apropriados"))},
                 {"id": "bc", "nome": tira.get("bc", "Operações do mercado com o Banco Central"), "txt": ("+ " if (conta_src.get("operacoes_bc") or 0.0) >= 0 else "- ") + fmt_bi(abs(conta_src.get("operacoes_bc") or 0.0)), "exato": fmt_exato(conta_src.get("operacoes_bc"))},
                 {"id": "terminou", "nome": str(tira.get("terminou", "Terminou {data_curta} devendo")).format(data_curta=data_curta, ano=ano), "txt": fmt_bi(conta_src.get("estoque_fim")), "exato": fmt_exato(conta_src.get("estoque_fim"))},
             ],
@@ -1264,4 +1307,28 @@ def dados_do_desenho(modelo: dict) -> dict:
         total_exato_visao = v["total_exato"]
         visoes.append({k: v.get(k) for k in ("id", "rotulo", "titulo", "explica", "legenda_esq", "legenda_dir", "centro_txt", "centro_nome", "total", "total_txt", "total_exato", "por_fonte", "sem_fonte_motivo", "titulo_esq", "titulo_dir", "hab_nota", "outro") if v.get(k) is not None}
                       | {"entradas": [enxuto(n) for n in v["entradas"]], "saidas": [enxuto(n) for n in v["saidas"]]})
+        ids_repetidos(visoes[-1], modelo["ano"])
     return {"ano": modelo["ano"], "visao_inicial": modelo["visao_inicial"], "visoes": visoes}
+
+
+def ids_repetidos(visao: dict, ano: int | str = "") -> None:
+    """Trava: cada nó de uma visão tem um id só seu. O desenho acha o nó pelo id (clique, ficha, "Ir para"); com id
+    repetido, a ficha mostra o irmão. Falhou, não publica."""
+    vistos: dict[str, str] = {}
+    repetidos: list[str] = []
+
+    def andar(n: dict, caminho: list[str]) -> None:
+        onde = " > ".join(caminho + [n["nome"]])
+        if n["id"] in vistos:
+            repetidos.append(f"{n['id']}: {vistos[n['id']]} e {onde}")
+        else:
+            vistos[n["id"]] = onde
+        for f in n.get("filhos") or []:
+            andar(f, caminho + [n["nome"]])
+        for o in n.get("outro_lado") or []:
+            andar(o, caminho + [n["nome"], "(outro lado)"])
+
+    for n in visao["entradas"] + visao["saidas"]:
+        andar(n, [])
+    if repetidos:
+        raise ValueError(f"{ano} / visão {visao['id']}: {len(repetidos)} id(s) de nó repetido(s); o desenho não saberia qual abrir. " + " | ".join(repetidos[:5]))

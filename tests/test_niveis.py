@@ -45,6 +45,14 @@ def test_niveis_fecham_com_siop(stagings, config_dir):
     adm = _sub(defesa, "05-122")
     assert adm["valor_rreo"] == 50.0 and adm["ajustes"] == [{"nome": "saiu para a linha Aposentados e pensionistas do setor público", "para": "inativos_pensionistas", "valor": -10.0}] and adm["valor"] == 40.0
     assert _sub(defesa, "05-demais")["nome"] == "Demais subfunções"
+    # v1.0.0: de uma subfunção de onde saiu dinheiro para uma linha medida por elemento de despesa (aposentados:
+    # elementos 01 e 03), a lista de ações do SIOP não consegue descontar o que saiu (a agregação por ação não traz o
+    # elemento). Até um quarto do total das ações (config siop.niveis_acoes_saida_maxima), as ações aparecem inteiras
+    # e o item registra quanto saiu e para onde (`acoes_saida`); acima disso, a subfunção não abre por ação
+    assert [a["cod"] for a in adm["acoes"]] == ["2000", "0179"] and adm["acoes_total_siop"] == 50.0 and "acoes_bloqueadas" not in adm
+    assert adm["acoes_saida"]["total_siop"] == 50.0 and adm["acoes_saida"]["saiu"] == 10.0 and adm["acoes_saida"]["fracao"] == pytest.approx(0.2)
+    assert adm["acoes_saida"]["para"] == ["Aposentados e pensionistas do setor público"] and adm["acoes_saida"]["limite"] == 0.25 and "elemento" in adm["acoes_saida"]["motivo"]
+    assert "acoes_saida" not in _sub(defesa, "05-151") and [a["cod"] for a in _sub(defesa, "05-151")["acoes"]] == ["2058"]
     educ = res.niveis["educacao"]
     assert _sub(educ, "12-demais")["ajustes"][0]["para"] == "fora_do_real" and _sub(educ, "12-demais")["valor"] == 65.0
     # quando o SIOP acha o que saiu numa subfunção que o RREO não lista na linha, o ajuste fica nomeado, não some
@@ -66,7 +74,16 @@ def test_niveis_fecham_com_siop(stagings, config_dir):
     assert por["28-846"]["valor_rreo"] == 20.0 and {a["para"] for a in por["28-846"]["ajustes"]} == {"fora_do_real", "juros"}
     assert por["lei_vs_tesouro"]["valor"] == 4.0 and por["lei_vs_tesouro"]["detalhe"]["fundos_constitucionais"] == 3.0
     f09 = maq["itens"][1]
-    assert next(s for s in f09["subfuncoes"] if s["subfuncao_cod"] == "272")["ajustes"][0]["para"] == "inativos_pensionistas"
+    s272 = next(s for s in f09["subfuncoes"] if s["subfuncao_cod"] == "272")
+    assert s272["ajustes"][0]["para"] == "inativos_pensionistas"
+    # v1.0.0: no resíduo, o balde "demais" de uma função não lista ações das subfunções das linhas nomeadas (antes, a
+    # 845 das transferências entrava em "28 - demais"; nos dados reais, os R$ 980 bi do INSS apareciam dentro de uma
+    # faixa de R$ 677 mi); e a 272, de onde saíram os aposentados, fica sem ações, com o motivo
+    assert [a["cod"] for a in por["28-demais"]["acoes"]] == ["00SY"] and por["28-demais"]["acoes_total_siop"] == 20.0
+    assert "acoes" not in s272 and "acoes_total_siop" not in s272 and "acoes_saida" not in s272
+    assert s272["acoes_bloqueadas"]["total_siop"] == 100.0 and s272["acoes_bloqueadas"]["saiu"] == 100.0 and s272["acoes_bloqueadas"]["fracao"] == pytest.approx(1.0)
+    assert s272["acoes_bloqueadas"]["para"] == ["Aposentados e pensionistas do setor público"]
+    assert [a["cod"] for a in next(s for s in f09["subfuncoes"] if s["subfuncao_cod"] == "122")["acoes"]] == ["2000"]
     assert maq["nao_alocado"] == [{"nome": "fora do R$ 1,00: despesas que o Tesouro trata como financeiras em outros grupos (sem detalhe por subfunção)", "para": "fora_do_real", "valor": -1.0}]
     # juros não abre aqui: as partes vêm do mart da dívida
     assert res.niveis["juros"]["tipo"] is None and "mart da dívida" in res.niveis["juros"]["fonte"]

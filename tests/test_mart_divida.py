@@ -562,6 +562,9 @@ def test_estoque_detalhe_conta_do_ano_e_mensal_no_export(staging_divida, config_
     assert cel[("prefixado", "Global BRL", "de_2_a_5_anos", "2028")]["externa"] is True and cel[("cambio", "BIRD9172-BR", "mais_de_5_anos", "2050")]["titulos"] == 1
     assert [i["id"] for i in det["indexadores"]] == ["selic", "prefixado", "precos", "cambio", "demais"] and "soma das células" in det["nota"]
     assert familia_do_titulo("NTN-B 150535") == "NTN-B" and familia_do_titulo("Global BRL 2028") == "Global BRL" and familia_do_titulo("BIRD9172-BR") == "BIRD9172-BR" and familia_do_titulo("") == "(sem nome)"
+    # v1.0.0: o CSV do Tesouro grafa o mesmo título "NTN-I" e "ntn-i"; a família é uma só. "Euro" e "Global" não mudam.
+    assert familia_do_titulo("ntn-i 010125") == "NTN-I" and familia_do_titulo("lft 010326") == "LFT"
+    assert familia_do_titulo("Euro 2021") == "Euro" and familia_do_titulo("Global 2031 ESG") == "Global 2031 ESG" and familia_do_titulo("LFT-TD1 Reserva 010327") == "LFT-TD1 Reserva"
     fx = linhas["divida"]["estoque_csv"]["faixas_vencimento"]
     assert faixa_de(0, fx, {"id": "sem_data"})["id"] == "ate_12m" and faixa_de(12, fx, {})["id"] == "ate_12m" and faixa_de(13, fx, {})["id"] == "de_1_a_2_anos" and faixa_de(61, fx, {})["id"] == "mais_de_5_anos" and faixa_de(None, fx, {"id": "sem_data"})["id"] == "sem_data"
     conta = exp["conta_do_ano"]

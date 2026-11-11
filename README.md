@@ -18,7 +18,8 @@ público presta contas (art. 70) e qualquer cidadão pode cobrar (art. 74, § 2�
 Achou um número que não bate, um bug ou discorda de uma regra? [Abra uma issue](https://github.com/cadareal/pipeline/issues/new/choose)
 (há um modelo para cada caso) ou escreva para contato@cadareal.org. As perguntas que o próprio site ainda não sabe
 responder estão em [cadareal.org/perguntas-abertas](https://cadareal.org/perguntas-abertas/), com os pedidos feitos ao
-Tesouro pela Lei de Acesso à Informação.
+Tesouro pela Lei de Acesso à Informação. O que a versão 1.0.0 ainda não faz, item por item, com o que a próxima versão
+precisa fazer, está em [DEBITOS.md](DEBITOS.md): quem for conferir sabe onde o projeto está.
 
 ## O que é
 
@@ -91,7 +92,7 @@ Pré-requisitos: Python 3.11+ e [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync --extra dev
-uv run pytest                      # 88 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida, séries do BC e população do IBGE sintéticos, e o site gerado a partir deles
+uv run pytest                      # 91 testes sobre um RREO (Anexos 01, 02 e 06), um SIOP, um COFOG, arquivos da dívida, séries do BC e população do IBGE sintéticos, e o site gerado a partir deles
 
 # 1) baixar RREO da União (anexos 01, 02, 04-RGPS, 04-RPPS, 06; bimestres 1 a 6)
 uv run recibo fetch siconfi --exercicios 2024 2025 2026
@@ -575,7 +576,7 @@ se valorizou.
 
 Tudo isso está em `config/linhas.yaml`, que gera o SQL, a ficha e os testes.
 
-### O que o site publica (v0.9.0 a v0.11.1)
+### O que o site publica (v0.9.0 a v1.0.0)
 
 - **Uma página por ano** (`docs/AAAA/`; a do ano fechado mais recente também é a `index.html`): a frase do ano, as
   palavras do desenho explicadas, o desenho de fluxo com duas visões, a ficha da faixa selecionada, três frases, a
@@ -698,6 +699,26 @@ Tudo isso está em `config/linhas.yaml`, que gera o SQL, a ficha e os testes.
   e pelo link do site, `LICENSE` (MIT) e três modelos de issue em `.github/ISSUE_TEMPLATE/` (número que não bate, bug no
   site, discordância de metodologia), para onde o botão "Abrir uma issue" do site passa a apontar
   (`url_issue_nova` em `site.yaml`).
+- **1.0.0: cada nó com id só seu; o resíduo não lista ações das linhas nomeadas; débitos escritos.** Um leitor achou a
+  faixa "Ministério da Defesa" com R$ 28,9 bi e a ficha com R$ 35,4 bi: dois nós do desenho tinham o mesmo id
+  (`orgao-52000`, em Aposentadorias e em Pensões), e o desenho acha o nó pelo id, então a ficha mostrava o irmão. Em
+  2025 havia 84 ids repetidos na visão do caixa (a ação 2000 "Administração da Unidade" cinco vezes; as carteiras da
+  dívida em Juros e em Dívida antiga paga). Agora todo id leva o caminho (`saude-10-301-acao-2000`,
+  `inativos_pensionistas-elemento-03-orgao-52000`, `juros-carteira-mercado`) e `ids_repetidos` em `dados.py` trava a
+  geração com a lista dos repetidos: falhou, não publica. No mesmo exame, o resíduo ("Encargos especiais e demais
+  funções") listava, no balde "Demais subfunções" de cada função, ações inteiras das linhas nomeadas: a ação 00SJ do INSS
+  (R$ 980,8 bi) dentro de uma faixa de R$ 677,4 mi; `_acoes` em `marts/niveis.py` passa a excluir as subfunções das
+  linhas nomeadas no resíduo. E as subfunções de onde saiu dinheiro para a linha dos aposentados (por elemento de
+  despesa, que a lista de ações do SIOP não traz) ganham `acoes_saida` (quanto saiu, para onde, que fração do total das
+  ações) ou, quando o que saiu passa de `siop.niveis_acoes_saida_maxima` (um quarto), `acoes_bloqueadas`: a subfunção não
+  abre por ação e a ficha diz os dois números (2025: Previdência do Regime Estatutário no resíduo, 99% fora;
+  Administração Geral da Defesa, 48%). A família "ntn-i" do CSV do Tesouro é a mesma "NTN-I" (`normalizar_familia` em
+  `textnorm.py`, no mart e no site). Os textos sobre juros apropriados dizem o que a conta do Tesouro faz: os juros que a
+  dívida gerou no ano, pagos ou não, entram no saldo, e os pagos em dinheiro já estão descontados em "pagou". A tabela
+  "Ano a ano" diz que compara reais de cada ano, sem correção pela inflação. `DEBITOS.md` lista os vinte débitos da V2
+  (agregação ação x elemento do SIOP, isenções fiscais, estados e municípios, famílias da dívida, automação, cartões e
+  Reel dentro do pacote), e a metodologia aponta para ele. Para refazer os exports com o mart novo sem baixar nada:
+  `uv run recibo mart recibo --exercicio AAAA` e `uv run recibo mart divida --exercicio AAAA`, depois `uv run recibo site --limpar`.
 - **Formatação uma vez só.** `src/recibo/site/dados.py` transforma o export no modelo das páginas com todas as strings
   prontas ("R$ 990,2 bi", "31 centavos", "30,7%", "R$ 4.640 por habitante", em pt-BR); o HTML (Jinja2) e o `fluxo.js`
   só colocam as strings no lugar. Dentro de uma faixa, as porcentagens e os centavos são de cada R$ 1,00 daquela faixa
